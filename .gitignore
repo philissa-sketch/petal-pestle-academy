@@ -42,24 +42,36 @@ _to_delete-from-app/
 _archive-test/
 
 
-# ---- HER RECORDS AND THE PROJECT'S NOTES ---------------------------------
+# ---- HER RECORDS — THE MISSION CONTROL RULE ------------------------------
 #
-# ⚠️ `claude/` IS NOT DOCUMENTATION. It holds `azianna-diagnostic-results.md`,
-# which is a full educational assessment of a named nine-year-old — every
-# measured strand level, the item-level detail behind them, and how often she
-# needed a question read aloud. Her name appears across about thirty files in
-# there, and `her-backup-2026-08-18.json` is her raw record.
+# ⚠️ `claude/` IS COMMITTED, MINUS THREE FILES. Gigi, Aug 24 2026, after
+# showing that Mission Control is already set up this way: mirror Lamar
+# exactly. His repository commits `docs/` — PROJECT_LOG, MASTER_PLAN_REVIEW,
+# THE_SCHEDULE — and excludes the real student records even so.
 #
-# The master plan and the build log are the best writing in this project and it
-# is a real loss to leave them out. They also quote her name and her levels on
-# 27 lines between them.
+# HIS .gitignore STATES THE RULE, AND IT IS THE RIGHT ONE:
 #
-# TO PUBLISH THEM ANYWAY: delete the `claude/` line, and update
-# `check-publish-safety` — it fails if this line is missing, deliberately, so
-# that publishing a child's assessment is a decision somebody makes on purpose
-# rather than something that happens because a line was tidied away.
+#   "The repository is PRIVATE, but 'private' is a setting someone can change
+#    by accident and a collaborator can be added to. ANYTHING THAT WOULD BE A
+#    PROBLEM IN PUBLIC DOES NOT GO IN AT ALL."
+#
+# So privacy is not the guard here. It is the second guard. The first is that
+# the three files below are never committed at any visibility:
+#
+#   · her export and her backup — her raw record, both already caught above
+#   · azianna-diagnostic-results.md — a FULL EDUCATIONAL ASSESSMENT of a named
+#     nine-year-old: all nine measured strand levels, the item-level detail
+#     behind each one, and how often she needed a question read aloud. It is
+#     the most sensitive document in this project by a distance, and nothing in
+#     the app reads it. It stays on Gigi's machine, where the next session
+#     works from it.
+#
+# The master plan, the build log and the blueprints DO go in. They are the best
+# writing in this project and losing them was a real cost. They quote her first
+# name and her levels, which is why the repository is private — the second
+# guard, doing the job it is for.
 
-claude/
+claude/azianna-diagnostic-results.md
 
 
 # ---- BUILD OUTPUT --------------------------------------------------------

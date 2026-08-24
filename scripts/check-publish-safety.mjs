@@ -344,6 +344,23 @@ if (existsSync(DIST)) {
       const base = parts[parts.length - 1];
       return lines.some((line) => {
         const pat = line.replace(/\/$/, '');
+
+        /* ---- A PATTERN WITH A SLASH IS A PATH, NOT A NAME ----
+         *
+         * ⚠️ THIS BRANCH WAS MISSING AND THE CHECK CAUGHT IT ON ITS FIRST RUN.
+         * `claude/azianna-diagnostic-results.md` was correctly in .gitignore
+         * and this matcher reported it as unignored, because it only ever
+         * compared bare folder names and basenames.
+         *
+         * It failed in the SAFE direction — claiming her assessment was
+         * exposed when it was not — which is the direction this helper was
+         * deliberately built to be wrong in. A version that guessed the other
+         * way would have gone green and said nothing.
+         */
+        if (pat.includes('/')) {
+          return rel === pat || rel.startsWith(pat + '/');
+        }
+
         if (!pat.includes('*')) return parts.includes(pat) || base === pat;
         const rx = new RegExp('^' + pat.split('*').map((x) => x.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*') + '$');
         return rx.test(base);
@@ -384,31 +401,79 @@ if (existsSync(DIST)) {
     }
     notes.push(`${hers} file(s) on disk are her export — every one excluded from git`);
 
-    // ---- 3 and 4. the rules are present BY NAME ----
-    //
-    // Assertion 2 passes today because these lines exist. Deleting one could
-    // leave it passing tomorrow simply because the matching file had been
-    // moved — a guard that holds by luck, which v3.76 is the whole lesson
-    // about. So the lines themselves are required.
-    const REQUIRED = [
-      { pat: 'local/', why: 'local/her-latest-export.json is her live record' },
-      { pat: '_to_delete/', why: 'it held eleven copies of her export' },
-      { pat: 'node_modules/', why: '59MB, and Netlify installs it itself' },
-      { pat: 'dist/', why: 'Netlify builds it, and dist/ has carried her export before' },
+    /* ---- 3. THE THINGS THAT MUST BE PROTECTED, ASKED AS A QUESTION ----
+     *
+     * ⚠️ THIS WAS FIRST WRITTEN AS "THESE EXACT LINES MUST APPEAR" AND THAT
+     * WAS WRONG TWICE OVER, both caught by its own negative tests:
+     *
+     *   · BROADENING THE RULE FAILED THE CHECK. Replacing the single-file
+     *     exclusion with the whole `claude/` folder protects strictly MORE and
+     *     the check went red. That is a check failing correct content — the
+     *     thing this project has now done six times, and the worst habit a
+     *     check can have, because the fix people reach for is to weaken it.
+     *
+     *   · AND DELETING A REAL RULE PASSED. Removing `*her-backup*.json` did
+     *     nothing, because `her-*.json` still caught the same file. The rule
+     *     was never independently tested — v3.76's lesson, one file over: a
+     *     redundant guard is not a tested guard.
+     *
+     * So it asks the question that actually matters — WOULD THIS PATH BE
+     * COMMITTED? — for each thing that must never be. Any wording that
+     * achieves it passes; nothing that fails to achieve it does. And the paths
+     * are asserted whether or not the file is on disk today, so a protection
+     * cannot go quiet just because a file moved.
+     */
+    const PROTECTED = [
+      { path: 'local/her-latest-export.json', why: 'her live record' },
+      { path: 'claude/her-backup-2026-08-18.json', why: 'her raw backup' },
       {
-        pat: 'claude/',
+        path: 'claude/azianna-diagnostic-results.md',
         why:
-          'it holds azianna-diagnostic-results.md — a full educational assessment of a named ' +
-          'nine-year-old, her measured levels and the item detail behind them — plus her raw ' +
-          'backup. TO PUBLISH IT ANYWAY: remove the line here AND in .gitignore, together, ' +
-          'so it is a decision somebody makes rather than a line that got tidied away.'
-      }
+          'her FULL EDUCATIONAL ASSESSMENT — all nine measured levels, the item detail behind ' +
+          'each, and how often she needed a question read aloud. Mission Control’s rule, ' +
+          'which this repo mirrors: anything that would be a problem in public does not go in ' +
+          'at all. The repository being private is the SECOND guard, not this one.'
+      },
+      { path: '_to_delete/her-latest-export.json', why: 'one of eleven old copies of her record' },
+      { path: 'node_modules/react/package.json', why: '59MB, and Netlify installs it itself' },
+      { path: 'dist/index.html', why: 'Netlify builds it, and dist/ has carried her export before' }
     ];
-    for (const r of REQUIRED) {
-      if (!lines.includes(r.pat)) {
-        fail('gitignore-keeps-its-rules', `.gitignore no longer excludes \`${r.pat}\` — ${r.why}`);
+    for (const r of PROTECTED) {
+      if (!isIgnored(r.path)) {
+        fail(
+          'gitignore-protects-what-it-must',
+          `.gitignore would COMMIT ${r.path} — ${r.why}. Whatever rule used to cover it is gone.`
+        );
       }
     }
+    notes.push(`${PROTECTED.length} paths asserted uncommittable, by effect rather than by wording`);
+
+    /* ---- HER RECORDS THAT ARE NOT JSON ----
+     *
+     * ⚠️ THE SCAN ABOVE ONLY READS .json. `azianna-diagnostic-results.md` is
+     * markdown, so it is invisible to a structural test that works by parsing
+     * — and it is the most sensitive file in the project. A check that finds
+     * every copy of her export and cannot see her assessment would be exactly
+     * the kind of check this build log keeps writing down: green, and looking
+     * like more coverage than it has.
+     */
+    const NOT_JSON = [
+      {
+        rel: 'claude/azianna-diagnostic-results.md',
+        what: 'her full educational assessment'
+      }
+    ];
+    for (const r of NOT_JSON) {
+      if (!existsSync(resolve(ROOT, r.rel))) continue;
+      if (!isIgnored(r.rel)) {
+        fail(
+          'her-records-would-be-committed',
+          `${r.rel} is ${r.what} and .gitignore does not exclude it. It is not JSON, so the ` +
+            `structural scan above cannot see it — this is the only thing checking.`
+        );
+      }
+    }
+    notes.push('claude/ is committed, minus her assessment — the Mission Control rule');
 
     // ---- the build command runs the checks before it publishes ----
     const TOML = resolve(ROOT, 'netlify.toml');
