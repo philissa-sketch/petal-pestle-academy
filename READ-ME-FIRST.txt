@@ -1,0 +1,175 @@
+PETAL & PESTLE ACADEMY
+======================
+
+HOW TO START IT
+---------------
+Double-click  START-PETAL-PESTLE.bat
+
+The first time you do this it will spend a few minutes downloading what it
+needs. That happens once, and it needs internet for that part only. After
+that it works offline.
+
+A black window opens. Leave it open while she works. Closing it stops the app.
+Your browser opens on its own at http://localhost:5180
+
+If Node.js is not installed, the black window will tell you and give you the
+link. Install it (pick the big LTS button), then double-click the .bat again.
+
+
+WHAT'S IN VERSION 1
+-------------------
+  The Greenhouse    her home screen
+  Check-In          the adaptive diagnostic, ~12 questions per sitting
+  My Levels         her results, drawn as a garden
+  My Plan           exactly which Khan Academy course + unit to open, in order
+  Market            the store - Petals and Golden Seeds
+  My Greenhouse     her room, her shelves, and her - where everything she buys
+                    actually appears
+  Herb Library      24 plant cards
+  Grown-Up Corner   passcode-locked: real numbers, full history, printable
+                    report, and the reward approvals
+
+Lessons are NOT in version 1. That was the decision: she takes the Check-In
+first, and the lesson build is shaped by what it finds.
+
+
+DR. MARIGOLD
+------------
+Her mentor, the way Lamar has Commander Nova. A Black American woman who is both
+a physician and a herbalist - which is exactly what your granddaughter says she
+wants to be.
+
+She appears once on each screen and says ONE thing, always about what to do next.
+She never tells her she is clever - praise aimed at ability makes a child avoid
+hard things, which is the one behaviour that would wreck a diagnostic.
+
+She is NEVER on screen during a question. A mentor looking over a child's
+shoulder mid-test adds pressure to the one activity that has to feel safe.
+
+She also carries a daily line - a quote or a thought, the same one all day.
+
+
+MY GREENHOUSE
+-------------
+The place everything she buys actually goes. Three views:
+
+  THE GREENHOUSE - a drawn room in perspective. Buy the stool and the stool
+  appears in the room. Buy the rose arch and it grows over the back wall. Things
+  she has NOT bought are drawn as dotted outlines standing in their own spots,
+  with the price underneath, so she can see what her Petals are for.
+
+  APOTHECARY SHELF - three real shelves. Jars, the mortar and pestle, the brass
+  scales, the microscope. Same dotted outlines for the gaps.
+
+  YOU - her avatar, drawn as a Black girl, in layers. The apron goes on, the
+  gloves go on her hands, the straw hat sits on her head, the boots replace her
+  shoes. Buying something wearable puts it on automatically, and she can change
+  what she is wearing any time in the wardrobe.
+
+Nothing here is locked behind a score. It is all bought with Petals, and Petals
+come from effort.
+
+
+THE STORE
+---------
+Two currencies, same idea as her brother's app.
+
+  * PETALS - earned fast, spent in the app on greenhouse decorations, her
+    apron and kit, and jars for her apothecary shelf. 32 things to collect.
+    Costs you nothing. Never waits for anyone's permission.
+
+  * GOLDEN SEEDS - the scarce one. Saved up for real-world rewards. Small
+    privileges that cost you nothing (pick the film, stay up 30 minutes) clear
+    on their own, up to 50 seeds a week. Everything else comes to you in the
+    Grown-Up Corner as a request you approve or decline.
+
+SHE EARNS FOR EFFORT, NOT FOR CORRECT ANSWERS. This was your call and it is
+worth knowing why it matters: if being right paid more, she would work out
+inside one sitting that hard questions cost her money, and start guessing safe
+and skipping the strands she finds difficult. The Check-In would then be
+measuring her strategy instead of her knowledge - and the gaps it exists to
+find are exactly what it would stop being able to see. A wrong answer pays
+exactly what a right one pays, and the app tells her so on the Market screen.
+
+  Every question answered      3 Petals + 1 Seed
+  Every strand finished       25 Petals + 8 Seeds
+  Every sitting completed     15 Petals + 5 Seeds
+  Every day she comes back    10 Petals + 3 Seeds
+
+The whole diagnostic works out to about 715 Petals and 232 Golden Seeds -
+enough for six to eight things off her shelf and one real reward at the
+200-seed tier.
+
+DREAM REWARD: she picks one big thing to save toward, and you add 1 seed for
+every 4 she saves. That match is what makes the 500-seed tier reachable, and it
+teaches her what an employer match feels like years before anyone explains one.
+
+THE REWARD LIST IS YOURS TO CHANGE. Grown-Up Corner -> Rewards -> Reward list.
+Add your own, re-price anything, remove what does not fit. No code needed.
+
+Seeds are never taken while she waits. A request you decline, or never get to,
+costs her nothing.
+
+
+"READ IT TO ME"
+---------------
+There is a button on every question that reads it out loud - the passage, the
+question and all four answers. It uses your computer's own voice, so nothing
+goes over the internet.
+
+Tell her to use it whenever she wants. It is there to be used, and the app says
+so on the screen.
+
+WHY IT MATTERS MORE THAN IT LOOKS: every question in every subject is made of
+words. If a 6th-grade geometry question is written above her reading level, she
+gets it wrong because she could not READ it - and the app records that as "weak
+at geometry." Hearing the question removes that problem completely, and the math
+strand goes back to measuring math.
+
+The one place it changes the meaning: on Reading Comprehension and Vocabulary,
+hearing the passage turns a reading question into a listening question. That is
+still allowed - a child who needs it needs it - but your report will tell you
+when it happened and how many, so you know which of those two numbers is a
+listening estimate rather than a reading one.
+
+Every question in the app was also rewritten to keep the reading load down.
+Math questions are held to plain, short sentences no matter how hard the math
+is. You can re-run that check any time with:  npm run check:reading
+
+
+FIRST TIME SHE OPENS IT
+-----------------------
+1. It asks her name. That is all the setup there is.
+2. Send her to Check-In. It takes about 15 minutes a sitting.
+3. Full run is around 80 questions across roughly 7 sittings. She does not
+   have to do them in one go, or on one day. It saves after EVERY question.
+4. After the first sitting, open My Plan. It fills in as she goes.
+
+The first time you open the Grown-Up Corner it asks you to set a passcode.
+
+
+THINGS WORTH KNOWING
+--------------------
+* This is completely separate from her son's Mission Control app. Different
+  folder, different database, different port. They can both be open at once
+  and cannot touch each other.
+
+* Everything is saved in the browser on THIS computer. There is no cloud copy.
+  If browser data gets cleared, it is gone. The Grown-Up Corner has a
+  "Download backup" button - use it now and then.
+
+* The app does not teach Math, Reading or Science. Khan Academy does. This
+  app's job is telling you where in Khan Academy to start.
+
+* Khan Academy renames its units occasionally. If a unit name in My Plan stops
+  matching the site, the course link still goes to the right course, and the
+  names can be edited in one file: src/data/khan/khanMap.js
+
+
+IF SOMETHING LOOKS WRONG
+------------------------
+Open the black window's folder and run:  npm run check
+
+That runs six built-in checks - the source files, the question bank, the reading
+load, item placement, the diagnostic engine and the money rules - and prints
+exactly what it finds.

@@ -1,0 +1,42 @@
+{
+  "name": "petal-pestle-academy",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "node scripts/run-all-checks.mjs",
+    "check:sources": "node scripts/check-sources.mjs",
+    "check:items": "node scripts/verify-itembank.mjs",
+    "check:reading": "node scripts/check-readability.mjs",
+    "check:engine": "node scripts/simulate-diagnostic.mjs",
+    "check:economy": "node scripts/verify-economy.mjs",
+    "check:placement": "node scripts/check-placement.mjs",
+    "check:avatar": "node scripts/check-avatar.mjs",
+    "check:hooks": "node scripts/check-hooks.mjs",
+    "check:schedule": "node scripts/check-schedule.mjs",
+    "check:jsx": "node scripts/check-jsx.mjs",
+    "check:links": "node scripts/check-links.mjs",
+    "check:room": "node scripts/check-room.mjs",
+    "check:import": "node scripts/check-import.mjs",
+    "check:year": "node scripts/check-yearplan.mjs",
+    "check:imports": "node scripts/check-imports.mjs",
+    "check:assessment": "node scripts/check-assessment.mjs",
+    "check:year40": "node scripts/simulate-year.mjs"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^4.5.4",
+    "dexie": "^4.0.8"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "vite": "^5.3.1"
+  }
+}

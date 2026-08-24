@@ -1,0 +1,85 @@
+# ---------------------------------------------------------------------------
+# HOW NETLIFY BUILDS THIS APP.
+#
+# Until v3.77 the deploy was: run `npm run build` on the Windows machine, then
+# drag the `dist/` folder onto Netlify by hand. That worked, and it had two
+# holes in it that a dragged folder can never close:
+#
+#   1. NOTHING STOPPED A BROKEN BUILD BEING PUBLISHED. The thirty-one checks
+#      are the whole quality story of this project, and the publish step did
+#      not run them. A red check and a green one dragged identically.
+#
+#   2. WHAT WAS UPLOADED WAS WHATEVER HAPPENED TO BE IN `dist/`. If the last
+#      build was two versions old, or was built before a fix, the site said so
+#      and nothing on screen disagreed.
+#
+# Building from the repository closes both. The command below runs the checks
+# FIRST, and Netlify treats a non-zero exit as a failed build — so a red check
+# now means the old site stays up, which is the correct outcome. Azianna never
+# opens a broken app.
+# ---------------------------------------------------------------------------
+
+[build]
+  # ⚠️ THE CHECKS RUN BEFORE THE BUILD, AND THE && IS LOAD-BEARING.
+  #
+  # `npm run check` exits 1 if any of the thirty-one fails, and `&&` stops
+  # there, so `vite build` never runs and Netlify reports a failed deploy.
+  # Changing this to `;` or dropping the check would publish anyway and look
+  # exactly the same on the dashboard.
+  #
+  # v3.73 is why this is worth stating: eighteen of thirty checks had never run
+  # on Windows at all, and the suite looked green for months. Netlify is Linux,
+  # which is the platform they were written on — but the run that matters is
+  # still the one on the machine the app is developed on. THIS DOES NOT REPLACE
+  # RUNNING `npm run check` YOURSELF. It is the second pair of eyes, not the
+  # first.
+  command = "npm run check && npm run build"
+
+  # Vite writes here. It is in .gitignore on purpose — Netlify builds it fresh,
+  # so the site and the source can never disagree about which version is live.
+  publish = "dist"
+
+[build.environment]
+  # ⚠️ PINNED DELIBERATELY. Seventeen scripts were broken on Windows at v3.73
+  # by an assumption about how Node resolves a path. A build machine that
+  # silently changes Node version underneath you is the same class of surprise,
+  # and this app is checked by thirty-one Node scripts.
+  #
+  # 20 is the version these checks are known to pass on. Raise it on purpose,
+  # after running the suite on that version locally, not by leaving it unset.
+  NODE_VERSION = "20"
+
+  # Netlify defaults to installing production dependencies only in some
+  # setups. Vite and every check script are devDependencies, so the build
+  # needs them.
+  NPM_FLAGS = "--include=dev"
+
+# ---------------------------------------------------------------------------
+# SINGLE-PAGE APP ROUTING.
+#
+# The app draws every screen itself and never asks the server for a second
+# page, so this is not strictly needed today. It is here because the day
+# somebody bookmarks a screen — or Azianna opens a link that is not the bare
+# address — a host with no rule like this returns "Page not found" for a page
+# that exists, and that failure looks exactly like the app being broken.
+# ---------------------------------------------------------------------------
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# ---------------------------------------------------------------------------
+# ⚠️ WHAT THIS FILE CANNOT DO, STATED SO IT IS NOT ASSUMED.
+#
+# · It cannot keep the site ADDRESS the same. Her work lives in the browser,
+#   filed under the exact address — rename the site, or connect this repo to a
+#   NEW Netlify site instead of the existing one, and the app opens EMPTY on
+#   her Chromebook. Nothing is lost; it is sitting at an address nobody visits.
+#
+# · It cannot stop her data being committed. That is `.gitignore`, and
+#   `check-publish-safety` is what asserts it.
+#
+# · It cannot password-protect the site. That is a Netlify Pro feature, which
+#   is why the standing rule is that nothing personal may sit in `public/`.
+# ---------------------------------------------------------------------------

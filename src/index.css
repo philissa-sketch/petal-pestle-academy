@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply font-body text-ink-900 antialiased;
+    background:
+      radial-gradient(ellipse at top left, rgba(214, 204, 238, 0.35), transparent 45%),
+      radial-gradient(ellipse at top right, rgba(247, 198, 208, 0.3), transparent 45%),
+      #fffcf8;
+  }
+  ::selection {
+    @apply bg-lavender-300;
+  }
+  /* A 9-year-old taps and clicks fast. Nothing should feel like it snapped. */
+  button {
+    @apply transition;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-petal border border-cream-300 bg-cream-100 shadow-petal;
+  }
+  .panel-white {
+    @apply rounded-petal border border-cream-300 bg-white shadow-petal;
+  }
+  .label-caps {
+    @apply font-body text-[0.68rem] font-700 uppercase tracking-[0.18em] text-ink-500;
+  }
+}
+
+@layer utilities {
+  .font-700 {
+    font-weight: 700;
+  }
+  /* Numbers in tables and level readouts must not jitter as they change. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Print styles for the Grown-Up Corner's one-page report. Everything marked
+   .print-hide disappears; the report itself goes black-on-white so it does not
+   drink a colour cartridge. Scoped exactly the way Mission Control does it. */
+@media print {
+  .print-hide {
+    display: none !important;
+  }
+  .print-content,
+  .print-content * {
+    background: white !important;
+    color: black !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+  }
+  @page {
+    margin: 0.5in;
+  }
+}

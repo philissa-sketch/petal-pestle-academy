@@ -1,0 +1,90 @@
+# ---------------------------------------------------------------------------
+# WHAT NEVER GOES TO GITHUB.
+#
+# ---- READ THIS BEFORE YOU LOOSEN ANYTHING BELOW ----
+#
+# THIS REPOSITORY IS PUBLIC. Gigi's call, Aug 24 2026.
+#
+# And git is not like the Netlify near-miss at v3.72, where a file could be
+# taken back out of `public/` and the problem was over. GIT KEEPS HISTORY.
+# Committing a file once and deleting it in the next commit does NOT remove it:
+# it stays in the repository for ever, in every clone anyone has ever made, and
+# a public repo is scraped by machines within hours of being pushed.
+#
+# So the rule for this file is stricter than for `public/`:
+#
+#   IF IT NAMES AZIANNA OR MEASURES HER, IT DOES NOT GO IN.
+#
+# `check-publish-safety` asserts the rules below rather than trusting them.
+# Deleting a line here will fail the build, on purpose. If you mean to change
+# one, change the check too, and write down why and when — the same way every
+# other reversal in this project is recorded.
+# ---------------------------------------------------------------------------
+
+
+# ---- HER DATA. THE WHOLE REASON THIS FILE EXISTS. -------------------------
+#
+# Each of these parses as a full export: her learner name, all nine measured
+# strand levels, 74 answers, and both journal entries in her own words.
+#
+# There were THIRTEEN copies of it in this folder on Aug 24 2026.
+
+local/
+*her-latest-export*.json
+*her-backup*.json
+her-*.json
+
+# The scratch copies from v3.72's negative tests — eleven of them. This folder
+# is meant to be moved out of the project entirely; the ignore is the belt as
+# well as the braces.
+_to_delete/
+_to_delete-from-app/
+_archive-test/
+
+
+# ---- HER RECORDS AND THE PROJECT'S NOTES ---------------------------------
+#
+# ⚠️ `claude/` IS NOT DOCUMENTATION. It holds `azianna-diagnostic-results.md`,
+# which is a full educational assessment of a named nine-year-old — every
+# measured strand level, the item-level detail behind them, and how often she
+# needed a question read aloud. Her name appears across about thirty files in
+# there, and `her-backup-2026-08-18.json` is her raw record.
+#
+# The master plan and the build log are the best writing in this project and it
+# is a real loss to leave them out. They also quote her name and her levels on
+# 27 lines between them.
+#
+# TO PUBLISH THEM ANYWAY: delete the `claude/` line, and update
+# `check-publish-safety` — it fails if this line is missing, deliberately, so
+# that publishing a child's assessment is a decision somebody makes on purpose
+# rather than something that happens because a line was tidied away.
+
+claude/
+
+
+# ---- BUILD OUTPUT --------------------------------------------------------
+#
+# Netlify runs `npm run build` itself, so `dist/` is made fresh on their
+# machine from the committed source. Committing it means the site and the code
+# can silently disagree about which version is live — and `dist/` has carried
+# her export before (v3.72).
+
+dist/
+node_modules/
+.vite/
+*.local
+
+
+# ---- ENVIRONMENT AND EDITOR ----------------------------------------------
+
+.env
+.env.*
+!.env.example
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

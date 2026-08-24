@@ -1,0 +1,309 @@
+// ---------------------------------------------------------------------------
+// Run with: node scripts/check-khan-units.mjs
+//
+// CHECK #23 — the Khan unit links, and the four bugs that were live in the app
+// on the morning of Aug 16 2026 with all twenty-two other checks passing.
+//
+// ---- WHAT WENT WRONG, AND WHY NOTHING SAW IT ----
+//
+// 1. A DEAD COURSE URL. khanMap.js sent 2nd Grade Math to
+//    /math/cc-second-grade-math. Rendered in a browser it says "Oops! Page not
+//    found". Her Geometry and Measurement both measured at the floor of 2nd
+//    grade, so that was the course her plan opened most, and it opened an error.
+//
+// 2. UNIT NAMES FOR UNITS THAT DO NOT EXIST. Seven of them. The 3rd grade
+//    reading units were called "Reading informational text" and "Vocabulary";
+//    Khan's real units are Pets, Homes and Extreme Environments. 2nd grade
+//    maths had "Equal parts of circles and rectangles", which is not a 2nd
+//    grade unit at all. The LINK still resolved, so the wrong LABEL was
+//    invisible — the screen said one thing and Khan said another.
+//
+// 3. THE SCHEDULE OPENED A COURSE INDEX. resolveBlockTarget handed back
+//    courseUrl, so tapping Mathematics landed her on a page of eight units to
+//    read and search. v2.0 took six steps out of starting a maths block and
+//    left this one in.
+//
+// ---- WHAT THIS FILE CAN AND CANNOT TEST, STATED PLAINLY ----
+//
+// It CANNOT tell you a Khan URL is alive. Three reasons, all verified:
+//   * Khan answers HTTP 200 for the dead URL and draws "Page not found"
+//     afterwards in JavaScript.
+//   * The served HTML <title> of a dead course is byte-identical to a live one.
+//   * Khan's public API is gone — /api/v1/topic/<slug> returns "410 API
+//     removed". There is no endpoint left to ask.
+// Only a rendering browser knows. So re-confirming a link is a browser job, and
+// `confirmedOn` records when it was last done.
+//
+// What it DOES test is shape, provenance and agreement — every one of which
+// would have caught one of the three bugs above:
+//   1. every course carries a confirmedOn date, and it is a real date
+//   2. units are numbered 1..n, no gaps, no duplicates, no empty slug
+//   3. a unit URL is NEVER equal to its own course front page  <- bug 3
+//   4. every unitCourse/unitN in khanMap resolves to a real unit  <- bug 1
+//   5. every unit NAME in khanMap matches the confirmed name     <- bug 2
+//   6. the three Khan blocks on her real measured levels open an EXACT unit
+//   7. no two units in a course share a slug
+//
+// A check must never claim more than it tests. This one prints its own blind
+// spot on every run rather than leaving the reader to assume coverage.
+// ---------------------------------------------------------------------------
+
+import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const U = await import(pathToFileURL(resolve(ROOT, 'src/data/khan/khanUnits.js')).href);
+const { KHAN_MAP, KHAN_COURSES } = await import(pathToFileURL(resolve(ROOT, 'src/data/khan/khanMap.js')).href);
+const { resolveBlockTarget } = await import(pathToFileURL(resolve(ROOT, 'src/lib/blockLinks.js')).href);
+// v3.74 — §6c below records results through the app's own writer instead of
+// inventing grade objects. See the note there; it matters more than it looks.
+const { khanGradeRow } = await import(pathToFileURL(resolve(ROOT, 'src/lib/khanGrade.js')).href);
+
+const errors = [];
+const notes = [];
+
+// ---- 1. provenance -------------------------------------------------------
+for (const id of U.KHAN_UNIT_COURSE_IDS) {
+  const c = U.KHAN_UNIT_COURSES[id];
+  if (!/^\/[a-z0-9\-/]+$/i.test(c.base || '')) {
+    errors.push(`${id}: base "${c.base}" is not a plain path`);
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(c.confirmedOn || '')) {
+    errors.push(`${id}: confirmedOn "${c.confirmedOn}" is not a YYYY-MM-DD date — an unconfirmed link is a guess`);
+  } else if (Number.isNaN(Date.parse(c.confirmedOn))) {
+    errors.push(`${id}: confirmedOn "${c.confirmedOn}" is not a real date`);
+  }
+  // renderedOn is a SEPARATE claim from confirmedOn and is required too: the
+  // slug was read off a list, but the address this file BUILDS was opened in a
+  // browser and came back with the right heading. A correct slug on a stale
+  // base still gives a dead link, which is exactly how cc-second-grade-math
+  // survived for months.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(c.renderedOn || '')) {
+    errors.push(`${id}: renderedOn "${c.renderedOn}" is not a YYYY-MM-DD date — nobody has opened these addresses in a browser`);
+  } else if (Date.parse(c.renderedOn) < Date.parse(c.confirmedOn)) {
+    errors.push(`${id}: renderedOn (${c.renderedOn}) is older than confirmedOn (${c.confirmedOn}) — the units changed after anyone last opened them`);
+  }
+  if (!c.units || c.units.length === 0) errors.push(`${id}: no units`);
+}
+
+// ---- 2. numbering and slugs ----------------------------------------------
+for (const id of U.KHAN_UNIT_COURSE_IDS) {
+  const c = U.KHAN_UNIT_COURSES[id];
+  const seen = new Set();
+  c.units.forEach((u, i) => {
+    if (u.n !== i + 1) errors.push(`${id}: unit at position ${i + 1} is numbered ${u.n} — units must run 1..n in order`);
+    if (!u.slug || !u.slug.trim()) errors.push(`${id}: unit ${u.n} has no slug`);
+    if (!u.name || !u.name.trim()) errors.push(`${id}: unit ${u.n} has no name`);
+    if (seen.has(u.slug)) errors.push(`${id}: two units share the slug "${u.slug}"`);
+    seen.add(u.slug);
+    if (u.slug && u.slug.startsWith('/')) errors.push(`${id}: unit ${u.n} slug starts with a slash — it is joined to the base, not used whole`);
+  });
+}
+
+// ---- 3. A UNIT LINK IS NEVER THE COURSE FRONT PAGE ------------------------
+// This is the assertion for Gigi's own words: "Links to the course front page"
+// listed as the first thing wrong with v3.19.
+for (const id of U.KHAN_UNIT_COURSE_IDS) {
+  const front = U.courseUrl(id);
+  for (const u of U.KHAN_UNIT_COURSES[id].units) {
+    const link = U.unitUrl(id, u.n);
+    if (!link) { errors.push(`${id}: unit ${u.n} resolves to no URL`); continue; }
+    if (link === front) {
+      errors.push(`${id}: unit ${u.n} "${u.name}" resolves to the COURSE FRONT PAGE — she has to find her own unit on a page of ${U.KHAN_UNIT_COURSES[id].units.length}`);
+    }
+    if (!link.startsWith('https://www.khanacademy.org/')) {
+      errors.push(`${id}: unit ${u.n} does not resolve to a khanacademy.org address`);
+    }
+  }
+}
+
+// ---- 3b. NO URL KNOWN TO BE DEAD MAY COME BACK ----------------------------
+//
+// Four addresses were rendered on Aug 16 2026 and every one returned "Page not
+// found". Three of them were live in the app at the time with 23 checks
+// passing, and two were found by Gigi using it rather than by anything here.
+// Writing them down is only useful if something reads the list.
+{
+  const dead = new Map(U.KHAN_URLS_CONFIRMED_DEAD.map((d) => [d.url, d]));
+  for (const [id, c] of Object.entries(KHAN_COURSES)) {
+    const d = dead.get(c.url);
+    if (d) {
+      errors.push(
+        `KHAN_COURSES.${id} points at ${c.url}, which was opened on ${d.renderedOn} and returned "${d.saw}"` +
+          (d.instead ? ` — the live address is ${d.instead}` : ' — Khan has no replacement')
+      );
+    }
+  }
+  for (const id of U.KHAN_UNIT_COURSE_IDS) {
+    const base = 'https://www.khanacademy.org' + U.KHAN_UNIT_COURSES[id].base;
+    if (dead.has(base)) errors.push(`khanUnits.${id} is built on ${base}, which is a dead page`);
+  }
+  notes.push(`${dead.size} addresses on the confirmed-dead list, none of them in use`);
+}
+
+// ---- 4 & 5. khanMap agrees with the confirmed units ----------------------
+let bound = 0;
+for (const [strandId, bands] of Object.entries(KHAN_MAP)) {
+  for (const band of bands) {
+    if (!band.unitCourse && !band.unitN) continue;
+    if (!band.unitCourse || !band.unitN) {
+      errors.push(`${strandId}: band "${band.unit}" has only half a unit reference — unitCourse and unitN travel together`);
+      continue;
+    }
+    const rec = U.unitFor(band.unitCourse, band.unitN);
+    if (!rec) {
+      errors.push(`${strandId}: band "${band.unit}" points at ${band.unitCourse} unit ${band.unitN}, which is not in khanUnits.js`);
+      continue;
+    }
+    if (rec.name !== band.unit) {
+      errors.push(`${strandId}: the map calls ${band.unitCourse} unit ${band.unitN} "${band.unit}" — Khan calls it "${rec.name}". A wrong label is invisible while the link still works.`);
+    }
+    const mapCourse = KHAN_COURSES[band.course];
+    const unitCourse = U.KHAN_UNIT_COURSES[band.unitCourse];
+    if (mapCourse && unitCourse && !mapCourse.url.endsWith(unitCourse.base)) {
+      errors.push(`${strandId}: band sits in course "${band.course}" (${mapCourse.url}) but links a unit of "${band.unitCourse}" (${unitCourse.base}) — a level would send her to one course and one unit of another`);
+    }
+    bound++;
+  }
+}
+
+// ---- 6. her real day opens a real unit ------------------------------------
+// Her Check-In results, as recorded. Not a level someone happened to try.
+const HER_STRANDS = {
+  geometry: { asked: 7, level: 2.0 },
+  'measurement-data': { asked: 6, level: 2.0 },
+  'numbers-operations': { asked: 8, level: 3.48 },
+  'fractions-decimals': { asked: 7, level: 3.89 },
+  'patterns-algebra': { asked: 6, level: 2.98 },
+  'reading-comprehension': { asked: 7, level: 3.46 },
+  vocabulary: { asked: 6, level: 2.91 },
+  'grammar-usage': { asked: 7, level: 2.15 },
+  'writing-strategies': { asked: 6, level: 2.45 }
+};
+const frontPages = Object.values(KHAN_COURSES).map((c) => c.url);
+for (const subject of ['math', 'reading', 'writing']) {
+  const t = resolveBlockTarget({ subject }, HER_STRANDS, []);
+  if (!t) { errors.push(`the ${subject} block resolves to nothing at her measured levels`); continue; }
+  if (!t.exact) {
+    errors.push(`the ${subject} block opens a course front page at her measured levels, not her unit — this is the v3.19 complaint, back again`);
+  }
+  if (frontPages.includes(t.url)) {
+    errors.push(`the ${subject} block opens ${t.url}, which is a course front page`);
+  }
+
+  // ---- 6b. SHE STARTS AT UNIT 1 ----
+  //
+  // Gigi, from using it: "Math just skips to unit 6 instead of starting at
+  // unit 1." It did — her lowest strand chose the unit as well as the course,
+  // so Measurement 2.00 opened Unit 6 and Units 1–5 were never reachable.
+  //
+  // THIS CHECK WAS THE FIRST SUSPECT AND IT WAS GUILTY. The version above
+  // asserted the block opens "an exact unit" and never once asked WHICH. It
+  // passed, green, while the app skipped five units. A check that tests the
+  // shape of an answer and not the answer is how a bug ships with 23 checks
+  // passing.
+  if (t.unitN !== 1) {
+    errors.push(
+      `with nothing graded, the ${subject} block opens Unit ${t.unitN} ("${t.label}") — it must start at Unit 1. ` +
+        `Skipping ahead means the units before it are never done and the Course Challenge can never unlock.`
+    );
+  }
+}
+
+// ---- 6c. it advances one unit at a time, and ends at the Course Challenge --
+//
+// ⚠️ THIS SECTION WAS GUILTY, AND IT IS THE SECOND TIME IN THIS FILE.
+//
+// Until v3.74 the line below read `grades.push({ courseId: 'math2', unitN: i })`
+// — a grade object built BY THE CHECK, in a shape the app had never once
+// produced. `addKhanGrade` stored no courseId and no unitN, so every grade Gigi
+// could actually enter was invisible to `nextUnitFor`. This walked Unit 1 to 8
+// and printed "advance one unit per grade" while the app advanced nobody.
+//
+// Read §6b immediately above: the same file confessing to the same mistake one
+// section higher. Testing the shape of an answer instead of the answer.
+//
+// It now uses the app's own writer, so a check row and a saved row cannot be
+// different things. The end-to-end assertion lives in check-khan-advance;
+// this stays because what it tests here is the BLOCK — resolveBlockTarget at
+// her real measured levels — which that check does not touch.
+{
+  const grades = [];
+  const seen = [];
+  const total = U.KHAN_UNIT_COURSES.math2.units.length;
+  for (let i = 1; i <= total; i++) {
+    const t = resolveBlockTarget({ subject: 'math' }, HER_STRANDS, grades);
+    seen.push(t && t.unitN);
+    if (t && t.unitN !== i) {
+      errors.push(`after ${i - 1} unit(s) graded the maths block offers Unit ${t && t.unitN}, not Unit ${i}`);
+      break;
+    }
+    const built = khanGradeRow({ courseId: 'math2', unitN: i, grade: 'B' });
+    if (!built.ok) {
+      errors.push(`the app cannot even record a result for maths Unit ${i}: ${built.reason}`);
+      break;
+    }
+    grades.push(built.row);
+  }
+  const done = resolveBlockTarget({ subject: 'math' }, HER_STRANDS, grades);
+  if (!done || !done.challenge) {
+    errors.push(`with all ${total} maths units graded the block offers "${done && done.label}" — it should offer the Course Challenge`);
+  }
+  if (seen.join(',') === [...Array(total)].map((_, i) => i + 1).join(',')) {
+    notes.push(`the maths block walks Unit 1 → ${total} in order, then offers the Course Challenge`);
+  }
+}
+
+// ---- 6d. every screen that resolves a block must hand it her grades --------
+//
+// A caller that forgets the third argument gets `grades = []` and therefore
+// offers Unit 1 forever, which looks exactly like a child who has done nothing.
+// Rule 11: a rule the app must follow lives where a check can test it — so this
+// reads the call sites as text, the same way check-links reads navigate calls.
+{
+  const srcDir = resolve(ROOT, 'src');
+  const walk = (d) =>
+    readdirSync(d).flatMap((f) => {
+      const p = `${d}/${f}`;
+      return statSync(p).isDirectory() ? walk(p) : p.endsWith('.jsx') || p.endsWith('.js') ? [p] : [];
+    });
+  for (const f of walk(srcDir)) {
+    const src = readFileSync(f, 'utf8');
+    for (const m of src.matchAll(/resolveBlockTarget\(([^)]*)\)/g)) {
+      const args = m[1].split(',').length;
+      if (args < 3) {
+        errors.push(
+          `${f.split('/src/')[1]} calls resolveBlockTarget with ${args} argument(s) — without her grades it offers Unit 1 forever`
+        );
+      }
+    }
+  }
+}
+
+// ---- report ---------------------------------------------------------------
+console.log('\nPetal & Pestle — Khan unit links check\n');
+if (errors.length) {
+  for (const e of errors) console.log('  ✗ ' + e);
+  console.log(`\n${errors.length} problem${errors.length === 1 ? '' : 's'} with the Khan unit links.\n`);
+  process.exit(1);
+}
+for (const id of U.KHAN_UNIT_COURSE_IDS) {
+  const c = U.KHAN_UNIT_COURSES[id];
+  const tests = c.units.filter((u) => u.test).length;
+  console.log(
+    `  · ${c.label.padEnd(32)} ${String(c.units.length).padStart(2)} units · ` +
+      `${tests}/${c.units.length} unit tests · ${c.courseChallenge ? 'course challenge' : 'no course challenge'} · confirmed ${c.confirmedOn} · rendered ${c.renderedOn}`
+  );
+}
+console.log(`\n  · ${U.KHAN_UNIT_COUNT} units on file across ${U.KHAN_UNIT_COURSE_IDS.length} courses`);
+console.log(`  · ${bound} level bands bound to a confirmed unit, every name matching Khan's own`);
+console.log('  · her Mathematics, Reading and Language Arts blocks each open a UNIT, not a course index');
+console.log('  · with nothing graded all three start at UNIT 1, and advance one unit per grade');
+for (const n of notes) console.log('  · ' + n);
+console.log('\n  ALL 28 ADDRESSES WERE OPENED IN A BROWSER ON Aug 16 2026 — 16 units, 10 unit tests,');
+console.log('  2 course challenges. Every heading matched. Nothing came back "Oops!".');
+console.log('\n  WHAT THIS CHECK CANNOT DO: it cannot tell you they are STILL live today.');
+console.log('  Khan serves HTTP 200 for a dead course and renders "Page not found" in JavaScript,');
+console.log('  a dead course\'s HTML <title> is identical to a live one, and the public API is gone');
+console.log('  (410 API removed). Only a real browser knows. Re-confirm in one, and update confirmedOn.\n');

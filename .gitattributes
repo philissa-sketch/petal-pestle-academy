@@ -1,0 +1,64 @@
+# ---------------------------------------------------------------------------
+# LINE ENDINGS. ONE KIND, EVERYWHERE.
+#
+# ---- WHY THIS MATTERS MORE HERE THAN IN MOST PROJECTS ----
+#
+# Windows ends a line with two characters (CR LF). Linux uses one (LF). Git on
+# Windows defaults to converting between them, which is where the wall of
+# "LF will be replaced by CRLF" warnings comes from. In most projects it is
+# noise and nothing else.
+#
+# ⚠️ THIS PROJECT IS CHECKED BY THIRTY-ONE SCRIPTS THAT READ SOURCE AS TEXT.
+# They count words in a lesson, balance brackets, match patterns at the end of
+# a line, and read call sites as strings. A stray CR is an extra character on
+# every line, and it lands in exactly those places.
+#
+# And the two machines would disagree. WITHOUT THIS FILE:
+#
+#   · Gigi's Windows copy gets CRLF the next time git touches it
+#   · Netlify checks out LF, because Netlify is Linux
+#   · so `npm run check` on her machine and `npm run check` on the build server
+#     are reading DIFFERENT BYTES
+#
+# That is v3.73 waiting to happen again — the version where eighteen of thirty
+# checks turned out never to have run on Windows at all, while the suite looked
+# green for months. A check that passes on one machine and fails on the other
+# is bad; a check that passes on both while reading different text is worse,
+# because nothing tells you.
+#
+# `eol=lf` settles it: LF in the repository AND in the working copy, on both
+# machines. The warnings stop because there is no conversion left to warn about.
+# ---------------------------------------------------------------------------
+
+# Everything git decides is text gets LF, on every platform.
+* text=auto eol=lf
+
+# Said explicitly for the files the checks actually parse, so the rule does not
+# depend on git's guess about what counts as text.
+*.js    text eol=lf
+*.jsx   text eol=lf
+*.mjs   text eol=lf
+*.json  text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.toml  text eol=lf
+*.yml   text eol=lf
+
+# ⚠️ EXCEPT THIS ONE. START-PETAL-PESTLE.bat is run by Windows itself, and a
+# batch file with Unix line endings can fail in ways that are hard to read —
+# it is the file Azianna's setup depends on, so it keeps CRLF deliberately.
+*.bat   text eol=crlf
+
+# Binary. Never converted, never diffed as text.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.webp  binary
+*.ico   binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.pdf   binary
