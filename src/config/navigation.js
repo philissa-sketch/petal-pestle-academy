@@ -54,6 +54,19 @@ export const NAV = [
       { id: 'plan', label: 'My Plan' },
       { id: 'year', label: 'My Courses' },
       { id: 'herbs', label: 'Herb Library' },
+      // v3.80 — the reading check, and it needed a home here rather than only a
+      // button on Today.
+      //
+      // ⚠️ check-links CAUGHT THIS AND WAS RIGHT. The button on Today's Planner
+      // is a real door, but the rule in this app is stricter and better: every
+      // screen App.jsx can render has ONE home in the nav, so "where am I" and
+      // "how do I get back" always have an answer. A screen reachable only from
+      // a button inside another screen is one layout change from being the sixth
+      // thing here that is correct and unreachable.
+      //
+      // It is safe to show always: the screen says so plainly when no check is
+      // written for the unit she is currently in, rather than opening blank.
+      { id: 'reading', label: 'Reading check' },
       // She asked for this one herself, Aug 19. The 15:40 block has existed
       // since v3.2 and opened nothing.
       { id: 'movement', label: 'Singing & Movement' }

@@ -192,21 +192,51 @@ for (const subject of ['math', 'reading', 'writing']) {
     errors.push(`the ${subject} block opens ${t.url}, which is a course front page`);
   }
 
-  // ---- 6b. SHE STARTS AT UNIT 1 ----
+  // ---- 6b. SHE STARTS AT THE FIRST UNIT OF HER LANE ----
   //
-  // Gigi, from using it: "Math just skips to unit 6 instead of starting at
-  // unit 1." It did — her lowest strand chose the unit as well as the course,
-  // so Measurement 2.00 opened Unit 6 and Units 1–5 were never reachable.
+  // ⚠️ INVERTED AT v3.81, NOT DELETED. Gigi overturned her own rule, in one
+  // letter: "B", Aug 25 2026.
   //
-  // THIS CHECK WAS THE FIRST SUSPECT AND IT WAS GUILTY. The version above
-  // asserted the block opens "an exact unit" and never once asked WHICH. It
-  // passed, green, while the app skipped five units. A check that tests the
-  // shape of an answer and not the answer is how a bug ships with 23 checks
-  // passing.
-  if (t.unitN !== 1) {
+  // ---- WHAT THIS USED TO ASSERT, AND WHY ----
+  //
+  // Gigi, Aug 16 2026, from using it: "Math just skips to unit 6 instead of
+  // starting at unit 1." It did — her lowest strand chose the unit as well as
+  // the course, so Measurement 2.00 opened Unit 6 and Units 1-5 were never
+  // reachable. From v3.20 to v3.80 this line read `if (t.unitN !== 1)`.
+  //
+  // THIS CHECK WAS THE FIRST SUSPECT THEN AND IT WAS GUILTY: the version before
+  // it asserted the block opens "an exact unit" and never once asked WHICH. It
+  // passed, green, while the app skipped five units.
+  //
+  // ---- WHY IT TURNED OVER ----
+  //
+  // Starting every strand at Unit 1 had a cost nobody had priced. Her three
+  // maths strands all route to 2nd Grade Math, and with no grades recorded all
+  // three were handed Unit 1 — "Add and subtract within 20", which teaches
+  // NUMBERS & OPERATIONS, her 3.48 strand. Measurement & Data 2.50 is Unit 6
+  // and Geometry 2.82 is Unit 8. The rule was spending her two weakest strands'
+  // half hour on her strongest one, and would have gone on doing it for months.
+  //
+  // ---- AND THE OLD HARM IS STILL FORBIDDEN ----
+  //
+  // v3.20's complaint was SKIPPING: units passed over, never done, the Course
+  // Challenge unreachable for ever. That cannot happen here and it is asserted
+  // in check-strand-lanes, not merely described: every unit belongs to exactly
+  // one lane, each lane starts at its own first unit and runs in order, and the
+  // Course Challenge still asks the WHOLE course.
+  //
+  // So Unit 5 is not a skip. It is the first Measurement unit there is.
+  //
+  // THE WAY BACK, written down the way v3.68 wrote check-writing's: delete the
+  // STRAND_LANES entry for the course and this assertion returns to Unit 1 on
+  // its own, because every strand falls back to the whole course in order.
+  const lane = U.laneFor(t.courseId, t.strandId);
+  const expected = lane ? Math.min(...lane.units) : 1;
+  if (t.unitN !== expected) {
     errors.push(
-      `with nothing graded, the ${subject} block opens Unit ${t.unitN} ("${t.label}") — it must start at Unit 1. ` +
-        `Skipping ahead means the units before it are never done and the Course Challenge can never unlock.`
+      `with nothing graded, the ${subject} block opens Unit ${t.unitN} ("${t.label}") — it must start at ` +
+        `Unit ${expected}, the first unit of ${lane ? `her ${t.strandId} lane` : 'the course'}. ` +
+        `Starting anywhere else means the units before it are never done and the Course Challenge can never unlock.`
     );
   }
 }
@@ -228,20 +258,41 @@ for (const subject of ['math', 'reading', 'writing']) {
 // different things. The end-to-end assertion lives in check-khan-advance;
 // this stays because what it tests here is the BLOCK — resolveBlockTarget at
 // her real measured levels — which that check does not touch.
+// ⚠️ v3.81 — AND THE ORDER IT WALKS IS HER LANE'S ORDER, NOT 1 TO 8.
+//
+// This loop used to expect exactly Unit 1, 2, 3 … 8. With lanes, her lowest
+// maths strand walks its own units first and then the block moves on to the
+// rest of the course in order — so the sequence for Measurement & Data is
+// 5, 6, 7, then 1, 2, 3, 4, 8.
+//
+// It still asserts the two things that matter and always did: EVERY unit is
+// reached exactly once, and the Course Challenge arrives at the end and not
+// before. Those are what v3.20 was really about. Expecting the literal
+// sequence 1..8 was expecting the implementation, not the rule.
 {
   const grades = [];
   const seen = [];
   const total = U.KHAN_UNIT_COURSES.math2.units.length;
   for (let i = 1; i <= total; i++) {
     const t = resolveBlockTarget({ subject: 'math' }, HER_STRANDS, grades);
-    seen.push(t && t.unitN);
-    if (t && t.unitN !== i) {
-      errors.push(`after ${i - 1} unit(s) graded the maths block offers Unit ${t && t.unitN}, not Unit ${i}`);
+    if (!t || !t.unitN) {
+      errors.push(`after ${i - 1} unit(s) graded the maths block offers no unit, with ${total - i + 1} still ungraded`);
       break;
     }
-    const built = khanGradeRow({ courseId: 'math2', unitN: i, grade: 'B' });
+    if (seen.includes(t.unitN)) {
+      errors.push(`the maths block offered Unit ${t.unitN} twice — a graded unit must never come round again`);
+      break;
+    }
+    seen.push(t.unitN);
+    // ⚠️ GRADE THE UNIT THE BLOCK ACTUALLY OFFERED, not the loop counter.
+    // Until v3.81 this read `unitN: i`, which was the same thing only while the
+    // block walked 1..8. With lanes it is not, and grading unit `i` while the
+    // block sits on unit 5 would file a result against a unit she never opened
+    // — the exact harm khanGrade.js refuses free-text rows to prevent, arriving
+    // inside the check that guards it.
+    const built = khanGradeRow({ courseId: 'math2', unitN: t.unitN, grade: 'B' });
     if (!built.ok) {
-      errors.push(`the app cannot even record a result for maths Unit ${i}: ${built.reason}`);
+      errors.push(`the app cannot even record a result for maths Unit ${t.unitN}: ${built.reason}`);
       break;
     }
     grades.push(built.row);
@@ -250,8 +301,17 @@ for (const subject of ['math', 'reading', 'writing']) {
   if (!done || !done.challenge) {
     errors.push(`with all ${total} maths units graded the block offers "${done && done.label}" — it should offer the Course Challenge`);
   }
-  if (seen.join(',') === [...Array(total)].map((_, i) => i + 1).join(',')) {
-    notes.push(`the maths block walks Unit 1 → ${total} in order, then offers the Course Challenge`);
+  // EVERY unit reached exactly once, in whatever order her lane produces.
+  const everyUnit = [...Array(total)].map((_, i) => i + 1);
+  const missed = everyUnit.filter((n) => !seen.includes(n));
+  if (missed.length) {
+    errors.push(
+      `the maths block never offered Unit(s) ${missed.join(', ')} — a unit nothing reaches is a unit ` +
+        `she can never be graded on, and the Course Challenge would never unlock. This is the v3.20 ` +
+        `harm arriving by omission instead of by skipping.`
+    );
+  } else {
+    notes.push(`the maths block reaches all ${total} units exactly once — order ${seen.join(', ')} — then the Course Challenge`);
   }
 }
 
@@ -299,7 +359,15 @@ for (const id of U.KHAN_UNIT_COURSE_IDS) {
 console.log(`\n  · ${U.KHAN_UNIT_COUNT} units on file across ${U.KHAN_UNIT_COURSE_IDS.length} courses`);
 console.log(`  · ${bound} level bands bound to a confirmed unit, every name matching Khan's own`);
 console.log('  · her Mathematics, Reading and Language Arts blocks each open a UNIT, not a course index');
-console.log('  · with nothing graded all three start at UNIT 1, and advance one unit per grade');
+// ⚠️ v3.81 — THIS LINE SAID "all three start at UNIT 1" AND WOULD HAVE GONE ON
+// SAYING IT. The assertion above it was inverted for lanes and this printed
+// claim was not, so the check would have passed while announcing, on every run,
+// something the app had stopped doing. A check must never claim more than it
+// tests — and a check that claims the OPPOSITE of what it tests is worse than
+// one that claims too much, because it reads as confirmation.
+console.log(
+  '  · with nothing graded each strand starts at the FIRST UNIT OF ITS OWN LANE, and advances one per grade'
+);
 for (const n of notes) console.log('  · ' + n);
 console.log('\n  ALL 28 ADDRESSES WERE OPENED IN A BROWSER ON Aug 16 2026 — 16 units, 10 unit tests,');
 console.log('  2 course challenges. Every heading matched. Nothing came back "Oops!".');

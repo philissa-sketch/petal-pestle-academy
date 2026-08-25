@@ -322,6 +322,147 @@ export function nextUnitFor(courseId, grades = []) {
 }
 
 /* ---------------------------------------------------------------------------
+ * ONE LANE PER STRAND — v3.81. Gigi's call, Aug 25 2026: "B".
+ *
+ * ---- THE PROBLEM SHE FOUND ----
+ *
+ * Her three maths strands all route to 2nd Grade Math, and `nextUnitFor` above
+ * offers Unit 1 to every one of them, because units run in order and her record
+ * holds no grades. So:
+ *
+ *     Measurement & Data  2.50  — her LOWEST strand — is Unit 6
+ *     Geometry            2.82  — her second lowest — is Unit 8
+ *     and she was being sent to Unit 1, "Add and subtract within 20"
+ *
+ * ⚠️ AND UNITS 1 TO 4 TEACH NUMBERS & OPERATIONS, WHICH IS 3.48 — her second
+ * STRONGEST strand, and a level that does not even route to this course. The
+ * unit-order rule was spending her weakest strands' time on her strongest one.
+ *
+ * ---- WHY THIS IS NOT THE v3.20 BUG COMING BACK ----
+ *
+ * Gigi, Aug 16: "math just skips to unit 6 instead of starting at unit 1." That
+ * was ONE strand choosing the course AND the unit, so Measurement 2.00 landed
+ * her on Unit 6 with Units 1-5 never opened and the Course Challenge forever
+ * unreachable.
+ *
+ * This is different, and the difference is the whole design: each strand walks
+ * ITS OWN units, IN ORDER, starting at the first one. Nothing skips inside a
+ * lane. Measurement starts at Unit 5 because Unit 5 is the first Measurement
+ * unit, not because anything was jumped over. Every unit still belongs to
+ * exactly one lane, so the Course Challenge still unlocks when all eight are
+ * done — check-strand-lanes asserts that coverage.
+ *
+ * ---- ⚠️ THESE LANES ARE READ OFF KHAN'S UNIT NAMES. THAT IS AN INFERENCE. ----
+ *
+ * "Unit 6 · Measurement" teaches Measurement & Data; "Unit 8 · Geometry"
+ * teaches Geometry. Both are plainly true from the title and neither was
+ * observed inside the unit, because this app cannot see inside a Khan unit —
+ * v3.74's rule, and the reason no grade here is ever computed.
+ *
+ * So the names are recorded beside the lanes and a check fails the build if a
+ * unit's name stops matching the lane it was put in. A guess that stops
+ * announcing itself becomes a fact (v3.75).
+ *
+ * ---- ⚠️ AND SOME STRANDS HAVE NO LANE. THEY SAY SO. ----
+ *
+ * PATTERNS & ALGEBRA routes to 2nd Grade Math and NOT ONE of its eight units
+ * teaches it. Khan's 2nd grade course has no patterns or algebra unit at all.
+ * Inventing a lane for it — folding it into Place Value, say — would aim a
+ * child's weakest-strand time at something that does not teach it, which is the
+ * §35 mistake: "a Measurement & Data game set built on `scale` would have been
+ * aimed at the wrong child."
+ *
+ * READING has no lanes either, and for a better reason: `ela2`'s units are
+ * Fairy Tales Retold, The Moon, and Rural/Suburban/Urban. They are THEMES. Each
+ * one teaches vocabulary and comprehension together, and splitting them would
+ * be a claim about the inside of a unit nobody has seen.
+ *
+ * A strand with no lane falls back to the whole course in order — exactly the
+ * behaviour above, unchanged. Falling back is honest; inventing is not.
+ * --------------------------------------------------------------------------- */
+
+/**
+ * Which units of a course belong to which strand.
+ *
+ * A course with no entry here has no lanes at all and every strand walks the
+ * whole course in order. `why` records the unit name the lane was read off, so
+ * the inference can be checked rather than trusted.
+ */
+export const STRAND_LANES = {
+  math2: {
+    'numbers-operations': {
+      units: [1, 2, 3, 4],
+      why: ['Add and subtract within 20', 'Place value', 'Add and subtract within 100', 'Add and subtract within 1,000']
+    },
+    'measurement-data': {
+      units: [5, 6, 7],
+      why: ['Money and time', 'Measurement', 'Data']
+    },
+    geometry: {
+      units: [8],
+      why: ['Geometry']
+    }
+    // patterns-algebra: DELIBERATELY ABSENT. No unit of 2nd Grade Math teaches
+    // it. See the header — it falls back, it does not get an invented lane.
+  },
+  grammar: {
+    'grammar-usage': {
+      units: [1, 2],
+      why: ['Parts of speech: the noun', 'Parts of speech: the verb']
+    }
+  }
+  // ela2 and ela3: no lanes. Their units are THEMES, not strands. See header.
+};
+
+/** Does this course split into lanes at all? */
+export function hasLanes(courseId) {
+  return Boolean(STRAND_LANES[courseId]);
+}
+
+/** The lane a strand walks in a course, or null when it has none. */
+export function laneFor(courseId, strandId) {
+  return STRAND_LANES[courseId]?.[strandId] || null;
+}
+
+/**
+ * The next unit for ONE STRAND, walking only that strand's lane, in order.
+ *
+ * Returns `{ unit, lane }` — `lane` is true when a real lane was walked and
+ * false when it fell back to the whole course. The caller needs to be able to
+ * tell those apart, because "this is your Measurement unit" and "this is the
+ * next unit of the course" are different claims and only one of them is about
+ * her strand.
+ *
+ * Returns null when every unit in her lane is graded. ⚠️ That is NOT the same
+ * as the Course Challenge unlocking — the challenge needs every unit in the
+ * COURSE, which `nextUnitFor` still answers. A child who finishes the Geometry
+ * lane has finished one unit out of eight.
+ */
+export function nextUnitForStrand(courseId, strandId, grades = []) {
+  const c = KHAN_UNIT_COURSES[courseId];
+  if (!c) return null;
+
+  const lane = laneFor(courseId, strandId);
+  if (!lane) {
+    const unit = nextUnitFor(courseId, grades);
+    return unit ? { unit, lane: false } : null;
+  }
+
+  const done = new Set(
+    (grades || [])
+      .filter((g) => g && g.courseId === courseId && countsAsUnitDone(g))
+      .map((g) => Number(g.unitN))
+  );
+  // Ascending, always. The lane is written in order and sorted anyway, because
+  // a lane listed out of order would skip inside itself — the one thing this
+  // design promises it never does.
+  const n = [...lane.units].sort((a, b) => a - b).find((num) => !done.has(num));
+  if (n === undefined) return null;
+  const unit = c.units.find((u) => u.n === n);
+  return unit ? { unit, lane: true } : null;
+}
+
+/* ---------------------------------------------------------------------------
  * ⚠️ THIS TEST USED TO BE `Number.isFinite(Number(g.unitN))` AND IT WAS TWO
  * BUGS WAITING — v3.76.
  *

@@ -1432,6 +1432,88 @@ export const useAppStore = create((set, get) => ({
    * be checked by anyone later, and this is the record a 4th grade transcript
    * is built from.
    */
+  /**
+   * Record a reading check. v3.80.
+   *
+   * ⚠️ IT WRITES readAloud ON EVERY ROW, AND THAT IS THE POINT OF IT. The
+   * weekly tests do not — `recordAttempt` below has never carried the flag,
+   * because for a Herbalism paper it is a nice-to-have. Here it is the
+   * measurement: without it this produces one more listening score wearing a
+   * reading score's name.
+   *
+   * evidenceSource is 'test' — it counts toward mastery, like every other paper
+   * she sits in this app. It is NOT 'diagnostic': §3.10.6 keeps placement
+   * evidence out of mastery, and this is not a placement instrument. It also
+   * therefore moves no strand level, which is correct — one paper does not
+   * re-place a child.
+   *
+   * ⚠️ AND IT NEVER TOUCHES khanGrades. v3.76's rule from a third direction: a
+   * unit test, a Course Challenge and a check this app wrote are three different
+   * things. A row here must never advance her Khan unit, because Khan has not
+   * seen this paper.
+   */
+  async recordReadingCheck(form, grade) {
+    const attempt = {
+      attemptId: newEntryId(),
+      testId: form.testId,
+      kind: 'reading-check',
+      title: form.title,
+      attempt: form.attempt ?? 1,
+      dayKey: dayKeyOf(),
+      at: new Date().toISOString(),
+      right: grade.right,
+      total: grade.total,
+      percent: grade.percent,
+      letter: grade.letter,
+      // The whole reason this exists. Null-safe: unaidedPercent is null when
+      // every question was read to her, and null is not zero.
+      unaidedRight: grade.unaidedRight,
+      unaidedCount: grade.unaidedCount,
+      unaidedPercent: grade.unaidedPercent,
+      unaidedLetter: grade.unaidedLetter,
+      aloudCount: grade.aloudCount,
+      khanCourse: form.khanCourse,
+      khanUnit: form.khanUnit,
+      rows: grade.rows.map((r) => ({
+        questionId: r.questionId,
+        passage: r.passage,
+        chosen: r.chosen,
+        answer: r.answer,
+        correct: r.correct,
+        skipped: r.skipped,
+        readAloud: r.readAloud
+      }))
+    };
+    await putAttempt(attempt);
+    set({ attempts: [...get().attempts, attempt] });
+
+    await get().recordItemEvents(
+      grade.rows.map((r) => ({
+        questionId: r.questionId,
+        evidenceSource: 'test',
+        attemptState: r.skipped ? 'abandoned' : 'complete',
+        correct: r.correct,
+        chosen: r.chosen,
+        readAloud: r.readAloud
+      }))
+    );
+
+    // Petals for SITTING it, never for the score — the same rule the weekly
+    // tests follow. She has to be able to walk into a reading test she might
+    // fail without it costing her anything, and this is the one subject where
+    // she has most reason to expect to fail.
+    await get().addLedgerEntry(
+      makeEntry({
+        currency: 'petal',
+        amount: PETALS.unitTest,
+        kind: 'grant',
+        source: 'test-taken',
+        note: `Sat ${form.title}`
+      })
+    );
+    return attempt;
+  },
+
   async recordAttempt(form, responses, grade) {
     const attempt = {
       attemptId: newEntryId(),

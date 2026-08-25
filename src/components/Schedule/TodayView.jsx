@@ -13,6 +13,7 @@ import {
 } from '../../lib/bell.js';
 import { resolveBlockTarget } from '../../lib/blockLinks.js';
 import { blockLabelOnDay, blockIconOnDay, isRotatingBlock } from '../../lib/rotatingBlock.js';
+import { currentReadingCheck } from '../../lib/readingCheck.js';
 
 // ---------------------------------------------------------------------------
 // TODAY — her school day, with a bell.
@@ -278,6 +279,11 @@ export function TodayView({ onNavigate }) {
           // deciding what it opened was the string 'social'.
           // check-links asserts this call carries both.
           const target = resolveBlockTarget(b, strands, khanGrades, lessonsRead, new Date());
+          // v3.80 — is there a reading check for the Khan unit this block opens?
+          // Asked only of a reading block, and it asks the SAME function the
+          // block asked, so the two can never point at different units.
+          const readingCheck =
+            b.subject === 'reading' ? currentReadingCheck(strands, khanGrades) : null;
           return (
             <div
               key={b.id}
@@ -335,14 +341,37 @@ export function TodayView({ onNavigate }) {
                   {target && (
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       {target.kind === 'khan' ? (
-                        <a
-                          href={target.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="rounded-full bg-lavender-500 px-4 py-1.5 text-xs font-700 text-white hover:bg-lavender-700"
-                        >
-                          Open {target.label} ↗
-                        </a>
+                        <>
+                          <a
+                            href={target.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="rounded-full bg-lavender-500 px-4 py-1.5 text-xs font-700 text-white hover:bg-lavender-700"
+                          >
+                            Open {target.label} ↗
+                          </a>
+                          {/* v3.80 — AND THE CHECK THAT KHAN DOES NOT BUILD.
+                              Gigi: "There are no unit tests. How can we test
+                              her." Khan's elementary ELA has ZERO assessments —
+                              counted on the rendered page, 77 links, none of
+                              them a test — so `ela2` carries graded: 'parent'
+                              and the grade came from her by hand.
+
+                              THE BUTTON ONLY APPEARS WHERE A CHECK IS WRITTEN.
+                              One of the three ela2 units has one today.
+                              `currentReadingCheck` returns null for the rest,
+                              and a button with nothing behind it is the dead
+                              end this app has built five times. */}
+                          {readingCheck && (
+                            <button
+                              type="button"
+                              onClick={() => onNavigate?.('reading')}
+                              className="rounded-full border-2 border-sage-500 bg-sage-300/20 px-4 py-1.5 text-xs font-700 text-sage-700 hover:bg-sage-300/40"
+                            >
+                              Then: reading check
+                            </button>
+                          )}
+                        </>
                       ) : target.kind === 'notice' ? (
                         /* v3.42 — WORDS, AND DELIBERATELY NO BUTTON.
                            The Human Body has no lessons yet. Gigi's call was to

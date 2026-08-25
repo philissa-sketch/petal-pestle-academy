@@ -1546,3 +1546,180 @@ Same family as v3.72, where both guard assertions matched the comments explainin
 ### What this does not touch
 
 **Khan Academy.** This app cannot see inside it, so it cannot know which unit she actually finished — only which grade Gigi recorded. **A wall built on a guess is a locked door with no key**, and §37 is the whole argument for not building one.
+
+---
+
+## 42. THE READING CHECK — v3.80
+
+**Gigi, Aug 25 2026:**
+
+> *"Can you look through Kahn Academy reading lessons that she is doing. There are no unit tests. How can we test her. In Lamar's app we have passages that he has to read and is tested on it. But there aren't any Kahn Academy that he does for it. Are you able to scan the lessons and create a unit test for each unit?"*
+
+### What could not be done, and what could
+
+**Khan has no public API.** Nothing this app writes can open her Khan course and read what is inside a unit. "Scan the lessons" is not available, and eight tests written from pages nobody has seen would be the §38 failure with a child's reading record attached.
+
+**But the units themselves are on disk**, names and slugs, each confirmed against Khan's own rendered page — that is how the links are placed. So the app knows exactly which unit she is in. It simply cannot see inside it.
+
+**And the hole she found was already written down.** `khanUnits.js`, Aug 16 2026:
+
+> *"KHAN BUILT NO TESTS FOR THIS COURSE, AND THAT IS NOT A GAP IN THE RESEARCH. Counted on the rendered page: 77 links — 49 videos, 15 exercises, 6 articles, **ZERO assessments**. The words 'unit test', 'quiz' and 'course challenge' do not appear anywhere on it. Khan's elementary ELA is themed reading, not a graded course; its gradeable ELA starts at 4th grade."*
+
+That course carries `graded: 'parent'`. The grade was always meant to come from Gigi, by hand. **This is what replaces the hand.**
+
+---
+
+### ⚠️ The number this exists for is not the percentage
+
+It is `readAloud`, per answer.
+
+**54 of her 86 recorded answers were read to her — 63%**, and **5 of her 6** Reading Comprehension answers. Her diagnostic file has said since Aug 13:
+
+> *"Reading 3.46 and Vocabulary 2.91 are listening scores, not reading scores. Her independent reading level is likely lower than both."*
+
+**Her independent reading has never been measured.** Not by this app, not by the Check-In, not by anything either knows about. It is the largest blank on her record, and §41's reading cap review found it blocking a second decision twelve days later.
+
+So a reading check that does not record whether she was read to would produce **one more listening score wearing a reading score's name** — worse than no score at all, because it would look like it had filled the blank.
+
+### `unaidedPercent` is null, and never 0
+
+A sitting where every word was read to her reports **"no independent reading measured"**, not 0%.
+
+`Number(null)` is 0 and 0 is finite — the trap found in **three files in two days at v3.75** and a fourth at v3.76. Here it would print a nine-year-old **a zero for a paper she got every question right on.**
+
+The count rides beside the percentage, always. **100% over two questions is lying with true arithmetic**, and §5.4 forbids the app overstating what it knows.
+
+### ⚠️ Reading the passage aloud marks every question on it
+
+The cautious direction, and it has to be. If the passage was read to her, **no answer drawn from it is independent reading** — including the questions where she pressed nothing at all. Marking only the question in focus would let listened-to answers into the one number this whole feature exists to produce.
+
+Negative-tested: the mutation that marks a single question goes red.
+
+### She is never told off for pressing it
+
+The screen says *"Listening to a passage and then answering it is reading too."* When she reads the lot herself it says *"You read every word of that yourself."*
+
+The split-out number is **a grown-up's instrument, never a verdict on her**. §32's rule one room over — and a check fails the build if *needed help*, *without help* or *on your own* ever appear where she can read them.
+
+---
+
+### The passages, measured rather than claimed
+
+Run through `analyse()` from `readingLoad.js`, the same function `check-lesson-prose` uses:
+
+| | Words | Per sentence | Long words |
+|---|---|---|---|
+| The Bears Tell It | 112 | **7.5** | 0.0% |
+| Jack and the Bean | 99 | **7.6** | 0.0% |
+
+Against a Quarter 1 cap of 11 and 6%. **Deliberately well under.**
+
+⚠️ §34 records a **floor** at Quarter 3 because prose written too easy is as wrong as prose written too hard, and Quarter 1 has no floor — so nothing here breaks a rule. But this is the **first time anyone measures what she reads alone**, and a first measurement that defeats her tells you only that it was too hard. Start under. Ramp the next unit on evidence rather than on hope.
+
+**Point of view is the first passage's whole point**, because that is the skill *"Fairy Tales Retold"* teaches: the same events, a different teller. **No question needs a fairy tale she read somewhere else** — the trap in a retelling unit, where the tempting question is *"what happened in the real story"*.
+
+Answer key spread 25/25/25/25 against the 40% ceiling.
+
+---
+
+### ⚠️ A reading check is not a Khan grade
+
+v3.76 kept a unit test and a Course Challenge apart **in both directions**. This is a **third kind**: a paper this app wrote, about a Khan unit, sat here.
+
+Filing it in `khanGrades` would put a number **Khan never produced** onto what becomes a transcript, and `nextUnitFor` would then **advance her Khan unit on a test Khan has never seen.**
+
+### One definition of which unit she is in
+
+`currentReadingCheck` walks the route the block walks — lowest strand chooses the course, the course chooses the unit in order. The button on Today and the screen it opens **cannot point at different units.**
+
+**⚠️ And her reading placement is driven by VOCABULARY, not comprehension.** 2.91 is below 3.46, and below 3.00 is second grade. Gigi said *"she is currently in 2nd grade reading"*; a session said third, having computed it off an eight-day-old export instead of asking the app. **She was reading her screen.** Verify against the disk, not against a file that was true last week.
+
+### ⚠️ Two of my own assertions were wrong, and their negative tests said so
+
+**One searched for the word "unaided" anywhere after a `>`** — and `isFullyUnaided(grade)` contains it. The check failed correct code: it was reading the identifier that *implements* a rule and calling it a message to a child.
+
+**The other required `readAloud` at one of its two write sites.** Stripping it from the `itemEvents` rows — the copy every report and the Gradebook read — left the check green, because the attempt row still satisfied the regex. **A rule enforced at one of its two sites is a rule that holds by luck.**
+
+Both are v3.79's `aria-disabled` twin, one version later. **Eleven negative tests, all red** — and one was rewritten after the first version landed a mutation that did not reintroduce the bug: a longer sentence that still sat under the cap.
+
+---
+
+## 43. ONE LANE PER STRAND — v3.81
+
+**Gigi, Aug 25 2026, choosing between leaving Khan's unit order alone and giving each strand its own track:**
+
+> *"B"*
+
+### The problem, in one table
+
+| Unit 1 | Add and subtract within 20 | ← **she was here, and so were the other two** |
+|---|---|---|
+| Unit 2 | Place value | |
+| Unit 3 | Add and subtract within 100 | |
+| Unit 4 | Add and subtract within 1,000 | |
+| Unit 5 | Money and time | |
+| **Unit 6** | **Measurement** | her **2.50** strand |
+| Unit 7 | Data | |
+| **Unit 8** | **Geometry** | her **2.82** strand |
+
+All three of her maths strands route to 2nd Grade Math. `nextUnitFor` offered **Unit 1** to every one of them, because units run in order and her record holds no Khan grades.
+
+**⚠️ And Unit 1 teaches Numbers & Operations — 3.48, her second STRONGEST strand.**
+
+So the unit-order rule was spending her two weakest strands' half hour on her strongest one, and would have gone on doing it until she had graded five units. Her Measurement block now opens **Unit 5**, the first Measurement unit there is.
+
+---
+
+### ⚠️ This is one step away from being the v3.20 bug again
+
+**Gigi, Aug 16 2026:** *"math just skips to unit 6 instead of starting at unit 1."*
+
+That was one strand choosing the course **and** the unit: Measurement 2.00 landed her on Unit 6, Units 1–5 were never opened, and the Course Challenge — the finish line she asked for — was unreachable for ever.
+
+**The difference is enforced, not described.** `check-strand-lanes` asserts all three:
+
+- **Every unit belongs to exactly one lane.** A unit in no lane can never be graded, and the Course Challenge would never unlock — the v3.20 harm arriving by omission instead of by skipping.
+- **Each lane starts at its own first unit and runs in order.** Nothing is jumped inside a lane. Unit 5 is not a skip; it is the first Measurement unit.
+- **The maths block still reaches all eight units exactly once**, in the order **5, 6, 7, 1, 2, 3, 4, 8**, and only then the Course Challenge.
+
+The first negative test is the v3.20 bug reintroduced exactly as it happened: a lane that jumps to Unit 6 and skips Unit 5. It goes red.
+
+### ⚠️ Finishing a lane is not finishing the course
+
+Before lanes, *"no next unit"* could only mean all eight were graded, and offering the Course Challenge there was correct.
+
+**The Geometry lane is one unit of eight.** A child who graded it would have been handed the cumulative final for a course she had done an eighth of. **Gigi's own words at v3.76 are the rule:** *"the course challenge is the test after all the units are completed."*
+
+A finished lane now moves to the rest of the course in order.
+
+---
+
+### ⚠️ Some strands get no lane, and that is the honest answer
+
+**Patterns & Algebra routes to 2nd Grade Math and not one of its eight units teaches it.** Khan's 2nd grade course has no patterns or algebra unit at all.
+
+Folding it into Place Value to make the table look complete would aim her weakest-strand time at something that does not teach the strand — **§35's mistake**, where `scale` was tagged as Measurement and turned out to mean scale *model*: *"a Measurement & Data game set built on it would have been aimed at the wrong child."*
+
+So it **falls back** to the whole course in order, and the target **says** it fell back. *"This is your Measurement unit"* and *"this is the next unit of the course"* are different claims, and only one of them is about her strand.
+
+**Reading gets no lanes either, for a better reason.** `ela2` is Fairy Tales Retold, The Moon, and Rural/Suburban/Urban. Those are **themes**. Each teaches vocabulary and comprehension together, and splitting them would be a claim about the inside of a unit nobody has seen.
+
+### ⚠️ The lanes are read off Khan's titles. That is an inference.
+
+*"Unit 6 · Measurement"* teaches Measurement & Data. Plainly true from the title — and **never observed inside the unit**, because this app cannot see inside Khan (§37, and the reason no grade here is ever computed).
+
+So the unit name each lane was read off is **stored beside it**, and the check fails if Khan renames a unit underneath the inference. **A guess that stops announcing itself becomes a fact** — v3.75's rule, and the reason the assumed A+ band still carries its flag.
+
+---
+
+### ⚠️ And the check was asserting the rule she had just overturned
+
+From v3.20 to v3.80, `check-khan-units` read `if (t.unitN !== 1)`.
+
+**Inverted, not deleted.** Her word, the date, and the reasoning sit beside it, and the way back is written down: delete the `STRAND_LANES` entry for the course and the assertion returns to Unit 1 on its own, because every strand falls back to the whole course in order. Same as `check-writing` at v3.68 and `check-yearplan` at v3.23. **A rule deleted is a rule nobody can argue with later.**
+
+### ⚠️ Two more things in that same file
+
+**It would have gone on printing *"with nothing graded all three start at UNIT 1"* on every run.** The assertion was inverted; the sentence printed beside it was not. **A check that announces the opposite of what it tests is worse than one that claims too much, because it reads as confirmation.** Rule 4, in the file that has now been guilty three times.
+
+**And its own loop was grading the wrong unit.** It recorded `unitN: i` — the loop counter — which was the same as the offered unit only while the block walked 1 to 8. With lanes it would have filed a result against a unit Azianna never opened: the exact harm `khanGrade.js` refuses free-text rows to prevent, arriving **inside the check that guards it.**

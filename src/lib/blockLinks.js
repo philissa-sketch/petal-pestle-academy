@@ -36,7 +36,13 @@
 // ---------------------------------------------------------------------------
 
 import { khanFor, KHAN_COURSES } from '../data/khan/khanMap.js';
-import { nextUnitFor, courseChallengeUrl, KHAN_UNIT_COURSES } from '../data/khan/khanUnits.js';
+import {
+  nextUnitFor,
+  nextUnitForStrand,
+  courseChallengeUrl,
+  KHAN_UNIT_COURSES
+} from '../data/khan/khanUnits.js';
+import { strandLabel } from '../config/strands.js';
 import { ALL_LESSONS } from '../data/lessons/appCourses.js';
 import {
   isRotatingBlock,
@@ -295,8 +301,57 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
     // the block offers the Course Challenge - the finish line she asked for.
     if (khan.unitCourse) {
       const course = KHAN_UNIT_COURSES[khan.unitCourse];
-      const next = nextUnitFor(khan.unitCourse, grades);
+      // ---- v3.81 — HER STRAND WALKS ITS OWN LANE ----
+      //
+      // Gigi, Aug 25 2026, choosing between leaving the order alone and giving
+      // each strand its own track: "B".
+      //
+      // `lowest.id` is the strand that CHOSE this course, and it is now also the
+      // strand whose units she is given. Measurement & Data 2.50 opens Unit 5,
+      // the first Measurement unit, instead of Unit 1 "Add and subtract within
+      // 20" — which teaches Numbers & Operations, her 3.48 strand, and was
+      // spending her weakest strand's half hour on her strongest.
+      //
+      // ⚠️ NOT the v3.20 bug. That was one strand choosing the course AND
+      // jumping to Unit 6 with 1-5 never opened. Nothing is jumped here: each
+      // lane starts at its own first unit and runs in order, every unit belongs
+      // to exactly one lane, and the Course Challenge still needs all eight.
+      //
+      // `next.lane` is false when the strand has no lane — Patterns & Algebra,
+      // which no 2nd Grade Math unit teaches, and both reading courses, whose
+      // units are themes rather than strands. Then this is the whole course in
+      // order, exactly as before, and the detail line says so rather than
+      // claiming the unit is about her strand.
+      const picked = nextUnitForStrand(khan.unitCourse, lowest.id, grades);
+      const next = picked?.unit || null;
+      const onHerLane = Boolean(picked?.lane);
       if (!next) {
+        // ---- \u26a0\ufe0f FINISHING A LANE IS NOT FINISHING THE COURSE ----
+        //
+        // v3.81. Before lanes existed, "no next unit" could only mean every
+        // unit of the course was graded, and offering the Course Challenge here
+        // was right. It is not right now: the Geometry lane is ONE unit of
+        // eight, so a child who grades it would have been handed the cumulative
+        // final for a course she has done an eighth of.
+        //
+        // Gigi's own words at v3.76 are the rule: "the course challenge is the
+        // test after all the units are completed." So the challenge asks the
+        // WHOLE course, through nextUnitFor, which knows nothing about lanes.
+        //
+        // And when her lane is done but the course is not, she moves to the
+        // rest of it in order rather than being told she has finished.
+        const wholeCourseLeft = nextUnitFor(khan.unitCourse, grades);
+        if (wholeCourseLeft) {
+          return {
+            kind: 'khan',
+            label: wholeCourseLeft.name,
+            url: `https://www.khanacademy.org${course.base}/${wholeCourseLeft.slug}`,
+            detail: `${course.label} \u00b7 Unit ${wholeCourseLeft.n} of ${course.units.length}`,
+            exact: true,
+            courseId: khan.unitCourse,
+            unitN: wholeCourseLeft.n
+          };
+        }
         const challenge = courseChallengeUrl(khan.unitCourse);
         if (challenge) {
           return {
@@ -320,8 +375,15 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
           kind: 'khan',
           label: next.name,
           url: `https://www.khanacademy.org${course.base}/${next.slug}`,
-          detail: `${course.label} \u00b7 Unit ${next.n} of ${course.units.length}`,
+          // On her lane the detail names the STRAND, because that is the claim
+          // being made \u2014 "this unit is your Measurement work". Off a lane it
+          // says unit N of M, the old wording, because that is all that is true.
+          detail: onHerLane
+            ? `${course.label} \u00b7 Unit ${next.n} \u00b7 your ${strandLabel(lowest.id)}`
+            : `${course.label} \u00b7 Unit ${next.n} of ${course.units.length}`,
           exact: true,
+          onHerLane,
+          strandId: lowest.id,
           courseId: khan.unitCourse,
           unitN: next.n
         };

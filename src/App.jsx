@@ -4,6 +4,7 @@ import { NavBar } from './components/Navigation/NavBar.jsx';
 import { HomeDashboard } from './components/Home/HomeDashboard.jsx';
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { ParentGate } from './components/Parent/ParentGate.jsx';
+import { currentReadingCheck } from './lib/readingCheck.js';
 
 // The Home screen is the first paint, so it is imported directly. Everything
 // else is reachable only by a nav tab or a button on Home, so none of it needs
@@ -52,6 +53,9 @@ const LessonsView = lazy(() =>
 );
 const JournalView = lazy(() =>
   import('./components/Journal/JournalView.jsx').then((m) => ({ default: m.JournalView }))
+);
+const ReadingCheckView = lazy(() =>
+  import('./components/Assess/ReadingCheckView.jsx').then((m) => ({ default: m.ReadingCheckView }))
 );
 const ParentDashboard = lazy(() =>
   import('./components/Parent/ParentDashboard.jsx').then((m) => ({ default: m.ParentDashboard }))
@@ -117,6 +121,14 @@ export default function App() {
 
   const [view, setView] = useState('home');
   const [dbNotice, setDbNotice] = useState(null);
+
+  // v3.80 — which reading check is hers today, derived rather than routed.
+  // Passing an id through navigate() would give the button and the screen two
+  // ways to disagree about which unit she is on; asking the same function twice
+  // gives them none.
+  const strands = useAppStore((s) => s.strands);
+  const khanGrades = useAppStore((s) => s.khanGrades);
+  const readingUnitId = currentReadingCheck(strands, khanGrades)?.id ?? null;
 
   // v3.42 — WHICH COURSE A LINK MEANT, not just which tab.
   //
@@ -238,6 +250,11 @@ export default function App() {
           {view === 'lessons' && (
             <LessonsView onNavigate={navigate} courseId={viewCourse} lessonId={viewLesson} />
           )}
+          {/* v3.80 — the reading check. It works out WHICH unit she is on
+              itself, from her strand levels, rather than being handed an id:
+              one definition of "which Khan reading unit is she in", asked by
+              both the button on Today and the screen it opens. */}
+          {view === 'reading' && <ReadingCheckView unitId={readingUnitId} onExit={() => navigate('today')} />}
           {view === 'friday' && <CatchUpView onNavigate={navigate} />}
           {view === 'journal' && <JournalView />}
           {view === 'diagnostic' && <DiagnosticView onNavigate={navigate} />}

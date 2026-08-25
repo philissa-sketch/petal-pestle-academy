@@ -60,10 +60,55 @@ export const READING_CAPS = {
    * until roughly April, so a Check-In re-take at the end of Q2 or Q3 lands
    * months ahead of it.
    *
-   * ⚠️ REVIEW THIS NUMBER AFTER THE NEXT CHECK-IN, and write what moved.
-   * Her Reading 3.46 and Vocabulary 2.91 are LISTENING scores — 10 of her 13
-   * reading questions were read aloud. The app records read-aloud per answer,
-   * so a re-take is what tells you what her INDEPENDENT reading is doing.
+   * ---- ⚠️ REVIEWED Aug 25 2026. HELD AT 14. THE EVIDENCE STILL DOES NOT
+   *      EXIST, AND THAT IS THE FINDING. ----
+   *
+   * §34 said: review this after the next Check-In. Azianna sat Check-In #2 on
+   * Aug 24 2026 and it has been read.
+   *
+   * IT DID NOT MEASURE HER READING. The sitting re-took the four strands that
+   * were still `settled: false` — Grammar & Usage, Writing Strategies, Geometry
+   * and Measurement & Data — and left the five settled ones alone, correctly.
+   * READING COMPREHENSION AND VOCABULARY WERE NOT ASKED. They still read 3.46
+   * and 2.91, unchanged since Aug 13, because nothing has asked them since.
+   *
+   * So the review that was supposed to settle this number could not: the
+   * instrument was pointed somewhere else. Writing "reviewed, held at 14" with
+   * no more than that would make this look like a decision supported by a second
+   * reading. It is not. It is the same absence of evidence as v3.70, twelve days
+   * older.
+   *
+   * ---- WHAT DID MOVE, AND WHY IT DOES NOT ANSWER THIS ----
+   *
+   * Grammar & Usage 2.20 → 2.35 and Writing Strategies 2.70 → 2.82. Both real
+   * readings, both up, and they are the two strands nearest to prose. It is
+   * tempting to read that as reading growth and raise the cap.
+   *
+   * DO NOT. Grammar and writing are what she PRODUCES; the cap governs what she
+   * must CONSUME. §3.10.8 permits a delta on one instrument's scale — it does
+   * not permit borrowing one strand's delta to predict another's. That is the
+   * v3.75 mistake in a new place: a number derived from adjacent evidence,
+   * stated as though it were measured.
+   *
+   * ---- AND THE READ-ALOUD SHARE WENT UP, NOT DOWN ----
+   *
+   * 54 of 86 answers read aloud — 63%, against 59% at the Aug 13 sitting. On
+   * Reading Comprehension it is 5 of 6. So every reading number on her record is
+   * still a LISTENING number, and her independent reading has never once been
+   * measured. Raising a cap on prose she must read alone, on the strength of
+   * scores earned while being read to, is the clearest way to write 96 lessons
+   * she cannot get through.
+   *
+   * ⚠️ WHAT WOULD ACTUALLY ANSWER THIS, and neither is a Check-In re-take:
+   *   1. The passage tests (v3.80) — she reads a passage and answers on it, with
+   *      read-aloud recorded per answer. The first score she earns WITHOUT
+   *      pressing "read it to me" is the first independent reading measurement
+   *      this app has ever taken.
+   *   2. A re-take of the FIVE SETTLED strands, which would ask Reading
+   *      Comprehension and Vocabulary for the first time since Aug 13.
+   *
+   * She does not reach Q4 Herbalism until roughly April. There is time. There is
+   * simply not yet a reason.
    *
    * NOTE: the quarterly and weekly tests cannot answer this. They carry
    * evidenceSource 'test' and draw from the course banks, which have no strand.
