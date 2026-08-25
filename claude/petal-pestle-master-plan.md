@@ -1426,3 +1426,49 @@ A Course Challenge could not be recorded until this version, so **every row with
 Her 2nd Grade Math screenshot reads **COURSE CHALLENGE: IN PROGRESS** with six units untouched. **Khan offers it whenever she likes.**
 
 This app holds her block on Unit 1 until the units are graded, which was the v3.20 fix for *"maths skips to unit 6."* The two disagree deliberately, and the row says so: **recording it early is allowed; pretending the units are done is not.**
+
+---
+
+## 40. THE ANNUAL PROGRESS REPORT — v3.78
+
+**Gigi, Aug 24, choosing the next job, then choosing how:** *"Do it the way Lamar's app is setup."*
+
+### What the statute asks for
+
+**O.C.G.A. § 20-2-690(c):** a **written annual progress assessment**, covering **each of five named subjects** — reading, language arts, mathematics, social studies and science — **kept on file for three years**.
+
+The groundwork was already here and had been for months. `GEORGIA.requiredSubjects` maps the five statute subjects to this app's own ids, and `hoursSummary()` already returned `perStatuteSubject` carrying a comment that said why: *"so the annual progress report can be written against the five the law actually names."* **Everything the report needed was on disk. There was simply no report.**
+
+### Lamar's shape, adopted whole
+
+From Mission Control's own plan: *"subject-by-subject **letter grades A-F**, based on average accuracy on lessons actually attempted … **deliberately kept separate from curriculum-coverage stats**, since 'how much of the curriculum exists so far' and 'how well he's doing' are different things — plus a **'Needs Attention' list** of specific weak lessons per subject, **printable**."*
+
+And his screenshot supplied the layout: **one grade on the subject line**, an **"INSIDE THIS GRADE"** breakdown beneath it, and the sentence *"One grade goes on the transcript. These two are what tell you where to spend the time."* All three carried across.
+
+### ⚠️ The rule this exists to keep, and Gigi is the one who found it
+
+His log records her catching it: the Report Card showed **"1/106 mastered · 1%"** as though that were a grade — when the number measured **how much curriculum had been built**, *"which I control by how fast I build it, not how well he's actually doing."*
+
+> *"Conflating 'curriculum completion' with 'performance' made the platform's own unfinished state look like his failure."*
+
+**A nine-year-old must never be marked down for a lesson nobody has written yet.**
+
+So coverage and hours are computed, printed, and **structurally unable to reach a letter**. `check-annual-report` proves it the only way worth proving it: it runs the report twice on identical graded evidence — once bare, once with a hundred lessons read and a full year of hours — and **requires every letter to be identical.** It also asserts the coverage figures genuinely moved, because a test that changed nothing proves nothing, which this project has now learned four times.
+
+### Three more rules, each already paid for
+
+**Ungraded is null with a reason — never 0, never F.** Anti-pattern 23, and Lamar's *"Not yet graded, not a misleading 0%."* This app had the `Number(null)`-is-0 bug **three times in two days**, once inside a course average where it would have made an unfinished course look like a failing child.
+
+**The Check-In never touches a grade.** §3.10.6 keeps diagnostic evidence out of mastery: a placement instrument measures **where to start her**, not how she did. It appears under **Growth**, on its own instrument, per §3.10.8 — and the check proves that adding Check-In levels moves no letter.
+
+**Enrichment is named and never counted.** The Human Body carries no Georgia element. Folding it into "Science" would overstate coverage of the very thing the statute asks about.
+
+### And the report is honest about being nearly empty
+
+Built today it prints **"Not yet graded"** against almost every subject. Her record holds **0 Khan grades, 0 writing marks, 0 test attempts, 5 lesson reads and 3 school days.**
+
+**That is the correct output, and it is the argument for building it in August rather than May.** The report is an early-warning instrument, not a trophy. §5.4's point, in a new place: *the useful moment to find out Social Studies has nothing in it is October, not June.*
+
+### What it does not claim
+
+**Whether it satisfies Georgia.** Nothing in software can promise that, the check prints the disclaimer on every run, and none of it is legal advice.

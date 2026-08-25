@@ -14,6 +14,7 @@ import { exportAll } from '../../db/db.js';
 import { RewardsPanel } from './RewardsPanel.jsx';
 import { MessagesPanel } from './MessagesPanel.jsx';
 import { SchedulePanel } from './SchedulePanel.jsx';
+import { AnnualReportPanel } from './AnnualReportPanel.jsx';
 import { GradebookPanel } from './GradebookPanel.jsx';
 import { WritingPiecesPanel } from './WritingPiecesPanel.jsx';
 import { GoalsPanel } from './GoalsPanel.jsx';
@@ -2057,6 +2058,8 @@ export function ParentDashboard({ onExit }) {
         {tab === 'remeasure' && <RemeasurePanel />}
         {tab === 'goals' && <GoalsPanel />}
         {tab === 'hours' && <HoursPanel />}
+        {/* v3.78 — the document O.C.G.A. § 20-2-690(c) actually asks for. */}
+        {tab === 'annual' && <AnnualReportPanel />}
         {tab === 'khan' && <KhanGradesPanel />}
         {tab === 'writingpieces' && <WritingPiecesPanel />}
         {tab === 'messages' && <MessagesPanel />}

@@ -149,7 +149,11 @@ export const PARENT_NAV = [
       // set FROM a measurement, and four of hers are waiting on the re-measure
       // one row up.
       { id: 'goals', label: 'Goals' },
-      { id: 'hours', label: 'Hours (Georgia)' }
+      { id: 'hours', label: 'Hours (Georgia)' },
+      // v3.78 — the document Georgia actually asks for, O.C.G.A. § 20-2-690(c).
+      // It sits beside Hours because they answer the same statute from two
+      // sides: hours are the instruction given, this is the progress made.
+      { id: 'annual', label: 'Annual report' }
     ]
   },
   {

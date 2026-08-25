@@ -20,12 +20,28 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.77';
+export const VERSION = '3.78';
 
 export const BUILD_DATE = 'August 24, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.78',
+    date: 'Aug 24, 2026',
+    notes: [
+      '⭐⭐ THE ANNUAL PROGRESS REPORT EXISTS. O.C.G.A. § 20-2-690(c) asks for a WRITTEN annual assessment of progress in each of five named subjects — reading, language arts, mathematics, social studies, science — kept on file for three years. This app has held every input that report needs for months and could not print one. Grown-Up Corner → Report → Annual report, printable, one block per statute subject.',
+      'BUILT TO LAMAR’S SHAPE, because Gigi asked for that exactly: subject-by-subject letter grades, an "inside this grade" breakdown listing the components with their own letters, a "needs attention" list, and printable. His own note carried across: "One grade goes on the record. These are what tell you where to spend the time."',
+      '⚠️ AND THE RULE IT EXISTS TO KEEP IS ONE GIGI FOUND HERSELF, IN HIS APP. Mission Control’s report card printed "1/106 mastered · 1%" as though it were a grade — but that measured how much curriculum had been BUILT. His log: "Conflating curriculum completion with performance made the platform’s own unfinished state look like his failure." SO COVERAGE AND HOURS CANNOT REACH A LETTER HERE. They print below the grade, marked as separate, and check-annual-report runs the report twice with wildly different coverage and requires every letter to be identical.',
+      '⚠️ UNGRADED IS NULL WITH A REASON — NEVER 0, NEVER F. Blueprint anti-pattern 23, and Lamar’s own words: "Not yet graded," not a misleading 0%. This app had the Number(null)-is-0 bug three times in two days, once inside a course average, so it is asserted rather than assumed.',
+      'THE CHECK-IN NEVER TOUCHES A GRADE. §3.10.6 keeps diagnostic evidence out of mastery — a placement instrument measures where to START her, not how she did. It is reported under Growth, on its own instrument, per §3.10.8, and the check proves that adding Check-In levels moves no letter.',
+      'THE HUMAN BODY IS NAMED AS ENRICHMENT AND NEVER COUNTED AS ONE OF THE FIVE. Folding a course with no Georgia element into "Science" would overstate coverage of the thing the statute actually asks about.',
+      'ONE LADDER, ONE IMPLEMENTATION — the report imports letterForPercent from khanGrade.js rather than restating it. v3.70’s rule: two implementations of one metric drift, and the day they disagree neither number can be trusted. The check fails if a second ladder appears.',
+      '⚠️ AND IT PRINTS "NOT YET GRADED" ALMOST EVERYWHERE TODAY, WHICH IS THE CORRECT OUTPUT AND THE REASON TO BUILD IT IN AUGUST. Her record holds 0 Khan grades, 0 writing marks, 0 test attempts, 5 lesson reads and 3 school days. The report is an early-warning instrument, not a trophy: the useful moment to find out Social Studies has nothing in it is October, not June.',
+      'CHECK #32, check-annual-report, SIX NEGATIVE TESTS ALL RED: coverage folded into the grade (the Mission Control bug, reproduced deliberately), ungraded scored as a zero, the Check-In leaking into a letter, enrichment counted as a statute subject, a second letter ladder appearing, and the panel storing the report instead of deriving it. Each asserts its own mutation applied first.',
+      'NOT TESTED, AND SAID ON EVERY RUN: whether this satisfies Georgia. Nothing in software can promise that and none of it is legal advice.'
+    ]
+  },
   {
     version: '3.77',
     date: 'Aug 24, 2026',
