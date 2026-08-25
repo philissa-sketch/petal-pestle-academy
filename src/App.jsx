@@ -129,10 +129,24 @@ export default function App() {
   // navigate(view, course) is backwards compatible: navigate('journal') still
   // works everywhere it is already called with one argument, and the course is
   // simply cleared. Only the lessons tab reads it.
+  //
+  // v3.79 — AND WHICH LESSON, when the link meant one lesson and not a course.
+  //
+  // Gigi, Aug 25 2026: "her today prompt just sends her to the lesson she is to
+  // complete". resolveBlockTarget now returns a lessonId for the four courses
+  // this app teaches. Without a third argument here it would be computed
+  // correctly and then thrown away one function later — the target would know
+  // the answer and the screen would still open the index.
+  //
+  // navigate(view, course, lesson) stays backwards compatible in both
+  // directions: navigate('journal') and navigate('lessons', 'social') are
+  // unchanged everywhere they are already called, and the lesson is cleared.
   const [viewCourse, setViewCourse] = useState(null);
-  const navigate = useCallback((next, course = null) => {
+  const [viewLesson, setViewLesson] = useState(null);
+  const navigate = useCallback((next, course = null, lesson = null) => {
     setView(next);
     setViewCourse(course || null);
+    setViewLesson(lesson || null);
   }, []);
 
   useEffect(() => {
@@ -221,7 +235,9 @@ export default function App() {
         <Suspense fallback={<ScreenLoading />}>
           {view === 'home' && <HomeDashboard onNavigate={navigate} />}
           {view === 'today' && <TodayView onNavigate={navigate} />}
-          {view === 'lessons' && <LessonsView onNavigate={navigate} courseId={viewCourse} />}
+          {view === 'lessons' && (
+            <LessonsView onNavigate={navigate} courseId={viewCourse} lessonId={viewLesson} />
+          )}
           {view === 'friday' && <CatchUpView onNavigate={navigate} />}
           {view === 'journal' && <JournalView />}
           {view === 'diagnostic' && <DiagnosticView onNavigate={navigate} />}

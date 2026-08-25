@@ -374,12 +374,34 @@ for (const block of DEFAULT_SCHEDULE) {
 // target was built from block.subject alone and did not. So on a Tuesday the
 // block read "The Human Body" while the only thing deciding what it opened was
 // the string 'social'. Nothing compared the two.
+// ---- ⚠️ v3.79 — AND IT COMPARED MORE THAN IT CLAIMED TO ----
+//
+// The heading above says THE SAME COURSE. The test said `label !== detail`,
+// which is the same thing only while `detail` holds nothing but a course name.
+//
+// v3.79 gave the four app-course blocks a real destination, so detail became
+// "Social Studies · Week 1 · The bill, and the people who refused" — the same
+// course, and now also the week she is up to. All four rotating days went red
+// on a change that made the screen MORE truthful, not less.
+//
+// THAT IS THIS PROJECT'S MOST REPEATED SIN, and the seventh time: a check that
+// fails a safer change. The fix people reach for is to weaken the check —
+// delete the assertion, or exempt the block. Both would have thrown away the
+// rule that caught the v3.42 bug, where a Tuesday block read "The Human Body"
+// and opened Social Studies.
+//
+// So it compares THE COURSE SEGMENT, which is what the heading always promised.
+// Everything after the first separator is detail ABOUT that course and cannot
+// contradict it. A link that names a different course still fails, and the
+// negative test that reintroduces the v3.42 bug still goes red.
+const courseSegment = (s) => String(s || '').split(' · ')[0].trim();
+
 for (const block of DEFAULT_SCHEDULE) {
   if (!isRotatingBlock(block.id)) continue;
   for (const [dayName, date] of WEEK) {
     const label = blockLabelOnDay(block, date, undefined, []);
     const t = resolveBlockTarget(block, {}, [], [], date);
-    const named = t?.kind === 'notice' ? t.label : t?.detail;
+    const named = courseSegment(t?.kind === 'notice' ? t.label : t?.detail);
     if (!named) continue;
     if (label && named && label !== named && !['Catch-up', 'Garden & Projects'].includes(label)) {
       errors.push(

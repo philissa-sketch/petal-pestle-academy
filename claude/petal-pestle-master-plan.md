@@ -1472,3 +1472,77 @@ Built today it prints **"Not yet graded"** against almost every subject. Her rec
 ### What it does not claim
 
 **Whether it satisfies Georgia.** Nothing in software can promise that, the check prints the disclaimer on every run, and none of it is legal advice.
+
+---
+
+## 41. ONE LESSON, NOT A MENU — v3.79
+
+**Gigi, Aug 25 2026:**
+
+> *"I will like it that her today prompt just sends her to the lesson she is to complete and she doesn't see the other lessons. Sometimes she goes ahead without completing the full lesson. I know you cannot do it for Kahn Academy but can it be done for the modules that we created?"*
+
+Yes, for the four courses this app teaches. No for Khan, and she said so before it had to be said back to her.
+
+### What the block actually did
+
+Every app-course block returned `{ kind: 'view', view: 'lessons', course }` — **the course index.** Ninety-six Herbalism lessons, sixteen modules, four quarter tabs, nothing locked. Her 2:45 block named a subject and handed her the year.
+
+That was the right answer to the **v2.0** problem, which was a block that opened **nothing**. It is the wrong answer to this one. A nine-year-old handed a menu picks from the menu, and skipping ahead is what a menu is for.
+
+### ⚠️ And the file had been claiming otherwise for fifty-nine versions
+
+The comment above the Herbalism branch, written at v2.0 and never touched:
+
+> *"the block that says Herbalism opens the lesson she is up to — which was the entire point of the linking work in v2.0."*
+
+It opened the index. The sentence was **true about the intention and false about the code**, and nothing ever read it.
+
+**The Khan side of this same file got the identical correction at v3.20** — *"her schedule opened a course index, not her unit"* — and the app's own four courses kept the bug, thirty lines away. §5.4's rule arriving from a new direction: the app overstating what it does, in its own margin.
+
+### ⭐ Why "first unfinished" is a safe question to ask
+
+`markLessonRead` is called from **exactly one place** — `LessonReader.finish()` — and that button carries `disabled={!allChecked}`. Every check question must be answered before a row is written.
+
+So **a lesson she opened and wandered away from was never recorded**, and the first unfinished lesson is genuinely the one she is up to. **An abandoned lesson is the next thing she is given tomorrow.** That is not a side effect of the design; it is the sentence Gigi wrote, implemented.
+
+**⚠️ And `db.js` described that record as *"when she first OPENED a lesson."*** Wrong since it was written, and harmless until this version made it load-bearing: read that sentence and the feature looks like a bug to be fixed. **A document about an app is not the app** — §38's lesson, in this app's own database file, one sentence away from costing the feature.
+
+### The order comes from the week table, never from the lesson
+
+**⚠️ The 13 flat cards `hb-1-01` to `hb-1-13` carry no `course`, `quarter` or `week` on the lesson object** — the §35 finding, still open. Walking lesson metadata would have silently skipped **thirteen real Herbalism lessons**, and the app would have looked complete while a fortnight of Quarter 1 sat unreachable.
+
+`WEEKS` knows where all thirteen live. So the check asserts, on every run, that **all 256 lessons sit in exactly one week**, that no week names a lesson that does not exist, and that the weeks ascend. A lesson added tomorrow with no week **fails the build** instead of becoming unreachable — *the "correct and unreachable" failure, five times so far.*
+
+### ⚠️ The wall is a decision she has refused before
+
+At **v3.63** she was offered a Play tab locked until the day's work was done, and said no:
+
+> *"a wall makes a child stop trying."*
+
+She chose the wall here, on Aug 25 2026, for a different surface and a different reason: **a games tab she may or may not open is not a curriculum with an order that matters.** The two decisions do not contradict each other and both are on the record.
+
+**What it allows:** back into anything finished, always. The shape of her whole year, visible. **What it refuses:** jumping ahead. The words *behind*, *weakest* and *catch up* appear nowhere she can read them — §32's rule; the order carries the meaning.
+
+**It is written to be inverted with a date rather than deleted**, the way `check-writing` was at v3.68. A rule deleted is a rule nobody can argue with later.
+
+### ⚠️ A check went red on a change that made the screen more truthful — the seventh time
+
+`check-links` is headed **THE LABEL AND THE LINK MUST NAME THE SAME COURSE.** Its test was `label !== detail` — the same thing only while `detail` holds nothing but a course name. The moment the detail also named the week, all four rotating days failed.
+
+**This is the most repeated sin in this project**, and the fix people reach for is to weaken the check. It compares the **course segment** now, which is what the heading always promised, and the negative test that reintroduces the v3.42 bug still goes red on both days.
+
+### ⚠️ And one of my own assertions was satisfiable by the wrong string
+
+`locked-lessons-are-really-locked` tested for `disabled={!open}` — and **`aria-disabled={!open}` contains that string.** Deleting the real attribute left the aria one behind: the check stayed green, and the button was clickable. **A lesson that looked locked to her and opened anyway.**
+
+Same family as v3.72, where both guard assertions matched the comments explaining the guards. Pinned with a lookbehind, and the click handler asserted separately — because one attribute is not two guards (§39).
+
+### Fixed on the way past
+
+**The Human Body was still printing "This course is still being written" for a course with 64 lessons in it.** `bodyTarget()` was made derived at **v3.46** precisely so that notice would vanish the moment a lesson existed — and it was made derived in **one of the two places that returns it.** The rotating block got the fix; any block a grown-up attached "The Human Body" to by hand kept the notice.
+
+**The fifth exemption in this app to outlive its reason because it was written down twice.**
+
+### What this does not touch
+
+**Khan Academy.** This app cannot see inside it, so it cannot know which unit she actually finished — only which grade Gigi recorded. **A wall built on a guess is a locked door with no key**, and §37 is the whole argument for not building one.

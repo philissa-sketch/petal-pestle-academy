@@ -207,6 +207,102 @@ export function courseFinished(courseId, lessonsRead = [], weeks = WEEKS) {
   return courseWeeks.every((w) => (w.lessons || []).every((l) => read.has(l)));
 }
 
+/**
+ * THE ONE LESSON SHE IS UP TO IN A COURSE. v3.79.
+ *
+ * ---- WHY THIS EXISTS ----
+ *
+ * Gigi, Aug 25 2026: "I will like it that her today prompt just sends her to
+ * the lesson she is to complete and she doesn't see the other lessons.
+ * Sometimes she goes ahead without completing the full lesson."
+ *
+ * Every app-course block resolved to `view: 'lessons'` — the whole course, every
+ * module, every week, plus a quarter picker for the rest of the year. That was
+ * the right answer to the v2.0 problem, which was a block that opened NOTHING.
+ * It is the wrong answer to this one. A nine-year-old handed a menu picks from
+ * the menu.
+ *
+ * ---- WHAT "UP TO" MEANS, AND WHY IT IS SAFE TO ASK ----
+ *
+ * The first lesson in course order she has not FINISHED. Finished is a strong
+ * word here and it is earned: `markLessonRead` is called from LessonReader's
+ * `finish()`, and that button is disabled until every check question is
+ * answered. A lesson she opened and wandered away from was never written down.
+ *
+ * So an abandoned lesson is still the next lesson, tomorrow. That is not a
+ * side effect — it is the whole of what Gigi asked for.
+ *
+ * ---- ORDER COMES FROM WEEKS, NOT FROM THE LESSON ----
+ *
+ * ⚠️ The 13 flat cards, hb-1-01 to hb-1-13, carry NO course, quarter or week on
+ * the lesson object — the §71 finding, still open. Walking lesson metadata
+ * would silently skip thirteen real lessons of Herbalism, which is this app's
+ * "correct and unreachable" failure for the sixth time.
+ *
+ * WEEKS knows where all thirteen live. Verified rather than assumed, on all
+ * four courses: every lesson sits in exactly one week, no week names a lesson
+ * that does not exist, and quarter/n ascends strictly. check-lesson-gate
+ * asserts that coverage on every run, so a lesson added tomorrow without a week
+ * fails the build instead of becoming unreachable.
+ *
+ * PURE: ids in, a lesson id out, no store and no date — rule 11, so a check can
+ * call it with a made-up list and get a real answer.
+ *
+ * Returns null when every lesson in the course is finished. Null is also what
+ * an unwritten course returns, and the two are told apart by the caller, not
+ * here: `courseFinished` is false for a course with no weeks, because unwritten
+ * is not finished (v3.31).
+ */
+export function nextLessonFor(courseId, lessonsRead = [], weeks = WEEKS) {
+  const courseWeeks = (weeks && weeks[courseId]) || [];
+  if (!courseWeeks.length) return null;
+  const read = new Set(lessonsRead || []);
+  for (const w of courseWeeks) {
+    for (const lessonId of w.lessons || []) {
+      if (!read.has(lessonId)) return { lessonId, week: w };
+    }
+  }
+  return null;
+}
+
+/**
+ * Every lesson in a course, in the order WEEKS teaches them.
+ *
+ * Exported because the screen needs the SAME order the block walks. Two
+ * implementations of "what order are the lessons in" drift, and the day they
+ * disagree the block opens one lesson while the list says a different one is
+ * next — v3.70's rule, and the reason letterForPercent has one home.
+ */
+export function courseLessonOrder(courseId, weeks = WEEKS) {
+  return ((weeks && weeks[courseId]) || []).flatMap((w) => w.lessons || []);
+}
+
+/**
+ * May she open this lesson yet?
+ *
+ * TRUE for anything she has finished — going back is always allowed, and the
+ * re-read is the behaviour §3.12 most wants to encourage.
+ * TRUE for the one she is up to.
+ * FALSE for everything past it.
+ *
+ * ⚠️ THIS IS A WALL, AND GIGI HAS TURNED ONE DOWN BEFORE. At v3.63 she was
+ * offered a Play tab locked until the day's work was done and said no: "a wall
+ * makes a child stop trying." She chose this one deliberately on Aug 25 2026,
+ * for a different surface and a different reason — a games tab she may or may
+ * not open is not a curriculum with an order that matters.
+ *
+ * IT IS WRITTEN TO BE INVERTED WITH A DATE RATHER THAN DELETED, the same way
+ * check-writing was at v3.68 and check-yearplan at v3.23. A rule deleted is a
+ * rule nobody can argue with later. To open the course back up, make this
+ * return true and say who decided and when.
+ */
+export function lessonIsOpen(lessonId, courseId, lessonsRead = [], weeks = WEEKS) {
+  const read = new Set(lessonsRead || []);
+  if (read.has(lessonId)) return true;
+  const next = nextLessonFor(courseId, lessonsRead, weeks);
+  return Boolean(next) && next.lessonId === lessonId;
+}
+
 /** Every rotation course she has finished, as keys. */
 export function finishedRotationCourses(lessonsRead = [], weeks = WEEKS) {
   return rotatingCourseIds().filter((k) => hasRunOut(k, lessonsRead, weeks));

@@ -42,8 +42,51 @@ import {
   isRotatingBlock,
   courseForBlockOnDay,
   courseFinished,
+  nextLessonFor,
   isoWeekday
 } from './rotatingBlock.js';
+
+/**
+ * ONE LESSON, NOT A COURSE INDEX. v3.79.
+ *
+ * Gigi, Aug 25 2026: "her today prompt just sends her to the lesson she is to
+ * complete and she doesn't see the other lessons."
+ *
+ * Every one of the four courses this app teaches used to return
+ * `{ kind: 'view', view: 'lessons', course }` — the course index. The v2.0 note
+ * at the top of this file is about removing six steps from starting a maths
+ * block; this removes the last one from starting an app-course block, and it is
+ * the SAME correction the Khan side got at v3.20 ("her schedule opened a course
+ * index, not her unit"). The app's own courses had been sitting on that bug for
+ * fifty-nine versions, on the other side of the same file.
+ *
+ * ⚠️ `lessonsRead` IS NOT OPTIONAL FOR THIS TO BE RIGHT, and it is already
+ * optional in the signature — a caller that omits it gets "she has done
+ * nothing" and lands her on lesson one of ninety-six, for ever. check-links
+ * already asserts TodayView passes it, for the label; check-lesson-gate now
+ * asserts it for the target, because the cost of omitting it changed from a
+ * wrong word to a wrong lesson.
+ *
+ * Falls back to the course index rather than returning null when the course has
+ * no next lesson to give. A block that opens nothing is the dead end this file
+ * exists to prevent, and every caller that could reach this line has already
+ * handled "finished" above it.
+ */
+function lessonTarget(courseId, label, detail, lessonsRead) {
+  const next = nextLessonFor(courseId, lessonsRead || []);
+  if (!next) {
+    return { kind: 'view', label, view: 'lessons', course: courseId, detail };
+  }
+  const lesson = ALL_LESSONS.find((l) => l.id === next.lessonId);
+  return {
+    kind: 'lesson',
+    label: lesson?.title ? `Open ${lesson.title}` : label,
+    view: 'lessons',
+    course: courseId,
+    lessonId: next.lessonId,
+    detail: `${detail} · Week ${next.week.n} · ${next.week.title}`
+  };
+}
 
 /**
  * Which diagnostic strands feed which timetable subject.
@@ -98,14 +141,8 @@ function gardenTarget() {
   };
 }
 
-function socialTarget() {
-  return {
-    kind: 'view',
-    label: 'Open my Social Studies lessons',
-    view: 'lessons',
-    course: 'social',
-    detail: 'Social Studies'
-  };
+function socialTarget(lessonsRead) {
+  return lessonTarget('social', 'Open my Social Studies lessons', 'Social Studies', lessonsRead);
 }
 
 /**
@@ -126,7 +163,7 @@ function socialTarget() {
  * It is derived from the same fact now — DOES THE COURSE HAVE WRITTEN LESSONS —
  * so Tuesday and Thursday open the moment a lesson exists, with no edit here.
  */
-function bodyTarget() {
+function bodyTarget(lessonsRead) {
   const written = ALL_LESSONS.filter((l) => l.course === 'humanbody').length;
   if (written === 0) {
     return {
@@ -135,23 +172,24 @@ function bodyTarget() {
       detail: 'This course is still being written. There is nothing to open yet.'
     };
   }
-  return {
-    kind: 'view',
-    label: 'Open my Human Body lessons',
-    view: 'lessons',
-    course: 'humanbody',
-    detail: 'The Human Body'
-  };
+  return lessonTarget('humanbody', 'Open my Human Body lessons', 'The Human Body', lessonsRead);
 }
 
 /**
  * Resolve a block to something she can press.
  *
  * Returns one of:
- *   { kind: 'khan',   label, url, detail }           — opens Khan in a new tab
- *   { kind: 'view',   label, view, course, detail }  — moves to a tab in this app
- *   { kind: 'notice', label, detail }                — words, no button
- *   null                                             — no button, on purpose
+ *   { kind: 'khan',   label, url, detail }                     — opens Khan in a new tab
+ *   { kind: 'lesson', label, view, course, lessonId, detail }  — opens ONE lesson (v3.79)
+ *   { kind: 'view',   label, view, course, detail }            — moves to a tab in this app
+ *   { kind: 'notice', label, detail }                          — words, no button
+ *   null                                                       — no button, on purpose
+ *
+ * 'lesson' carries `view` and `course` as well as `lessonId`, so a caller that
+ * only understands 'view' still lands on the right course rather than on
+ * Herbalism. It degrades to the v3.42 behaviour instead of breaking — but
+ * check-lesson-gate asserts TodayView passes the lesson on, because a target
+ * that quietly loses the thing it exists to carry is the v3.42 bug again.
  *
  * `course` is optional and only meaningful for view 'lessons'. Without it,
  * LessonsView opens whatever course sits first in APP_COURSES — which is
@@ -336,13 +374,7 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
   // as the 2:45 block has since v3.31.
   if (subject === 'science') {
     if (courseFinished('sciencelab', lessonsRead || [])) return gardenTarget();
-    return {
-      kind: 'view',
-      label: 'Open my Science Lab lessons',
-      view: 'lessons',
-      course: 'sciencelab',
-      detail: 'The Science Lab'
-    };
+    return lessonTarget('sciencelab', 'Open my Science Lab lessons', 'The Science Lab', lessonsRead);
   }
 
   // ---- Social Studies, or The Human Body, depending on the day ----
@@ -362,7 +394,7 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
     if (!isRotatingBlock(block?.id)) {
       // Not the timetable's rotating block — a grown-up attached "Social
       // Studies" to some other block by hand. Take them at their word.
-      return socialTarget();
+      return socialTarget(lessonsRead);
     }
     const key = courseForBlockOnDay(block.id, date, lessonsRead);
     if (!key) {
@@ -373,8 +405,8 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
         ? { kind: 'view', label: 'Open Friday catch-up', view: 'friday', detail: 'Catch-up' }
         : gardenTarget();
     }
-    if (key === 'body') return bodyTarget();
-    return socialTarget();
+    if (key === 'body') return bodyTarget(lessonsRead);
+    return socialTarget(lessonsRead);
   }
 
   // ---- The app's own places ----
@@ -398,13 +430,14 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
     // The detail no longer says "Quarter 1 · Meet the Plants". All 96 lessons
     // and all four quarters have been written since v3.9; the block was still
     // announcing the first fortnight.
-    return {
-      kind: 'view',
-      label: 'Open my Herbalism lessons',
-      view: 'lessons',
-      course: 'herbalism',
-      detail: 'Herbalism & Botany'
-    };
+    //
+    // v3.79: and it now opens the lesson rather than the course. The comment
+    // above has claimed since v2.0 that this block "opens the lesson she is up
+    // to". It did not — it opened the index and let her pick. The sentence was
+    // true about the INTENTION and false about the code for fifty-nine
+    // versions, which is this project's oldest failure shape: a comment
+    // describing what somebody meant to build.
+    return lessonTarget('herbalism', 'Open my Herbalism lessons', 'Herbalism & Botany', lessonsRead);
   }
   if (subject === 'body') {
     // v3.42: this used to open the HERB LIBRARY and say the course is "built
@@ -412,11 +445,19 @@ export function resolveBlockTarget(block, strands = {}, grades = [], lessonsRead
     // different subject's reference shelf is not an answer to "what am I doing
     // now" — it is the dead end with a friendly label on it. Same words as the
     // rotating block gives on a Tuesday, and for the same reason.
-    return {
-      kind: 'notice',
-      label: 'The Human Body',
-      detail: 'This course is still being written. There is nothing to open yet.'
-    };
+    //
+    // ⚠️ v3.79 — AND THIS BRANCH WAS STILL SAYING "STILL BEING WRITTEN" FOR A
+    // COURSE WITH SIXTY-FOUR LESSONS IN IT. bodyTarget() was made derived at
+    // v3.46 precisely so this notice would disappear the moment a lesson
+    // existed. It was made derived in ONE of the two places that returns it.
+    // The rotating block (Tuesday and Thursday) got the fix; a grown-up who
+    // attached "The Human Body" to any other block by hand kept the notice, on
+    // a course finished months ago.
+    //
+    // That is the v3.46 bug surviving in its own sibling branch, and it is the
+    // fifth time an exemption in this app has outlived its reason because it
+    // was written down twice. One call now, to the derived one.
+    return bodyTarget(lessonsRead);
   }
 
   return null;

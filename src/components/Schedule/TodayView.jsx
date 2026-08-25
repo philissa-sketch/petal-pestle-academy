@@ -355,9 +355,18 @@ export function TodayView({ onNavigate }) {
                           {target.label} — being written
                         </span>
                       ) : (
+                        /* v3.79 — THE LESSON ID IS PASSED ON, OR IT MIGHT AS
+                           WELL NOT HAVE BEEN COMPUTED. `target.lessonId` is
+                           undefined for every 'view' target, and navigate
+                           treats undefined as "no lesson", so this one call
+                           serves both kinds with no branch. check-lesson-gate
+                           reads this call site as text and fails on a
+                           two-argument call — the same guard check-khan-units
+                           already keeps over resolveBlockTarget, and it caught
+                           a real two-argument call the first time it ran. */
                         <button
                           type="button"
-                          onClick={() => onNavigate?.(target.view, target.course)}
+                          onClick={() => onNavigate?.(target.view, target.course, target.lessonId)}
                           className="rounded-full bg-sage-700 px-4 py-1.5 text-xs font-700 text-white hover:bg-sage-500"
                         >
                           {target.label}

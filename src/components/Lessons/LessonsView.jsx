@@ -5,6 +5,7 @@ import { LessonReader } from './LessonReader.jsx';
 import { TestView } from '../Assess/TestView.jsx';
 import { APP_COURSES, courseById, lessonById } from '../../data/lessons/appCourses.js';
 import { WEEKS, weekForLesson, weekTestReady } from '../../config/assessment.js';
+import { lessonIsOpen, nextLessonFor } from '../../lib/rotatingBlock.js';
 import {
   buildWeeklyTest,
   buildQuarterTest,
@@ -81,7 +82,11 @@ const BAND_STYLE = {
 // One lookup across every lesson in the app, whatever course it belongs to.
 // Imported from appCourses.js — see the note above.
 
-export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) {
+export function LessonsView({
+  onNavigate,
+  courseId: requestedCourseId = null,
+  lessonId: requestedLessonId = null
+}) {
   // Subscribe to the RAW state, then derive.
   //
   // Subscribing to a selector that builds a fresh object every call —
@@ -120,6 +125,20 @@ export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) 
   useEffect(() => {
     if (requestedCourseId) setCourseId(requestedCourseId);
   }, [requestedCourseId]);
+
+  // v3.79 — A LINK THAT MEANT ONE LESSON OPENS THAT LESSON.
+  //
+  // Gigi, Aug 25 2026: "her today prompt just sends her to the lesson she is to
+  // complete and she doesn't see the other lessons."
+  //
+  // Same shape as the course effect above, and same reason it is an effect
+  // rather than initial state: she can press Back and browse what she has
+  // already done, and her choice must stick until a NEW link arrives. Seeding
+  // useState with it instead would reopen the lesson every time this screen
+  // re-rendered, which on a store this chatty means she could not get out of it.
+  useEffect(() => {
+    if (requestedLessonId) setOpenLesson(requestedLessonId);
+  }, [requestedLessonId]);
 
   const course = courseById(courseId) || APP_COURSES[0];
   // Only quarters this course actually has modules registered in. A quarter tab
@@ -219,6 +238,39 @@ export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) 
         </div>
       )}
 
+      {/* ---- v3.79 — THE ONE SHE IS UP TO, AT THE TOP, WITH A BUTTON ----
+           Today's Planner opens the lesson directly. THIS TAB DOES NOT — the
+           nav bar has a Lessons button, and pressing it lands her on the index
+           exactly as before. Sending her into a lesson from the planner and
+           then handing her a menu the moment she uses the other door is the
+           same feature half-built, which is how "correct and unreachable" keeps
+           happening here. So the answer is on the screen either way.
+           It is a shortcut, never a gate: everything below is still visible. */}
+      {(() => {
+        const next = nextLessonFor(course.id, lessonsRead);
+        if (!next) return null;
+        const nl = lessonById(next.lessonId);
+        if (!nl) return null;
+        return (
+          <button
+            type="button"
+            onClick={() => setOpenLesson(next.lessonId)}
+            className="mt-4 flex w-full items-center gap-3 rounded-petal border-2 border-sage-500 bg-sage-300/15 px-4 py-3.5 text-left hover:bg-sage-300/30"
+          >
+            <span className="flex-1">
+              <span className="label-caps text-sage-700">You are up to</span>
+              <span className="mt-0.5 block font-display text-lg text-ink-900">{nl.title}</span>
+              <span className="block text-[0.7rem] text-ink-500">
+                Week {next.week.n} · {next.week.title} · {nl.minutes} min
+              </span>
+            </span>
+            <span className="rounded-full bg-sage-700 px-4 py-1.5 text-xs font-700 text-white">
+              Start →
+            </span>
+          </button>
+        );
+      })()}
+
       {/* ---- which quarter ---- */}
       <div className="mt-3 flex gap-2">
         {quartersWithWork.map((q) => (
@@ -283,12 +335,30 @@ export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) 
                         if (!l) return null;
                         const read = lessonsRead.includes(lid);
                         const isShaky = shaky.includes(lid);
+                        // v3.79 — THE ROAD AHEAD IS VISIBLE AND NOT OPEN.
+                        //
+                        // Gigi chose this on Aug 25 2026: she may see the shape
+                        // of her year, she may go back over anything she has
+                        // finished, and she may not jump ahead. `lessonIsOpen`
+                        // is the ONE definition — the screen asks the same
+                        // function the block walks, so the list can never say a
+                        // different lesson is next from the one Today opens.
+                        const open = lessonIsOpen(lid, course.id, lessonsRead);
+                        const isNext = open && !read;
                         return (
                           <button
                             key={lid}
                             type="button"
-                            onClick={() => setOpenLesson(lid)}
-                            className="flex w-full items-center gap-3 rounded-petal border border-cream-300 bg-white px-4 py-3 text-left hover:border-sage-500"
+                            disabled={!open}
+                            aria-disabled={!open}
+                            onClick={() => open && setOpenLesson(lid)}
+                            className={`flex w-full items-center gap-3 rounded-petal border px-4 py-3 text-left ${
+                              open
+                                ? `border-cream-300 bg-white hover:border-sage-500${
+                                    isNext ? ' ring-2 ring-sage-500' : ''
+                                  }`
+                                : 'cursor-not-allowed border-cream-200 bg-cream-100 opacity-60'
+                            }`}
                           >
                             <span
                               className={`flex h-7 w-7 flex-none items-center justify-center rounded-full text-xs font-700 ${
@@ -296,17 +366,35 @@ export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) 
                                   ? 'bg-gold-300 text-ink-900'
                                   : read
                                     ? 'bg-sage-300 text-ink-900'
-                                    : 'bg-cream-200 text-ink-700'
+                                    : open
+                                      ? 'bg-cream-200 text-ink-700'
+                                      : 'bg-cream-200 text-ink-500'
                               }`}
                             >
                               {isShaky ? '~' : read ? '✓' : l.n}
                             </span>
                             <span className="flex-1">
-                              <span className="block text-sm font-700 text-ink-900">{l.title}</span>
+                              <span
+                                className={`block text-sm font-700 ${
+                                  open ? 'text-ink-900' : 'text-ink-500'
+                                }`}
+                              >
+                                {l.title}
+                              </span>
+                              {/* The words below never say behind, weakest or
+                                  catch up — the v3.63 rule. "Not yet" is a fact
+                                  about the order of the course, not a judgement
+                                  about her. And the next one says so plainly,
+                                  because a ring of colour with no words is a
+                                  thing a child has to work out. */}
                               <span className="block text-[0.7rem] text-ink-500">
-                                {isShaky
-                                  ? 'Worth another look'
-                                  : `${l.minutes} min · ${(l.words || []).join(', ')}`}
+                                {!open
+                                  ? 'Not yet — this one comes later'
+                                  : isNext
+                                    ? `This one is next · ${l.minutes} min`
+                                    : isShaky
+                                      ? 'Worth another look'
+                                      : `${l.minutes} min · ${(l.words || []).join(', ')}`}
                               </span>
                             </span>
                             {l.standards?.length > 0 && (
@@ -319,7 +407,7 @@ export function LessonsView({ onNavigate, courseId: requestedCourseId = null }) 
                                 ▶ video
                               </span>
                             )}
-                            <span className="text-xs text-ink-500">→</span>
+                            <span className="text-xs text-ink-500">{open ? '→' : '🔒'}</span>
                           </button>
                         );
                       })}

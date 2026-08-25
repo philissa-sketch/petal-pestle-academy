@@ -20,12 +20,30 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.78';
+export const VERSION = '3.79';
 
-export const BUILD_DATE = 'August 24, 2026';
+export const BUILD_DATE = 'August 25, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.79',
+    date: 'Aug 25, 2026',
+    notes: [
+      '⭐⭐ TODAY’S PLANNER OPENS THE LESSON NOW, NOT A MENU OF NINETY-SIX. Gigi: "I will like it that her today prompt just sends her to the lesson she is to complete and she doesn’t see the other lessons. Sometimes she goes ahead without completing the full lesson." Every one of the four courses this app teaches resolved to the COURSE INDEX — every module, every week, four quarter tabs, nothing locked. A nine-year-old handed a menu picks from the menu.',
+      '⚠️ AND THE COMMENT ABOVE THE HERBALISM BRANCH HAD CLAIMED THE OPPOSITE SINCE v2.0: "the block that says Herbalism opens the lesson she is up to." IT OPENED THE INDEX. True about the intention, false about the code, for fifty-nine versions, and nothing ever read it. Same shape as check-khan-units §6c printing "advance one unit per grade" about a writer that had never produced a usable row. The Khan side got this exact correction at v3.20 — "her schedule opened a course index, not her unit" — and the app’s OWN courses kept the bug, on the other side of the same file.',
+      '⭐ THE RECORD ALREADY MEANT FINISHED, WHICH IS WHY THIS IS SAFE. markLessonRead is called from exactly one place, LessonReader’s finish(), and that button carries disabled={!allChecked} — every check question answered before a row is written. So a lesson she opened and wandered away from was NEVER recorded, and the first unfinished lesson is genuinely the one she is up to. An abandoned lesson comes back tomorrow, which is the whole of what was asked for.',
+      '⚠️ AND db.js DESCRIBED THAT RECORD AS "when she first OPENED a lesson" — WRONG, AND LOAD-BEARING NOW. Read that sentence and this feature looks like a bug to be fixed. It is the Lamar’s-grading-ladder failure in miniature — a document about an app is not the app — and it was one sentence away from costing the feature. Corrected, and check-lesson-gate fails if it returns.',
+      'THE ORDER COMES FROM THE WEEK TABLE, NEVER FROM THE LESSON. ⚠️ The 13 flat cards hb-1-01..13 carry no course, quarter or week ON THE LESSON — §71, still open — so walking lesson metadata would silently skip thirteen real Herbalism lessons. WEEKS knows where all thirteen live, and the check now asserts on every run that all 256 lessons sit in exactly one week, no week names a lesson that does not exist, and the weeks ascend. A lesson added tomorrow with no week FAILS instead of becoming unreachable — the "correct and unreachable" failure, which has happened five times.',
+      '⚠️ THE WALL IS A DECISION GIGI HAS TURNED DOWN BEFORE, AND IT IS RECORDED AS ONE. At v3.63 she was offered a Play tab locked until the day’s work was done and said no: "a wall makes a child stop trying." She chose this one on Aug 25 2026 for a different surface — a games tab she may never open is not a curriculum with an order that matters. She may go back into anything finished, she may see the shape of her whole year, she may not jump ahead. WRITTEN TO BE INVERTED WITH A DATE RATHER THAN DELETED, like check-writing at v3.68.',
+      'THE SCREEN AND THE BLOCK ASK ONE FUNCTION. lessonIsOpen and nextLessonFor live in rotatingBlock.js beside courseFinished, so there is one definition of "where is she in this course". Two copies drift, and the day they disagree the list greys out a lesson the block just sent her into — v3.70’s rule, and letterForPercent’s.',
+      '⚠️ ONE THING FIXED ON THE WAY PAST: THE HUMAN BODY WAS STILL SAYING "STILL BEING WRITTEN" FOR A COURSE WITH 64 LESSONS. bodyTarget() was made derived at v3.46 so that notice would disappear the moment a lesson existed — and it was made derived in ONE of the two places that returns it. The rotating block got the fix; a grown-up who attached "The Human Body" to any other block by hand kept the notice. The v3.46 bug surviving in its own sibling branch — the fifth exemption in this app to outlive its reason because it was written down twice.',
+      '⚠️ AND check-links WENT RED ON ALL FOUR ROTATING DAYS FOR A CHANGE THAT MADE THE SCREEN MORE TRUTHFUL. Its heading says THE LABEL AND THE LINK MUST NAME THE SAME COURSE; its test said label !== detail, which is the same thing only while detail holds nothing but a course name. Adding "· Week 1 · The bill, and the people who refused" broke it. THAT IS THIS PROJECT’S MOST REPEATED SIN, THE SEVENTH TIME — a check that fails a safer change — and the fix people reach for is to weaken it. It compares the course segment now, which is what the heading always promised, and the negative test that reintroduces the v3.42 bug still goes red on both days.',
+      '⚠️ MY OWN ASSERTION WAS SATISFIABLE BY THE WRONG STRING AND ITS NEGATIVE TEST SAID SO. "locked lessons are really locked" tested for disabled={!open} — and aria-disabled={!open} CONTAINS that string. Deleting the real attribute left the aria one behind, the button became clickable again, and the check stayed green: a lesson that looked locked and opened anyway. Same family as v3.72, where both guard assertions matched the comments explaining the guards. Pinned with a lookbehind, and the click handler is now asserted separately.',
+      'CHECK #33, check-lesson-gate, TWELVE NEGATIVE TESTS ALL RED, each asserting its own mutation landed first: "first unfinished" swapped for "the one after her last" · the block handing back the index again · the wall removed · the wall made a prison with no way back · TodayView dropping the lessonId · the real disabled attribute removed · the click handler guard removed · the screen deciding for itself · the db.js sentence restored · Finish no longer requiring the check questions · a lesson dropped out of its week · and her progress never reaching the lesson choice.',
+      'NOT TOUCHED, DELIBERATELY: KHAN. This app cannot see inside Khan Academy, so it cannot know which unit she actually finished — only which grade Gigi recorded. A wall built on a guess is a locked door with no key.'
+    ]
+  },
   {
     version: '3.78',
     date: 'Aug 24, 2026',

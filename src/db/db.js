@@ -127,9 +127,22 @@ db.version(3).stores({
  * computer says she has this cold and the other says she missed it yesterday,
  * the honest answer is that she missed it yesterday.
  *
- * `lessonReads` is keyed by lessonId — when she first opened a lesson and how
+ * `lessonReads` is keyed by lessonId — when she first FINISHED a lesson and how
  * many times since. It is what unlocks a unit test, and it is why the app can
  * say "this test covers four lessons and she has read three".
+ *
+ * ⚠️ THIS SENTENCE SAID "when she first OPENED a lesson" UNTIL v3.79, AND THE
+ * CODE HAS NEVER DONE THAT. `markLessonRead` is called from exactly one place —
+ * LessonReader's `finish()` — and that button carries `disabled={!allChecked}`,
+ * so every check question must be answered before a row is written. A lesson
+ * she opened and walked away from was never recorded and never has been.
+ *
+ * It is corrected rather than left because v3.79 builds on it: the block now
+ * opens the first lesson she has NOT finished, and an abandoned lesson coming
+ * back tomorrow is the whole of what Gigi asked for. Read the old sentence and
+ * that behaviour looks like a bug to be fixed. This is the Lamar's-grading-
+ * ladder failure in miniature — a document about an app is not the app — and it
+ * was one sentence away from costing the feature.
  *
  * Dexie carries v1 to v3 forward automatically; the three new tables start
  * empty, which is exactly right — nobody has taken a test yet.
