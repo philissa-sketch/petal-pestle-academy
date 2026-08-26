@@ -20,12 +20,27 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.85';
+export const VERSION = '3.86';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.86',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⭐ HER DIAGNOSTIC DOCUMENT NOW SAYS WHAT HER RECORD SAYS, AND CHECK #37 KEEPS IT THAT WAY. §1 carries the settled nine — Measurement 2.44, Geometry 2.67, Writing Strategies 2.67 — and every row reads "settled" for the first time in this file’s life. §1d is recounted across all 90 answers: 57 read aloud, 63%. §1b IS UNTOUCHED, because it is the Aug 13 baseline and the only thing a growth delta can be measured from.',
+      '⚠️ THIRD DRIFT IN THIS ONE FILE, AND A RULE YOU HAVE TO ACT ON IS A CHECK. Aug 24: it said Grammar 2.15 when her record said 2.20, and called that the TENTH hand-typed number in this project to drift. Aug 26 morning: Measurement 2.50 against a record saying 2.44. Aug 26 again, one section down: §1d said 54 of her 86 answers when her record held 90 — nobody had even mentioned that one, it was found while fixing the first. The same sentence that produced check-version-stamp, for the same reason.',
+      '⚠️ AND ALL THREE STRANDS THAT WERE STILL OPEN ON Aug 25 FINISHED BELOW THE NUMBER THE DOCUMENT PRINTED THAT MORNING. Two moved by 0.15 in the last stretch — three quarters of the entire twelve-day Grammar delta this project calls real growth. §1c keeps the mid-re-measure column beside the final one so that is visible rather than quietly overwritten, and Writing’s honest delta is +0.22, not the +0.37 reported on Aug 25.',
+      '⚠️ MEASUREMENT & DATA HAS NOW FALLEN AT EVERY LIKE-FOR-LIKE READING: 2.70, 2.50, 2.44. All three are post-extension so all three sit on the same scale, and the comparison is fair. Three readings in a row is no longer a wobble, on the strand where four of the five holes found in August still have no lesson in this app that teaches them.',
+      '⚠️ THE CHECK CAN PASS WITHOUT TESTING ANYTHING, AND SAYS SO IN WORDS. Her export and this document are both kept out of git deliberately — the repository is PUBLIC and the document is a full assessment of a named child. So on Netlify neither file exists and nothing is compared. Gigi’s call, made explicitly. It never prints the word PASSED on those runs; it prints NOTHING WAS COMPARED and why. A green run off her PC says only that the files were not there.',
+      '⚠️ THE YARDSTICK IS THE ANSWER COUNT, NOT THE FILE DATE — because "newest by modification time" FAILS A SAFER CHANGE, which this project has now done seven times. Copying a folder or re-saving a stale export moves an mtime, and any of those would point the check at local/her-latest-export.json (86 answers, stale) and turn it red against a CORRECT document. Her record only grows, so the export carrying the most answers is the newest reading of her, whatever the filesystem thinks. The file it chose is PRINTED every run.',
+      '⚠️ AND IT REFUSES TO COVER §3, WHICH IS STALE AS THIS SHIPS. §3 still prints 2.50 and 2.82 and still argues that her three maths strands all open Unit 1 — the rule v3.81 overturned. A check that quietly covered it would make that staleness invisible, so the gap is named in the check’s own output and in its header, with instructions to widen it the moment §3 is corrected. §1b is excluded for the opposite reason: forcing the frozen baseline to match today would destroy the growth delta.',
+      'NINE NEGATIVE TESTS. Four RED where they must be — a §1 level drifting, a strand ROW DELETED (an omission must never exempt itself — v3.83), the §1d count drifting, and the labels drifting so far apart that the parser understands nothing and would otherwise report nine silent successes. Five GREEN where they must be — §1b changed, §3 changed, the stale export made newest by date, and both absent-file skips, neither of which claims a pass.',
+      '⚠️ ONE LABEL WAS CHANGED IN THE DOCUMENT RATHER THAN LOOSENING THE CHECK: §1 said "Patterns & Algebra" and src/config/strands.js says "Patterns & Early Algebra". A fuzzy match would have been the eighth assertion in this project satisfied by something adjacent to the rule. The names come from the app now.'
+    ]
+  },
   {
     version: '3.85',
     date: 'Aug 26, 2026',

@@ -2084,3 +2084,59 @@ She finished the re-measure on **Aug 25 at 17:49**.
 That is not a decline. A reading in progress is not a reading, and §1 of her diagnostic file has said since v3.74 that unsettled numbers *"must not be quoted as final"*. These are the final ones.
 
 **Her diagnostic document still describes those three as still re-measuring** — correct when it was written that morning, and wrong by the evening. **It is the first job of the next session**, and §1b, the Aug 13 baseline, must not be touched.
+
+---
+
+## 48. THE DOCUMENT THAT GOVERNS THE LESSONS IS CHECKED NOW — v3.86
+
+**§30 makes `claude/azianna-diagnostic-results.md` the thing every one of the 256 lessons is written against.** It is also hand-written prose, and it has drifted from her record three times, every one caught by a person:
+
+| When | What it said | What her record said |
+|---|---|---|
+| Aug 24 | Grammar 2.15, Writing 2.45, Geometry and Measurement 2.00 | 2.20, 2.70, 2.70, 2.70 |
+| Aug 26, morning | Measurement 2.50, Geometry 2.82, Writing 2.82, *"still re-measuring"* | 2.44, 2.67, 2.67, all settled |
+| Aug 26, again | §1d: *"54 of her 86 answers were read to her"* | 57 of 90 |
+
+The Aug 24 note in that file calls itself **"the tenth hand-typed number in this project to drift."** The third one nobody had even mentioned — it was found while fixing the second. **Twice is a note. Three times is a rule you have to act on, and a rule you have to act on is a CHECK** — the same sentence, word for word, that produced `check-version-stamp` at v3.70.
+
+### What §1, §1c and §1d say now
+
+All nine strands are settled and the table says so on every row, for the first time in the file's life. §1c keeps a **mid-re-measure column beside the final one**, so the three numbers that fell are visible rather than quietly overwritten. §1d is recounted across all 90 answers.
+
+⚠️ **§1b is untouched and must stay that way.** It is the Aug 13 baseline. §3.10.8 measures growth as a delta on one instrument, and deleting or "correcting" the baseline would destroy the only thing a second sitting can be compared against.
+
+⚠️ **And the honest deltas got smaller.** Writing Strategies is **+0.22**, not the +0.37 this project reported on Aug 25 — the strand had not finished being measured when that was written. Grammar is +0.20. **Those two are still the only honest deltas on the page**; Geometry and Measurement moved off a floor, and most of that movement is the instrument improving rather than the child.
+
+### ⚠️ Measurement & Data has now fallen at every like-for-like reading
+
+**2.70 → 2.50 → 2.44.** All three are post-extension, so all three sit on the same scale and the comparison is fair. §35 named this strand as the one with almost nothing to hang a game on: of the five holes the Aug 13 sitting found — units, perimeter, area, telling time, elapsed time — **four still have no lesson in this app that teaches them.** Three readings in a row is no longer a wobble.
+
+### ⚠️ THE FIRST CHECK IN THIS APP THAT CAN PASS WITHOUT TESTING ANYTHING
+
+Her export and her assessment are both kept out of git deliberately — **the repository is public** and the document is a full educational assessment of a named child (`.gitignore` line 95). So when Netlify runs the checks, neither file is there and `check-diagnostic-record` compares nothing.
+
+**That was Gigi's call, asked directly and answered.** It guards her PC, which is the only machine where the document can be edited, and that is enough. The price is honesty, paid in the output:
+
+> NOTHING WAS COMPARED. No export of her record is on this computer.
+> So this run tested NOTHING and is green only because there was nothing here to test.
+
+**It never prints the word PASSED on those runs.** A green Netlify build says only that the files were absent — and the build log's run-status line now says so too, because a reader who does not know that would read more coverage into the number than exists.
+
+### ⚠️ The yardstick is the answer count, not the file date
+
+The obvious rule — *compare against the newest export by modification time* — **fails a safer change**, which is the mistake this project has made seven times and repaired by weakening the check every time. Copying a folder, restoring a backup or re-saving the stale `local/her-latest-export.json` all move an mtime, and any of them would point the check at an **86-answer** file and turn it red against a **correct** document.
+
+**Her record only ever grows.** So the export carrying the most answers is the newest reading of her, whatever the filesystem thinks. Ties break on mtime, and **the file it chose is printed on every run**, so the choice is never silent.
+
+### What it deliberately does NOT cover, and why that is written down
+
+- **§1b** — the frozen baseline. Covered above.
+- **§3** — **stale as this ships.** It still prints 2.50 and 2.82, and still argues that her three maths strands all open Unit 1, **which is the rule §43 overturned at v3.81.** A check that quietly covered §3 would make that staleness invisible, so the gap is named in the check's own output with instructions to widen it the moment §3 is corrected. **Correcting §3 is still open and still Gigi's call**, because rewriting a section whose argument has been overturned is a decision about history, not a fix.
+
+### Nine negative tests
+
+**Four red where they must be:** a §1 level drifting · **a strand row deleted** — an omission must never exempt itself, which is the v3.83 lesson · the §1d count drifting · and the labels drifting so far apart that the parser understands nothing and would otherwise report **nine silent successes and exit green.**
+
+**Five green where they must be:** §1b changed · §3 changed · the stale export made newest by date · and both absent-file skips, neither of which claims a pass.
+
+⚠️ **One label was changed in the DOCUMENT rather than loosening the check.** §1 read *Patterns & Algebra*; `src/config/strands.js` says *Patterns & Early Algebra*. Matching those two fuzzily would have been the **eighth** assertion in this project satisfied by something adjacent to the rule. The strand names come from the app now.
