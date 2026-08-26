@@ -83,6 +83,22 @@ import { KHAN_UNIT_COURSES, unitFor } from '../data/khan/khanUnits.js';
  *   PROJECT_PLAN.md — "an inline A-F grade the parent assigns based on what
  *   Khan Academy shows on screen after the exercise"
  *
+ * ⚠️ THAT FOLDER NO LONGER EXISTS — Gigi deleted it Aug 26 2026, so the two
+ * quotations above can no longer be re-checked against their source. They are
+ * kept verbatim because that is what a citation is for, and because this whole
+ * block is already marked SUPERSEDED below.
+ *
+ * ⚠️ AND HIS APP HAS MOVED PAST THEM ANYWAY. Checked against his running code
+ * on Aug 26 2026: gradeScale.js takes a percentage or a fraction and derives
+ * the letter. His own note calls the mastery-word route "three lossy steps,
+ * done 151 times across the year, each one a chance to grade the same
+ * performance two different ways in October and March." NOTHING IN HIS src/
+ * MAPS Proficient OR Familiar TO A LETTER ANY MORE.
+ *
+ * So KHAN_MASTERY_GUIDE stays as a FALLBACK, for the screens where Khan shows a
+ * word and no fraction — and it is no longer claimed to match what his app does
+ * today. The fraction is the normal path in both apps now.
+ *
  * ⚠️ SUPERSEDED THE SAME DAY BY THE BLOCK BELOW — KEPT, NOT DELETED.
  *
  * v3.74 concluded from those two quotes that Khan grading is A PICKER AND NOT

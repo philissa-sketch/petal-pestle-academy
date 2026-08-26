@@ -1,0 +1,3792 @@
+{
+  "app": "Petal & Pestle Academy",
+  "version": 10,
+  "meta": [
+    {
+      "key": "diagnosticCompletedAt",
+      "value": 1786634113193
+    },
+    {
+      "key": "diagnosticStartedAt",
+      "value": 1786626439106
+    },
+    {
+      "key": "economyRebalanceV2",
+      "value": true
+    },
+    {
+      "key": "equippedGear",
+      "value": {
+        "feet": "av-clogs",
+        "hair": "av-braids"
+      }
+    },
+    {
+      "key": "lastActiveDay",
+      "value": "2026-08-25"
+    },
+    {
+      "key": "lastWarmUpDay",
+      "value": "2026-08-25"
+    },
+    {
+      "key": "learnerName",
+      "value": "PrettyGlow"
+    },
+    {
+      "key": "pickCounter",
+      "value": 90
+    },
+    {
+      "key": "streak",
+      "value": 2
+    },
+    {
+      "key": "unlockedItems",
+      "value": [
+        "gh-stool",
+        "gh-window-box",
+        "av-apron-floral",
+        "av-apron-linen",
+        "av-gloves",
+        "av-hat",
+        "av-satchel",
+        "av-boots",
+        "av-braids",
+        "av-clogs"
+      ]
+    }
+  ],
+  "strandStates": [
+    {
+      "strandId": "fractions-decimals",
+      "level": 3.8899999999999997,
+      "asked": 7,
+      "correct": 6,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        2,
+        2.7199999999999998,
+        3.1999999999999997,
+        3.4999999999999996,
+        3.6799999999999997,
+        3.8,
+        3.8899999999999997
+      ],
+      "seenItemIds": [
+        "fd-equiv-v0",
+        "fd-halfset-v0",
+        "fd-halfset-v1",
+        "fd-equiv-v2",
+        "fd-compare-v1",
+        "fd-compare-v2",
+        "fd-compare-v0"
+      ]
+    },
+    {
+      "strandId": "geometry",
+      "level": 2.67,
+      "asked": 7,
+      "correct": 4,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        1.5,
+        2.2199999999999998,
+        2.6999999999999997,
+        2.9999999999999996,
+        2.6999999999999997,
+        2.82,
+        2.67
+      ],
+      "easyAsked": 1,
+      "easyMissed": 0,
+      "seenItemIds": [
+        "ge-area-v1",
+        "fo-nameshape-v2",
+        "fo-sameshape-v0",
+        "ge-sides-v0",
+        "ge-perim-v2",
+        "ge-sides-v1",
+        "ge-perim-v1"
+      ]
+    },
+    {
+      "strandId": "grammar-usage",
+      "level": 2.35,
+      "asked": 7,
+      "correct": 4,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        1.5,
+        2.2199999999999998,
+        2.6999999999999997,
+        2.1999999999999997,
+        2.38,
+        2.5,
+        2.35
+      ],
+      "easyAsked": 1,
+      "easyMissed": 0,
+      "seenItemIds": [
+        "gr-03",
+        "gr-13",
+        "gr-01",
+        "gr-17",
+        "fo-gr-capital-v0",
+        "gr-16",
+        "gr-02"
+      ]
+    },
+    {
+      "strandId": "measurement-data",
+      "level": 2.4399999999999995,
+      "asked": 8,
+      "correct": 4,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        1.5,
+        2.2199999999999998,
+        2.6999999999999997,
+        2.9999999999999996,
+        2.6999999999999997,
+        2.4999999999999996,
+        2.3499999999999996,
+        2.4399999999999995
+      ],
+      "easyAsked": 1,
+      "easyMissed": 0,
+      "seenItemIds": [
+        "md-elapsed-v1",
+        "fo-longer-v0",
+        "md-time-v0",
+        "md-units-v1",
+        "md-units-v0",
+        "md-units-v2",
+        "md-time-v1",
+        "md-time-v2"
+      ]
+    },
+    {
+      "strandId": "numbers-operations",
+      "level": 3.4799999999999995,
+      "asked": 6,
+      "correct": 4,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        2,
+        2.7199999999999998,
+        3.1999999999999997,
+        3.4999999999999996,
+        3.6799999999999997,
+        3.4799999999999995
+      ],
+      "seenItemIds": [
+        "no-mult1-v0",
+        "no-add2-v0",
+        "no-sub2-v0",
+        "no-mult1-v1",
+        "no-mult1-v2",
+        "no-div1-v0"
+      ]
+    },
+    {
+      "strandId": "patterns-algebra",
+      "level": 2.98,
+      "asked": 6,
+      "correct": 3,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        4.7,
+        3.5,
+        2.7,
+        3,
+        3.18,
+        2.98
+      ],
+      "seenItemIds": [
+        "pa-rule-v2",
+        "pa-twostep-v1",
+        "pa-rule-v1",
+        "pa-missadd-v0",
+        "pa-missadd-v1",
+        "pa-missadd-v2"
+      ]
+    },
+    {
+      "strandId": "reading-comprehension",
+      "level": 3.46,
+      "asked": 6,
+      "correct": 3,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        4.7,
+        3.5,
+        3.98,
+        3.48,
+        3.66,
+        3.46
+      ],
+      "seenItemIds": [
+        "rc-03",
+        "rc-12",
+        "rc-04",
+        "rc-05",
+        "rc-11",
+        "rc-02"
+      ]
+    },
+    {
+      "strandId": "vocabulary",
+      "level": 2.91,
+      "asked": 7,
+      "correct": 4,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        4.7,
+        3.5,
+        2.7,
+        3,
+        2.7,
+        2.8200000000000003,
+        2.91
+      ],
+      "seenItemIds": [
+        "vo-03",
+        "vo-05",
+        "vo-11",
+        "vo-02",
+        "vo-01",
+        "vo-04",
+        "vo-06"
+      ]
+    },
+    {
+      "strandId": "writing-strategies",
+      "level": 2.6700000000000004,
+      "asked": 7,
+      "correct": 3,
+      "settled": true,
+      "levelHistory": [
+        3.5,
+        4.7,
+        3.5,
+        2.7,
+        3,
+        2.7,
+        2.8200000000000003,
+        2.6700000000000004
+      ],
+      "easyAsked": 0,
+      "easyMissed": 0,
+      "seenItemIds": [
+        "ws-03",
+        "ws-05",
+        "ws-20",
+        "ws-16",
+        "ws-18",
+        "ws-17",
+        "ws-02"
+      ]
+    }
+  ],
+  "answers": [
+    {
+      "itemId": "no-mult1-v0",
+      "strandId": "numbers-operations",
+      "level": 3.3,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786626541691,
+      "id": 1
+    },
+    {
+      "itemId": "md-elapsed-v1",
+      "strandId": "measurement-data",
+      "level": 3.6,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786627002162,
+      "id": 2
+    },
+    {
+      "itemId": "pa-rule-v2",
+      "strandId": "patterns-algebra",
+      "level": 3.6,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786627151591,
+      "id": 3
+    },
+    {
+      "itemId": "vo-03",
+      "strandId": "vocabulary",
+      "level": 3.5,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786627208202,
+      "id": 4
+    },
+    {
+      "itemId": "ws-03",
+      "strandId": "writing-strategies",
+      "level": 3.6,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786627240610,
+      "id": 5
+    },
+    {
+      "itemId": "ge-area-v2",
+      "strandId": "geometry",
+      "level": 3.7,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786627307527,
+      "id": 6
+    },
+    {
+      "itemId": "fd-equiv-v0",
+      "strandId": "fractions-decimals",
+      "level": 3.2,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786627361662,
+      "id": 7
+    },
+    {
+      "itemId": "gr-03",
+      "strandId": "grammar-usage",
+      "level": 3.4,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786627450902,
+      "id": 8
+    },
+    {
+      "itemId": "rc-03",
+      "strandId": "reading-comprehension",
+      "level": 3.4,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786627541027,
+      "id": 9
+    },
+    {
+      "itemId": "fd-halfset-v0",
+      "strandId": "fractions-decimals",
+      "level": 2.5,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786627576197,
+      "id": 10
+    },
+    {
+      "itemId": "ge-sides-v1",
+      "strandId": "geometry",
+      "level": 2.4,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786627606643,
+      "id": 11
+    },
+    {
+      "itemId": "vo-05",
+      "strandId": "vocabulary",
+      "level": 4.5,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786627692343,
+      "id": 12
+    },
+    {
+      "itemId": "no-add2-v0",
+      "strandId": "numbers-operations",
+      "level": 2.2,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786627962445,
+      "id": 13
+    },
+    {
+      "itemId": "gr-01",
+      "strandId": "grammar-usage",
+      "level": 2.3,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786628007826,
+      "id": 14
+    },
+    {
+      "itemId": "rc-12",
+      "strandId": "reading-comprehension",
+      "level": 4.6,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786628189095,
+      "id": 15
+    },
+    {
+      "itemId": "md-time-v0",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786628236497,
+      "id": 16
+    },
+    {
+      "itemId": "pa-twostep-v1",
+      "strandId": "patterns-algebra",
+      "level": 4.9,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786628376631,
+      "id": 17
+    },
+    {
+      "itemId": "ws-01",
+      "strandId": "writing-strategies",
+      "level": 2.5,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786628439158,
+      "id": 18
+    },
+    {
+      "itemId": "md-time-v1",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786628499997,
+      "id": 19
+    },
+    {
+      "itemId": "pa-rule-v1",
+      "strandId": "patterns-algebra",
+      "level": 3.6,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786628532215,
+      "id": 20
+    },
+    {
+      "itemId": "ws-02",
+      "strandId": "writing-strategies",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786628601901,
+      "id": 21
+    },
+    {
+      "itemId": "rc-04",
+      "strandId": "reading-comprehension",
+      "level": 3.9,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786628752080,
+      "id": 22
+    },
+    {
+      "itemId": "ge-sides-v0",
+      "strandId": "geometry",
+      "level": 2.4,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786628783868,
+      "id": 23
+    },
+    {
+      "itemId": "gr-02",
+      "strandId": "grammar-usage",
+      "level": 2.9,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786628821624,
+      "id": 24
+    },
+    {
+      "itemId": "no-sub2-v0",
+      "strandId": "numbers-operations",
+      "level": 2.8,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786629182373,
+      "id": 25
+    },
+    {
+      "itemId": "vo-11",
+      "strandId": "vocabulary",
+      "level": 3.8,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786629318934,
+      "id": 26
+    },
+    {
+      "itemId": "fd-halfset-v1",
+      "strandId": "fractions-decimals",
+      "level": 2.5,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786629390511,
+      "id": 27
+    },
+    {
+      "itemId": "pa-missadd-v0",
+      "strandId": "patterns-algebra",
+      "level": 3,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786629499109,
+      "id": 28
+    },
+    {
+      "itemId": "rc-05",
+      "strandId": "reading-comprehension",
+      "level": 4.4,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786629557127,
+      "id": 29
+    },
+    {
+      "itemId": "fd-equiv-v2",
+      "strandId": "fractions-decimals",
+      "level": 3.2,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786629606180,
+      "id": 30
+    },
+    {
+      "itemId": "no-mult1-v1",
+      "strandId": "numbers-operations",
+      "level": 3.3,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786629720417,
+      "id": 31
+    },
+    {
+      "itemId": "ge-sides-v2",
+      "strandId": "geometry",
+      "level": 2.4,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": false,
+      "at": 1786629747568,
+      "id": 32
+    },
+    {
+      "itemId": "md-time-v2",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786629786617,
+      "id": 33
+    },
+    {
+      "itemId": "vo-02",
+      "strandId": "vocabulary",
+      "level": 3,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786629827442,
+      "id": 34
+    },
+    {
+      "itemId": "gr-11",
+      "strandId": "grammar-usage",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786629861889,
+      "id": 35
+    },
+    {
+      "itemId": "ws-11",
+      "strandId": "writing-strategies",
+      "level": 3.9,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786629932756,
+      "id": 36
+    },
+    {
+      "itemId": "pa-missadd-v1",
+      "strandId": "patterns-algebra",
+      "level": 3,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786630127200,
+      "id": 37
+    },
+    {
+      "itemId": "vo-01",
+      "strandId": "vocabulary",
+      "level": 2.4,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786630210670,
+      "id": 38
+    },
+    {
+      "itemId": "ge-perim-v2",
+      "strandId": "geometry",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786630305376,
+      "id": 39
+    },
+    {
+      "itemId": "rc-11",
+      "strandId": "reading-comprehension",
+      "level": 3.1,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786630399986,
+      "id": 40
+    },
+    {
+      "itemId": "no-mult1-v2",
+      "strandId": "numbers-operations",
+      "level": 3.3,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786630505776,
+      "id": 41
+    },
+    {
+      "itemId": "md-units-v2",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786630563880,
+      "id": 42
+    },
+    {
+      "itemId": "fd-compare-v1",
+      "strandId": "fractions-decimals",
+      "level": 3.8,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786630668567,
+      "id": 43
+    },
+    {
+      "itemId": "ws-04",
+      "strandId": "writing-strategies",
+      "level": 4.2,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786630727701,
+      "id": 44
+    },
+    {
+      "itemId": "gr-04",
+      "strandId": "grammar-usage",
+      "level": 3.9,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786630780877,
+      "id": 45
+    },
+    {
+      "itemId": "rc-02",
+      "strandId": "reading-comprehension",
+      "level": 2.9,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786630874524,
+      "id": 46
+    },
+    {
+      "itemId": "gr-05",
+      "strandId": "grammar-usage",
+      "level": 4.4,
+      "correct": true,
+      "submitted": 2,
+      "readAloud": false,
+      "at": 1786630908548,
+      "id": 47
+    },
+    {
+      "itemId": "vo-04",
+      "strandId": "vocabulary",
+      "level": 4,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786630974122,
+      "id": 48
+    },
+    {
+      "itemId": "no-div1-v0",
+      "strandId": "numbers-operations",
+      "level": 3.9,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786632661939,
+      "id": 49
+    },
+    {
+      "itemId": "ws-05",
+      "strandId": "writing-strategies",
+      "level": 4.7,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786632720324,
+      "id": 50
+    },
+    {
+      "itemId": "ge-perim-v0",
+      "strandId": "geometry",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786632760697,
+      "id": 51
+    },
+    {
+      "itemId": "fd-compare-v2",
+      "strandId": "fractions-decimals",
+      "level": 3.8,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786632792721,
+      "id": 52
+    },
+    {
+      "itemId": "md-units-v0",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786632824453,
+      "id": 53
+    },
+    {
+      "itemId": "pa-missadd-v2",
+      "strandId": "patterns-algebra",
+      "level": 3,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786633643566,
+      "id": 54
+    },
+    {
+      "itemId": "fd-compare-v0",
+      "strandId": "fractions-decimals",
+      "level": 3.8,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786633839906,
+      "id": 55
+    },
+    {
+      "itemId": "md-units-v1",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786633877679,
+      "id": 56
+    },
+    {
+      "itemId": "ge-perim-v1",
+      "strandId": "geometry",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786633921181,
+      "id": 57
+    },
+    {
+      "itemId": "vo-06",
+      "strandId": "vocabulary",
+      "level": 5,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786633962282,
+      "id": 58
+    },
+    {
+      "itemId": "gr-06",
+      "strandId": "grammar-usage",
+      "level": 4.9,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786633998646,
+      "id": 59
+    },
+    {
+      "itemId": "ws-06",
+      "strandId": "writing-strategies",
+      "level": 5.2,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786634072273,
+      "id": 60
+    },
+    {
+      "itemId": "ge-area-v0",
+      "strandId": "geometry",
+      "level": 3.7,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1786634113147,
+      "id": 61
+    },
+    {
+      "itemId": "ge-area-v1",
+      "strandId": "geometry",
+      "level": 3.7,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786973818023,
+      "id": 62
+    },
+    {
+      "itemId": "ws-03",
+      "strandId": "writing-strategies",
+      "level": 3.6,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786973913840,
+      "id": 63
+    },
+    {
+      "itemId": "gr-03",
+      "strandId": "grammar-usage",
+      "level": 3.4,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786973954445,
+      "id": 64
+    },
+    {
+      "itemId": "md-elapsed-v1",
+      "strandId": "measurement-data",
+      "level": 3.6,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1786973998466,
+      "id": 65
+    },
+    {
+      "itemId": "ws-05",
+      "strandId": "writing-strategies",
+      "level": 4.7,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786974157579,
+      "id": 66
+    },
+    {
+      "itemId": "fo-longer-v0",
+      "strandId": "measurement-data",
+      "level": 1.2,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1786974186088,
+      "id": 67
+    },
+    {
+      "itemId": "gr-13",
+      "strandId": "grammar-usage",
+      "level": 1.5,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786974219796,
+      "id": 68
+    },
+    {
+      "itemId": "fo-nameshape-v2",
+      "strandId": "geometry",
+      "level": 1.2,
+      "correct": true,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786974269498,
+      "id": 69
+    },
+    {
+      "itemId": "md-time-v0",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786974301558,
+      "id": 70
+    },
+    {
+      "itemId": "gr-01",
+      "strandId": "grammar-usage",
+      "level": 2.3,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786974325116,
+      "id": 71
+    },
+    {
+      "itemId": "ws-20",
+      "strandId": "writing-strategies",
+      "level": 3.7,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1786974431212,
+      "id": 72
+    },
+    {
+      "itemId": "fo-sameshape-v0",
+      "strandId": "geometry",
+      "level": 2.2,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": false,
+      "at": 1786974477176,
+      "id": 73
+    },
+    {
+      "itemId": "gr-17",
+      "strandId": "grammar-usage",
+      "level": 2.8,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1786974547508,
+      "id": 74
+    },
+    {
+      "itemId": "ws-16",
+      "strandId": "writing-strategies",
+      "level": 2.6,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787595859021,
+      "id": 75
+    },
+    {
+      "itemId": "ge-sides-v0",
+      "strandId": "geometry",
+      "level": 2.4,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787595872470,
+      "id": 76
+    },
+    {
+      "itemId": "md-units-v1",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787595893003,
+      "id": 77
+    },
+    {
+      "itemId": "ws-18",
+      "strandId": "writing-strategies",
+      "level": 3,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1787595919959,
+      "id": 78
+    },
+    {
+      "itemId": "md-units-v0",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1787595940141,
+      "id": 79
+    },
+    {
+      "itemId": "fo-gr-capital-v0",
+      "strandId": "grammar-usage",
+      "level": 2.1,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787595967263,
+      "id": 80
+    },
+    {
+      "itemId": "ge-perim-v2",
+      "strandId": "geometry",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 3,
+      "readAloud": true,
+      "at": 1787596110321,
+      "id": 81
+    },
+    {
+      "itemId": "md-units-v2",
+      "strandId": "measurement-data",
+      "level": 3,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787596166260,
+      "id": 82
+    },
+    {
+      "itemId": "gr-16",
+      "strandId": "grammar-usage",
+      "level": 2.6,
+      "correct": true,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1787596199263,
+      "id": 83
+    },
+    {
+      "itemId": "ws-17",
+      "strandId": "writing-strategies",
+      "level": 2.8,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787596256122,
+      "id": 84
+    },
+    {
+      "itemId": "ge-sides-v1",
+      "strandId": "geometry",
+      "level": 2.4,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787596264247,
+      "id": 85
+    },
+    {
+      "itemId": "gr-02",
+      "strandId": "grammar-usage",
+      "level": 2.9,
+      "correct": false,
+      "submitted": 0,
+      "readAloud": true,
+      "at": 1787596278754,
+      "id": 86
+    },
+    {
+      "itemId": "ws-02",
+      "strandId": "writing-strategies",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1787680204573,
+      "id": 87
+    },
+    {
+      "itemId": "ge-perim-v1",
+      "strandId": "geometry",
+      "level": 3.1,
+      "correct": false,
+      "submitted": 2,
+      "readAloud": true,
+      "at": 1787680233171,
+      "id": 88
+    },
+    {
+      "itemId": "md-time-v1",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": false,
+      "submitted": 1,
+      "readAloud": true,
+      "at": 1787680264365,
+      "id": 89
+    },
+    {
+      "itemId": "md-time-v2",
+      "strandId": "measurement-data",
+      "level": 2.3,
+      "correct": true,
+      "submitted": 0,
+      "readAloud": false,
+      "at": 1787680274532,
+      "id": 90
+    }
+  ],
+  "sittings": [
+    {
+      "startedAt": 1786626439106,
+      "endedAt": null,
+      "answered": 0,
+      "id": 1
+    },
+    {
+      "startedAt": 1786628994020,
+      "endedAt": null,
+      "answered": 0,
+      "id": 2
+    },
+    {
+      "startedAt": 1786632626120,
+      "endedAt": null,
+      "answered": 0,
+      "id": 3
+    },
+    {
+      "startedAt": 1786633612484,
+      "endedAt": 1786634539796,
+      "answered": 8,
+      "id": 4
+    },
+    {
+      "startedAt": 1786973741483,
+      "endedAt": 1786974598436,
+      "answered": 13,
+      "id": 5
+    },
+    {
+      "startedAt": 1786974668699,
+      "endedAt": 1786974678407,
+      "answered": 0,
+      "id": 6
+    },
+    {
+      "startedAt": 1787595821968,
+      "endedAt": 1787596306328,
+      "answered": 12,
+      "id": 7
+    },
+    {
+      "startedAt": 1787680173291,
+      "endedAt": 1787680245350,
+      "answered": 2,
+      "id": 8
+    },
+    {
+      "startedAt": 1787680256552,
+      "endedAt": 1787680281964,
+      "answered": 2,
+      "id": 9
+    }
+  ],
+  "ledger": [
+    {
+      "entryId": "06cb92d1-3707-44c1-8a00-9eef77c4a901",
+      "currency": "petal",
+      "amount": -55,
+      "kind": "spend",
+      "source": "market",
+      "note": "Ribboned Braids",
+      "at": "2026-08-14T18:49:30.002Z"
+    },
+    {
+      "entryId": "123409f6-5458-421d-9265-cbaeb0b242eb",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-21T13:02:49.227Z"
+    },
+    {
+      "entryId": "1ecaac85-0bc9-43e8-ac44-312d4c5734f8",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-1-01",
+      "at": "2026-08-25T17:34:46.306Z"
+    },
+    {
+      "entryId": "21f997e3-2af0-4353-84be-3a47ab931a52",
+      "currency": "petal",
+      "amount": -45,
+      "kind": "spend",
+      "source": "market",
+      "note": "Window Box",
+      "at": "2026-08-14T18:47:34.520Z"
+    },
+    {
+      "entryId": "2705e31b-faac-4a49-889e-00d37c8016e4",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read ss-m1-01",
+      "at": "2026-08-17T19:15:41.160Z"
+    },
+    {
+      "entryId": "27bb92c5-b5e6-4cb5-b4a8-bab104db76b1",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m1-03",
+      "at": "2026-08-20T18:30:57.561Z"
+    },
+    {
+      "entryId": "31973feb-fbc8-4081-8186-60bfaf1f9bfa",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m2-01",
+      "at": "2026-08-17T18:54:09.513Z"
+    },
+    {
+      "entryId": "34f1fcd8-abb8-4af9-a399-d003e4ec2c45",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to sl-m1-03",
+      "at": "2026-08-20T18:36:32.716Z"
+    },
+    {
+      "entryId": "36fd8a0d-d677-4893-aae3-ba26682ad914",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-m1-04",
+      "at": "2026-08-20T17:00:29.418Z"
+    },
+    {
+      "entryId": "37006336-1245-4a33-b97b-f3b55c757d9a",
+      "currency": "petal",
+      "amount": 15,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · The bill, and the people who refused",
+      "at": "2026-08-24T18:51:49.601Z"
+    },
+    {
+      "entryId": "373cffe1-303c-4f56-98e9-ee16b16596f0",
+      "currency": "seed",
+      "amount": 9,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · Seeds",
+      "at": "2026-08-19T19:13:13.540Z"
+    },
+    {
+      "entryId": "3c017f0e-7db7-4c9a-a230-963f9f7d672b",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-1-09",
+      "at": "2026-08-18T22:11:36.361Z"
+    },
+    {
+      "entryId": "485a6a41-602d-4bc1-b249-1d92ef087897",
+      "currency": "seed",
+      "amount": 9,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · The bill, and the people who refused",
+      "at": "2026-08-24T18:51:49.605Z"
+    },
+    {
+      "entryId": "49bcd430-ddd8-4cbe-b238-a941cc581d69",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-20T13:03:53.642Z"
+    },
+    {
+      "entryId": "4aceaaca-65f5-4fdc-ae7d-20c3b069d4af",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-25T13:25:03.657Z"
+    },
+    {
+      "entryId": "520ec5b0-1aa4-44d3-880b-2450d28c1dc1",
+      "currency": "petal",
+      "amount": -45,
+      "kind": "spend",
+      "source": "market",
+      "note": "Floral Apron",
+      "at": "2026-08-14T18:48:25.295Z"
+    },
+    {
+      "entryId": "5a9ca774-0583-4076-a176-144cd4911990",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to sl-m1-01",
+      "at": "2026-08-17T19:04:59.763Z"
+    },
+    {
+      "entryId": "5aad1b60-b911-431f-879b-4f9788ea4480",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to hb-m1-01",
+      "at": "2026-08-14T17:47:56.141Z"
+    },
+    {
+      "entryId": "5b0da938-b193-450f-b244-3b71212afe5c",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read body-m1-02",
+      "at": "2026-08-25T19:30:47.712Z"
+    },
+    {
+      "entryId": "5d8a0a7f-c1ff-4157-9b48-7e988a42d7fa",
+      "currency": "petal",
+      "amount": -40,
+      "kind": "spend",
+      "source": "market",
+      "note": "Gardening Gloves",
+      "at": "2026-08-14T18:49:23.303Z"
+    },
+    {
+      "entryId": "61564530-0410-4156-8113-636f57b56f93",
+      "currency": "petal",
+      "amount": -55,
+      "kind": "spend",
+      "source": "market",
+      "note": "Garden Clogs",
+      "at": "2026-08-19T20:00:54.165Z"
+    },
+    {
+      "entryId": "67fc46d7-e2b4-4a14-9fe6-5f50226605e7",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to body-m1-02",
+      "at": "2026-08-25T19:33:21.542Z"
+    },
+    {
+      "entryId": "6c755f7e-99cf-43e4-b2a6-d60e55813517",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-1-12",
+      "at": "2026-08-24T17:29:51.388Z"
+    },
+    {
+      "entryId": "70946423-0535-43d2-9b70-5d58a70f5439",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m1-01",
+      "at": "2026-08-17T19:03:22.777Z"
+    },
+    {
+      "entryId": "719a85df-d78a-4a86-8e11-605bc1173fba",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-m1-02",
+      "at": "2026-08-17T17:24:16.468Z"
+    },
+    {
+      "entryId": "74a30b17-560c-472d-a034-a945058ed9b5",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-19T13:25:30.671Z"
+    },
+    {
+      "entryId": "7631f805-66b3-430e-90ed-d39f24a17158",
+      "currency": "petal",
+      "amount": 15,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · Seeds",
+      "at": "2026-08-19T19:13:13.517Z"
+    },
+    {
+      "entryId": "7d90b6fb-43e1-4ce0-859c-5393f04c2fde",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m1-05",
+      "at": "2026-08-25T18:31:23.445Z"
+    },
+    {
+      "entryId": "8745b05b-a716-42a6-91f1-2c19981e1e1f",
+      "currency": "petal",
+      "amount": -60,
+      "kind": "spend",
+      "source": "market",
+      "note": "Wide Straw Hat",
+      "at": "2026-08-14T18:49:24.587Z"
+    },
+    {
+      "entryId": "884e37d1-f2bf-44e9-b616-9080c398192b",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m1-02",
+      "at": "2026-08-19T19:37:58.665Z"
+    },
+    {
+      "entryId": "8f9ec434-29e2-48d0-b526-3244a7199e53",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read sl-m1-04",
+      "at": "2026-08-21T18:31:06.851Z"
+    },
+    {
+      "entryId": "94d28e9b-db11-4e14-a152-52456a587ad3",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read body-m1-01",
+      "at": "2026-08-20T18:50:39.891Z"
+    },
+    {
+      "entryId": "98534454-5cf5-4f23-b4c7-98788d64fa48",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to ss-m1-02",
+      "at": "2026-08-19T19:44:34.983Z"
+    },
+    {
+      "entryId": "a39514f8-59c1-440d-9bbc-3bc7a798a6b4",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to sl-m1-03",
+      "at": "2026-08-20T18:35:38.958Z"
+    },
+    {
+      "entryId": "a432f956-8d53-4503-86bd-97d79a02affd",
+      "currency": "petal",
+      "amount": -25,
+      "kind": "spend",
+      "source": "market",
+      "note": "Linen Apron",
+      "at": "2026-08-14T18:48:30.418Z"
+    },
+    {
+      "entryId": "a7922de8-b3c9-481e-b484-d35cd493e500",
+      "currency": "seed",
+      "amount": 9,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · Naming the forces",
+      "at": "2026-08-24T18:14:41.677Z"
+    },
+    {
+      "entryId": "b1ba30ef-ee6a-48a0-8080-8648d56f50b4",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read hb-m1-05",
+      "at": "2026-08-21T17:45:14.965Z"
+    },
+    {
+      "entryId": "b9b828bc-63db-4346-a45b-1b56e9856cb2",
+      "currency": "petal",
+      "amount": -25,
+      "kind": "spend",
+      "source": "market",
+      "note": "Wooden Stool",
+      "at": "2026-08-14T18:46:48.572Z"
+    },
+    {
+      "entryId": "bb030709-3a4e-478a-999d-828e09d27775",
+      "currency": "petal",
+      "amount": 6,
+      "kind": "grant",
+      "source": "lesson-read",
+      "note": "Read ss-m1-02",
+      "at": "2026-08-19T19:43:35.424Z"
+    },
+    {
+      "entryId": "c956b958-aa27-408c-bdd3-ed9456803278",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-17T13:28:09.772Z"
+    },
+    {
+      "entryId": "caec96ce-c2f5-4e7b-89b6-a8d92ad25d92",
+      "currency": "petal",
+      "amount": -65,
+      "kind": "spend",
+      "source": "market",
+      "note": "Green Wellingtons",
+      "at": "2026-08-14T18:49:28.518Z"
+    },
+    {
+      "entryId": "d18373c0-9597-413f-a9f8-30bde5c9d6cc",
+      "currency": "petal",
+      "amount": 5,
+      "kind": "grant",
+      "source": "lesson-revisit",
+      "note": "Went back to sl-m1-03",
+      "at": "2026-08-20T18:31:57.122Z"
+    },
+    {
+      "entryId": "dab8057c-adb5-4746-8aff-c0bda369471a",
+      "currency": "petal",
+      "amount": -85,
+      "kind": "spend",
+      "source": "market",
+      "note": "Foraging Satchel",
+      "at": "2026-08-14T18:49:27.060Z"
+    },
+    {
+      "entryId": "e5f62b65-c61c-4ec8-8892-3bfbd66c2d76",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-18T12:31:29.285Z"
+    },
+    {
+      "entryId": "f828d9a3-6bda-4a3a-903f-b3153e1a40c6",
+      "currency": "petal",
+      "amount": 15,
+      "kind": "grant",
+      "source": "test-taken",
+      "note": "Sat Week 1 · Naming the forces",
+      "at": "2026-08-24T18:14:41.675Z"
+    },
+    {
+      "entryId": "fc16501b-7197-4c07-97c0-3d8457d32084",
+      "currency": "petal",
+      "amount": 3,
+      "kind": "grant",
+      "source": "warm-up",
+      "note": "Morning warm-up",
+      "at": "2026-08-24T13:42:02.175Z"
+    },
+    {
+      "entryId": "journal-3a52ee55-0d22-46de-ae1f-d58638e7de23",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: pressed",
+      "at": "2026-08-25T20:04:56.324Z"
+    },
+    {
+      "entryId": "journal-4b74eead-e8c0-49a5-b8ea-9fda937a3546",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: notice",
+      "at": "2026-08-17T19:27:56.219Z"
+    },
+    {
+      "entryId": "journal-7714bee3-c31c-4e9c-8cec-e0908479b534",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: pressed",
+      "at": "2026-08-25T21:22:46.204Z"
+    },
+    {
+      "entryId": "journal-bbfda65c-4a81-4600-9628-aafc8e9b6159",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: notice",
+      "at": "2026-08-20T18:55:21.900Z"
+    },
+    {
+      "entryId": "journal-dc13f1dc-78c5-4d05-b6b7-32e4a87386c7",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: notice",
+      "at": "2026-08-21T19:55:03.793Z"
+    },
+    {
+      "entryId": "journal-f24d670e-a2d8-4b4d-b758-ee53e6da2a4b",
+      "currency": "petal",
+      "amount": 12,
+      "kind": "grant",
+      "source": "journal",
+      "note": "Journal: plant",
+      "at": "2026-08-14T19:17:17.171Z"
+    },
+    {
+      "entryId": "rebalance-v2-petal",
+      "currency": "petal",
+      "amount": 315,
+      "kind": "grant",
+      "source": "rebalance-v2",
+      "note": "Kept from before the earning rates changed",
+      "at": "2026-08-17T13:05:04.500Z"
+    },
+    {
+      "entryId": "rebalance-v2-seed",
+      "currency": "seed",
+      "amount": 176,
+      "kind": "grant",
+      "source": "rebalance-v2",
+      "note": "Kept from before the earning rates changed",
+      "at": "2026-08-17T13:05:04.506Z"
+    }
+  ],
+  "requests": [],
+  "journal": [
+    {
+      "entryId": "4b74eead-e8c0-49a5-b8ea-9fda937a3546",
+      "kind": "notice",
+      "prompt": "What is one question you had today that nobody answered?",
+      "text": "that i did good on  my  homework today .",
+      "words": 9,
+      "at": "2026-08-17T19:27:56.219Z",
+      "editedAt": null
+    },
+    {
+      "entryId": "7714bee3-c31c-4e9c-8cec-e0908479b534",
+      "kind": "pressed",
+      "prompt": "Was the plant growing wild or did somebody plant it?",
+      "text": "The plant was not growing wild, I had to plant the seed myself.",
+      "words": 13,
+      "at": "2026-08-25T21:22:46.204Z",
+      "editedAt": null
+    },
+    {
+      "entryId": "bbfda65c-4a81-4600-9628-aafc8e9b6159",
+      "kind": "notice",
+      "prompt": "What is one question you had today that nobody answered?",
+      "text": "I noticed I did my home work fast",
+      "words": 8,
+      "at": "2026-08-20T18:55:21.900Z",
+      "editedAt": null
+    },
+    {
+      "entryId": "c8ff4358-6658-4f2d-89de-5d1924e75acf",
+      "kind": "plant",
+      "prompt": "If you came back in two weeks, what do you predict will have changed?",
+      "text": "did you konw the coat of the seed let it dry ",
+      "words": 11,
+      "at": "2026-08-19T19:51:01.418Z",
+      "editedAt": null
+    },
+    {
+      "entryId": "dc13f1dc-78c5-4d05-b6b7-32e4a87386c7",
+      "kind": "notice",
+      "prompt": "Write down one thing you got wrong today and what you now think instead.",
+      "text": "I check on my seed and it look like a bean growing and it fell soft and it growing outt of rag ",
+      "words": 22,
+      "at": "2026-08-21T19:55:03.793Z",
+      "editedAt": null
+    },
+    {
+      "entryId": "f24d670e-a2d8-4b4d-b758-ee53e6da2a4b",
+      "kind": "plant",
+      "prompt": "What is this plant doing right now — growing, flowering, seeding, or resting?",
+      "text": "that lemon basl tast strong and minty and the ' textuer was flufy .   it look green and shap like a leaf .",
+      "words": 23,
+      "at": "2026-08-14T19:17:17.171Z",
+      "editedAt": null
+    }
+  ],
+  "messages": [
+    {
+      "messageId": "0ea67771-28e3-4837-ab75-ae91c9cecc9f",
+      "from": "gigi",
+      "text": "About what you wrote on Aug 19 — Read your sentences back to yourself to make sure it makes sense.",
+      "sticker": "",
+      "at": "2026-08-20T20:23:55.031Z",
+      "readAt": "2026-08-25T13:04:20.561Z"
+    },
+    {
+      "messageId": "502da964-50e4-4cb9-a522-cd16be06ad2f",
+      "from": "gigi",
+      "text": "About what you wrote on Aug 20 — This doesn't have anything to do with what you are supposed to write about.  :(",
+      "sticker": "",
+      "at": "2026-08-20T20:22:53.685Z",
+      "readAt": "2026-08-25T13:03:29.738Z"
+    },
+    {
+      "messageId": "75e509db-aeb0-49ee-a3df-21842e6357bd",
+      "from": "gigi",
+      "text": "I'm so proud of you! You did a great job on your first day and got alot completed.  You are awesome!!!",
+      "sticker": "🌈",
+      "at": "2026-08-15T16:19:13.264Z",
+      "readAt": "2026-08-18T12:21:11.113Z"
+    },
+    {
+      "messageId": "a8b6dcf6-388c-40ca-862d-5e56cc09b094",
+      "from": "gigi",
+      "text": "I have the new import and have updated your app.  Have a great day! Love you!",
+      "sticker": "🫶",
+      "at": "2026-08-25T13:13:53.282Z",
+      "readAt": "2026-08-25T13:16:46.156Z"
+    }
+  ],
+  "scheduleDays": [
+    {
+      "dayKey": "2026-08-14",
+      "done": {
+        "blk-open": "2026-08-14T15:37:25.218Z",
+        "blk-math": "2026-08-14T15:37:27.379Z",
+        "blk-break1": "2026-08-14T15:37:29.343Z",
+        "blk-reading": "2026-08-14T15:37:31.015Z",
+        "blk-lunch": "2026-08-14T17:07:33.028Z",
+        "blk-writing": "2026-08-14T17:30:24.109Z",
+        "blk-herbalism": "2026-08-14T17:49:51.748Z",
+        "blk-break2": "2026-08-14T18:41:27.741Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-17",
+      "done": {
+        "blk-open": "2026-08-17T13:51:44.785Z",
+        "blk-math": "2026-08-17T14:17:24.061Z",
+        "blk-break1": "2026-08-17T14:46:39.234Z",
+        "blk-reading": "2026-08-17T16:05:58.225Z",
+        "blk-lunch": "2026-08-17T16:05:59.592Z",
+        "blk-writing": "2026-08-17T16:25:49.699Z",
+        "blk-herbalism": "2026-08-17T17:32:07.613Z",
+        "blk-break2": "2026-08-17T17:33:55.302Z",
+        "blk-science": "2026-08-17T19:08:16.602Z",
+        "blk-social": "2026-08-17T19:16:05.235Z",
+        "blk-journal": "2026-08-17T19:28:29.320Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-18",
+      "done": {
+        "blk-open": "2026-08-18T12:32:23.266Z",
+        "blk-math": "2026-08-18T13:50:27.640Z",
+        "blk-break1": "2026-08-18T14:15:35.383Z",
+        "blk-lunch": "2026-08-18T15:36:15.273Z",
+        "blk-reading": "2026-08-18T20:24:03.535Z",
+        "blk-break2": "2026-08-18T20:24:39.942Z",
+        "blk-writing": "2026-08-18T21:58:41.341Z",
+        "blk-herbalism": "2026-08-18T22:17:17.101Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-19",
+      "done": {
+        "blk-open": "2026-08-19T13:25:59.863Z",
+        "blk-math": "2026-08-19T14:34:41.907Z",
+        "blk-break1": "2026-08-19T14:48:15.073Z",
+        "blk-reading": "2026-08-19T15:20:05.236Z",
+        "blk-lunch": "2026-08-19T15:35:53.521Z",
+        "blk-break2": "2026-08-19T17:28:18.938Z",
+        "blk-writing": "2026-08-19T19:07:46.328Z",
+        "blk-herbalism": "2026-08-19T19:19:08.854Z",
+        "blk-science": "2026-08-19T19:38:27.928Z",
+        "blk-social": "2026-08-19T19:45:10.405Z",
+        "blk-journal": "2026-08-19T19:51:46.210Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-20",
+      "done": {
+        "blk-open": "2026-08-20T13:04:31.711Z",
+        "blk-math": "2026-08-20T13:33:47.550Z",
+        "blk-break1": "2026-08-20T13:35:15.951Z",
+        "blk-reading": "2026-08-20T15:42:07.250Z",
+        "blk-lunch": "2026-08-20T16:37:10.359Z",
+        "blk-writing": "2026-08-20T16:45:40.224Z",
+        "blk-herbalism": "2026-08-20T17:00:56.964Z",
+        "blk-break2": "2026-08-20T17:05:12.212Z",
+        "blk-science": "2026-08-20T18:36:52.186Z",
+        "blk-social": "2026-08-20T18:51:01.274Z",
+        "blk-journal": "2026-08-20T18:55:46.830Z",
+        "blk-doing": "2026-08-20T20:53:25.300Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-21",
+      "done": {
+        "blk-open": "2026-08-21T13:03:30.619Z",
+        "blk-math": "2026-08-21T15:22:17.858Z",
+        "blk-break1": "2026-08-21T15:22:25.579Z",
+        "blk-lunch": "2026-08-21T16:44:42.494Z",
+        "blk-reading": "2026-08-21T17:01:09.111Z",
+        "blk-writing": "2026-08-21T17:29:50.015Z",
+        "blk-herbalism": "2026-08-21T17:45:47.321Z",
+        "blk-break2": "2026-08-21T17:47:58.142Z",
+        "blk-science": "2026-08-21T18:31:32.590Z",
+        "blk-social": "2026-08-21T19:43:20.790Z",
+        "blk-journal": "2026-08-21T19:55:30.023Z",
+        "blk-doing": "2026-08-21T20:03:18.659Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-24",
+      "done": {
+        "blk-open": "2026-08-24T13:42:18.814Z",
+        "blk-math": "2026-08-24T13:42:20.880Z",
+        "blk-break1": "2026-08-24T14:15:36.910Z",
+        "blk-reading": "2026-08-24T15:22:55.412Z",
+        "blk-lunch": "2026-08-24T15:35:09.263Z",
+        "blk-writing": "2026-08-24T16:40:48.932Z",
+        "blk-herbalism": "2026-08-24T17:30:30.773Z",
+        "blk-break2": "2026-08-24T17:55:20.610Z",
+        "blk-science": "2026-08-24T18:34:13.986Z",
+        "blk-social": "2026-08-24T18:50:15.786Z"
+      }
+    },
+    {
+      "dayKey": "2026-08-25",
+      "done": {
+        "blk-open": "2026-08-25T13:25:18.951Z",
+        "blk-math": "2026-08-25T13:49:36.100Z",
+        "blk-break1": "2026-08-25T14:50:47.023Z",
+        "blk-reading": "2026-08-25T15:34:32.639Z",
+        "blk-lunch": "2026-08-25T16:49:41.375Z",
+        "blk-writing": "2026-08-25T17:18:21.097Z",
+        "blk-herbalism": "2026-08-25T17:35:16.294Z",
+        "blk-break2": "2026-08-25T18:31:47.707Z",
+        "blk-science": "2026-08-25T18:31:53.875Z",
+        "blk-social": "2026-08-25T19:18:04.070Z",
+        "blk-journal": "2026-08-25T21:22:59.521Z",
+        "blk-doing": "2026-08-25T21:23:02.089Z"
+      },
+      "bellOn": true
+    }
+  ],
+  "attempts": [
+    {
+      "attemptId": "02725b04-5f21-4c7b-9c23-1ca8f488c267",
+      "testId": "social-q1-w1",
+      "kind": "weekly",
+      "title": "Week 1 · The bill, and the people who refused",
+      "attempt": 1,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.581Z",
+      "right": 2,
+      "total": 5,
+      "fraction": 0.4,
+      "percent": 40,
+      "bandId": "go-back",
+      "revisit": [
+        {
+          "lesson": "ss-m1-02",
+          "misses": 2
+        },
+        {
+          "lesson": "ss-m1-01",
+          "misses": 1
+        }
+      ],
+      "rows": [
+        {
+          "questionId": "ss-m1-01-q2",
+          "lesson": "ss-m1-01",
+          "chosen": 0,
+          "answer": 0,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "ss-m1-01-q10",
+          "lesson": "ss-m1-01",
+          "chosen": 0,
+          "answer": 3,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "ss-m1-01-q4",
+          "lesson": "ss-m1-01",
+          "chosen": 1,
+          "answer": 1,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "ss-m1-02-q8",
+          "lesson": "ss-m1-02",
+          "chosen": 2,
+          "answer": 3,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "ss-m1-02-q2",
+          "lesson": "ss-m1-02",
+          "chosen": 1,
+          "answer": 0,
+          "correct": false,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "attemptId": "078fd60c-c78c-4e93-b0ca-973d677ef298",
+      "testId": "herbalism-q1-w1",
+      "kind": "weekly",
+      "title": "Week 1 · Seeds",
+      "attempt": 1,
+      "dayKey": "2026-08-19",
+      "at": "2026-08-19T19:13:13.399Z",
+      "right": 6,
+      "total": 8,
+      "fraction": 0.75,
+      "percent": 75,
+      "bandId": "nearly",
+      "revisit": [
+        {
+          "lesson": "hb-m1-01",
+          "misses": 1
+        },
+        {
+          "lesson": "hb-m1-02",
+          "misses": 1
+        }
+      ],
+      "rows": [
+        {
+          "questionId": "t-hbm101h",
+          "lesson": "hb-m1-01",
+          "chosen": 1,
+          "answer": 1,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hbm101j",
+          "lesson": "hb-m1-01",
+          "chosen": 0,
+          "answer": 1,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hbm102h",
+          "lesson": "hb-m1-02",
+          "chosen": 1,
+          "answer": 1,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hbm101c",
+          "lesson": "hb-m1-01",
+          "chosen": 0,
+          "answer": 0,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hbm102g",
+          "lesson": "hb-m1-02",
+          "chosen": 0,
+          "answer": 0,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hb109g",
+          "lesson": "hb-1-09",
+          "chosen": 3,
+          "answer": 3,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hb109i",
+          "lesson": "hb-1-09",
+          "chosen": 0,
+          "answer": 0,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-hbm102d",
+          "lesson": "hb-m1-02",
+          "chosen": 0,
+          "answer": 2,
+          "correct": false,
+          "skipped": false
+        }
+      ]
+    },
+    {
+      "attemptId": "8c81874e-6a49-454c-808c-8b1ce0b6b3d7",
+      "testId": "sciencelab-q1-w1",
+      "kind": "weekly",
+      "title": "Week 1 · Naming the forces",
+      "attempt": 1,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.646Z",
+      "right": 4,
+      "total": 8,
+      "fraction": 0.5,
+      "percent": 50,
+      "bandId": "go-back",
+      "revisit": [
+        {
+          "lesson": "sl-m1-02",
+          "misses": 3
+        },
+        {
+          "lesson": "sl-m1-01",
+          "misses": 1
+        }
+      ],
+      "rows": [
+        {
+          "questionId": "t-slm103h",
+          "lesson": "sl-m1-03",
+          "chosen": 3,
+          "answer": 3,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm102h",
+          "lesson": "sl-m1-02",
+          "chosen": 1,
+          "answer": 1,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm102i",
+          "lesson": "sl-m1-02",
+          "chosen": 1,
+          "answer": 2,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm102f",
+          "lesson": "sl-m1-02",
+          "chosen": 0,
+          "answer": 3,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm101e",
+          "lesson": "sl-m1-01",
+          "chosen": 3,
+          "answer": 0,
+          "correct": false,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm102d",
+          "lesson": "sl-m1-02",
+          "chosen": 1,
+          "answer": 1,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm103g",
+          "lesson": "sl-m1-03",
+          "chosen": 2,
+          "answer": 2,
+          "correct": true,
+          "skipped": false
+        },
+        {
+          "questionId": "t-slm102a",
+          "lesson": "sl-m1-02",
+          "chosen": 3,
+          "answer": 2,
+          "correct": false,
+          "skipped": false
+        }
+      ]
+    }
+  ],
+  "reviewItems": [
+    {
+      "questionId": "ss-m1-01-q10",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "ss-m1-01-q2",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "ss-m1-01-q4",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "ss-m1-02-q2",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "ss-m1-02-q8",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-bodym101a",
+      "box": 0,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 1,
+      "source": "review"
+    },
+    {
+      "questionId": "t-bodym101b",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 0,
+      "source": "review"
+    },
+    {
+      "questionId": "t-bodym102a",
+      "box": 0,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-bodym102b",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 0,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-bodym102c",
+      "box": 0,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-bodym102d",
+      "box": 0,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-bodym102e",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 0,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-bodym102f",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 2,
+      "missed": 0,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hb109g",
+      "box": 2,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-21",
+      "seen": 3,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hb109i",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 4,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hbm101a",
+      "box": 2,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-20",
+      "seen": 4,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101b",
+      "box": 2,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-21",
+      "seen": 4,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101c",
+      "box": 2,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-19",
+      "seen": 4,
+      "missed": 1,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101d",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 6,
+      "missed": 3,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101e",
+      "box": 2,
+      "dueOn": "2026-09-01",
+      "lastSeen": "2026-08-25",
+      "seen": 6,
+      "missed": 2,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101f",
+      "box": 1,
+      "dueOn": "2026-08-22",
+      "lastSeen": "2026-08-19",
+      "seen": 4,
+      "missed": 2,
+      "source": "practice"
+    },
+    {
+      "questionId": "t-hbm101g",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 4,
+      "missed": 2,
+      "source": "review"
+    },
+    {
+      "questionId": "t-hbm101h",
+      "box": 1,
+      "dueOn": "2026-08-22",
+      "lastSeen": "2026-08-19",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hbm101j",
+      "box": 1,
+      "dueOn": "2026-08-28",
+      "lastSeen": "2026-08-25",
+      "seen": 6,
+      "missed": 3,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hbm102d",
+      "box": 1,
+      "dueOn": "2026-08-24",
+      "lastSeen": "2026-08-21",
+      "seen": 4,
+      "missed": 2,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hbm102g",
+      "box": 1,
+      "dueOn": "2026-08-22",
+      "lastSeen": "2026-08-19",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-hbm102h",
+      "box": 1,
+      "dueOn": "2026-08-22",
+      "lastSeen": "2026-08-19",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm101a",
+      "box": 0,
+      "dueOn": "2026-08-26",
+      "lastSeen": "2026-08-25",
+      "seen": 3,
+      "missed": 1,
+      "source": "review"
+    },
+    {
+      "questionId": "t-slm101b",
+      "box": 2,
+      "dueOn": "2026-09-01",
+      "lastSeen": "2026-08-25",
+      "seen": 3,
+      "missed": 0,
+      "source": "review"
+    },
+    {
+      "questionId": "t-slm101e",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm102a",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm102d",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm102f",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm102h",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm102i",
+      "box": 0,
+      "dueOn": "2026-08-25",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 1,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm103g",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    },
+    {
+      "questionId": "t-slm103h",
+      "box": 1,
+      "dueOn": "2026-08-27",
+      "lastSeen": "2026-08-24",
+      "seen": 2,
+      "missed": 0,
+      "source": "unit-test"
+    }
+  ],
+  "lessonReads": [
+    {
+      "lessonId": "body-m1-01",
+      "firstReadAt": "2026-08-20T18:50:39.851Z",
+      "lastReadAt": "2026-08-20T18:50:39.851Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "body-m1-02",
+      "firstReadAt": "2026-08-25T19:30:47.704Z",
+      "lastReadAt": "2026-08-25T19:33:21.539Z",
+      "reads": 2,
+      "practice": {
+        "asked": 3,
+        "correct": 3,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-1-01",
+      "firstReadAt": "2026-08-25T17:34:46.302Z",
+      "lastReadAt": "2026-08-25T17:34:46.302Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-1-09",
+      "firstReadAt": "2026-08-18T22:11:36.306Z",
+      "lastReadAt": "2026-08-18T22:11:36.306Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 3,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-1-12",
+      "firstReadAt": "2026-08-24T17:29:51.383Z",
+      "lastReadAt": "2026-08-24T17:29:51.383Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-m1-01",
+      "firstReadAt": "2026-08-14T17:45:22.321Z",
+      "lastReadAt": "2026-08-14T17:47:56.116Z",
+      "reads": 2,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-m1-02",
+      "firstReadAt": "2026-08-17T17:24:16.411Z",
+      "lastReadAt": "2026-08-17T17:24:16.411Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 3,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-m1-04",
+      "firstReadAt": "2026-08-20T17:00:29.359Z",
+      "lastReadAt": "2026-08-20T17:00:29.359Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 3,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "hb-m1-05",
+      "firstReadAt": "2026-08-21T17:45:14.948Z",
+      "lastReadAt": "2026-08-21T17:45:14.948Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m1-01",
+      "firstReadAt": "2026-08-17T19:03:22.714Z",
+      "lastReadAt": "2026-08-17T19:04:59.737Z",
+      "reads": 2,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m1-02",
+      "firstReadAt": "2026-08-19T19:37:58.616Z",
+      "lastReadAt": "2026-08-19T19:37:58.616Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m1-03",
+      "firstReadAt": "2026-08-20T18:30:57.474Z",
+      "lastReadAt": "2026-08-20T18:36:32.710Z",
+      "reads": 4,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m1-04",
+      "firstReadAt": "2026-08-21T18:31:06.835Z",
+      "lastReadAt": "2026-08-21T18:31:06.835Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m1-05",
+      "firstReadAt": "2026-08-25T18:31:23.442Z",
+      "lastReadAt": "2026-08-25T18:31:23.442Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "sl-m2-01",
+      "firstReadAt": "2026-08-17T18:54:09.490Z",
+      "lastReadAt": "2026-08-17T18:54:09.490Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 1,
+        "passed": false,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "ss-m1-01",
+      "firstReadAt": "2026-08-17T19:15:41.152Z",
+      "lastReadAt": "2026-08-17T19:15:41.152Z",
+      "reads": 1,
+      "practice": {
+        "asked": 3,
+        "correct": 3,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    },
+    {
+      "lessonId": "ss-m1-02",
+      "firstReadAt": "2026-08-19T19:43:35.364Z",
+      "lastReadAt": "2026-08-19T19:44:34.929Z",
+      "reads": 2,
+      "practice": {
+        "asked": 3,
+        "correct": 2,
+        "passed": true,
+        "extraServed": 0,
+        "extraCorrect": 0
+      }
+    }
+  ],
+  "projects": [],
+  "khanGrades": [],
+  "writingMarks": [],
+  "itemEvents": [
+    {
+      "eventId": "08d0a87c-d1ba-453e-8260-c583bbd54eaa",
+      "questionId": "t-bodym102b",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:29:17.860Z"
+    },
+    {
+      "eventId": "0b435f33-d299-443f-824b-8c7ca3fb042f",
+      "questionId": "sl-m1-04-check-2",
+      "lessonId": "sl-m1-04",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T18:31:06.717Z"
+    },
+    {
+      "eventId": "156c0c1f-3232-4304-b87b-61d4b75c0bcd",
+      "questionId": "t-bodym102e",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:16.054Z"
+    },
+    {
+      "eventId": "1698b1b7-4127-47e5-990d-3114925ebff5",
+      "questionId": "md-time-v2",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:51:14.545Z"
+    },
+    {
+      "eventId": "17a6e75e-d95e-485f-8a7d-ac6fc29c282c",
+      "questionId": "md-time-v1",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:51:04.376Z"
+    },
+    {
+      "eventId": "1a51efe4-2ef5-4f9c-80c1-56b417b50dcb",
+      "questionId": "t-hbm101g",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T13:42:02.147Z"
+    },
+    {
+      "eventId": "1c4dabe2-a907-4f41-a973-f9d3f97f0599",
+      "questionId": "sl-m1-05-check-3",
+      "lessonId": "sl-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T18:31:23.428Z"
+    },
+    {
+      "eventId": "1c5b3dc5-4dd1-4a52-9c8e-10b08ff0d941",
+      "questionId": "sl-m1-05-check-2",
+      "lessonId": "sl-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T18:31:23.428Z"
+    },
+    {
+      "eventId": "1ca12fe7-2179-4680-8dde-af5091111d2f",
+      "questionId": "fo-gr-capital-v0",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:26:07.274Z"
+    },
+    {
+      "eventId": "1ef7c94e-5530-4d7a-bd2c-84b7d4c9ea61",
+      "questionId": "t-hb109i",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T13:42:02.147Z"
+    },
+    {
+      "eventId": "1fa3d34f-ba69-4b7d-b96f-78cfc20d0b09",
+      "questionId": "t-slm102h",
+      "lessonId": "sl-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "2145d8e0-264e-4d6c-918a-41e7d14932f4",
+      "questionId": "t-bodym102a",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:27:45.268Z"
+    },
+    {
+      "eventId": "256cf32a-d18f-46c4-a7ce-bfe87a1015d4",
+      "questionId": "t-slm102a",
+      "lessonId": "sl-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "295d4973-9177-4155-a881-d2e3365840b1",
+      "questionId": "ws-18",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:25:19.973Z"
+    },
+    {
+      "eventId": "35974362-4a26-45e0-9c2f-69f1f808dc87",
+      "questionId": "t-slm101e",
+      "lessonId": "sl-m1-01",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "3d7591e2-5fdb-4de1-a0c9-a40223d785c2",
+      "questionId": "t-slm102d",
+      "lessonId": "sl-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "45d19f94-6146-4191-adb0-37ef85124804",
+      "questionId": "sl-m1-04-check-3",
+      "lessonId": "sl-m1-04",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T18:31:06.717Z"
+    },
+    {
+      "eventId": "46443092-9b39-491d-8245-993dfbea1374",
+      "questionId": "ws-16",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:24:19.037Z"
+    },
+    {
+      "eventId": "46ae552e-05b3-4598-8601-996c0857ae44",
+      "questionId": "hb-1-01-check-2",
+      "lessonId": "hb-1-01",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:34:46.289Z"
+    },
+    {
+      "eventId": "48d4708b-0f81-4634-bec7-9862f8915de5",
+      "questionId": "t-hbm102d",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T13:02:49.002Z"
+    },
+    {
+      "eventId": "49402181-a8d8-4a3d-ae68-584711488f58",
+      "questionId": "t-bodym102d",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:00.673Z"
+    },
+    {
+      "eventId": "496691cf-b5cc-435f-8623-69561ef7c610",
+      "questionId": "t-slm102f",
+      "lessonId": "sl-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "4b5eb930-4f87-46a8-8d0c-b3840aed068a",
+      "questionId": "t-hbm101d",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T13:25:03.638Z"
+    },
+    {
+      "eventId": "4c52c52f-bf86-434c-9164-cbe11a7001a6",
+      "questionId": "ge-sides-v1",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:31:04.259Z"
+    },
+    {
+      "eventId": "4d7fe3af-cc2e-480f-869a-3bdf9a01036a",
+      "questionId": "ss-m1-01-q10",
+      "lessonId": "ss-m1-01",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.592Z"
+    },
+    {
+      "eventId": "50758aef-a0cc-4d88-b9c7-6eabef5471e4",
+      "questionId": "hb-1-12-check-2",
+      "lessonId": "hb-1-12",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T17:29:51.376Z"
+    },
+    {
+      "eventId": "56a3641c-a49b-4e05-a71e-c81aef6b3c7a",
+      "questionId": "md-units-v1",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:24:53.016Z"
+    },
+    {
+      "eventId": "57d7dd07-b88f-4c54-a310-38653337e36b",
+      "questionId": "body-m1-02-check-2",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:33:21.532Z"
+    },
+    {
+      "eventId": "5e009468-8337-4dce-9738-b7b7165d5e22",
+      "questionId": "t-slm103g",
+      "lessonId": "sl-m1-03",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "5f3ac5b5-3e12-4f14-a5ec-150dd265a1bb",
+      "questionId": "ss-m1-01-q2",
+      "lessonId": "ss-m1-01",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.592Z"
+    },
+    {
+      "eventId": "62da265f-a902-4f26-af8f-c6d25b7bac44",
+      "questionId": "t-hbm101j",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T13:02:49.002Z"
+    },
+    {
+      "eventId": "64ba465d-d3e6-46ac-b2c3-9191c3f184be",
+      "questionId": "ss-m1-02-q8",
+      "lessonId": "ss-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.592Z"
+    },
+    {
+      "eventId": "6a8d693a-e73c-4212-b95c-f7ec3312e0e4",
+      "questionId": "t-slm103h",
+      "lessonId": "sl-m1-03",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "6d735ef9-23cb-453b-802b-8018c9072ed8",
+      "questionId": "t-hb109i",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T13:25:03.638Z"
+    },
+    {
+      "eventId": "6ec6c249-70b8-425e-b2c8-604d786ce96a",
+      "questionId": "hb-1-01-check-1",
+      "lessonId": "hb-1-01",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:34:46.289Z"
+    },
+    {
+      "eventId": "7a035a34-9500-4728-8a4b-6b5984490abd",
+      "questionId": "body-m1-02-check-3",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:47.697Z"
+    },
+    {
+      "eventId": "7be31613-2575-43d6-ad1c-bae325577c90",
+      "questionId": "ge-perim-v2",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:28:30.335Z"
+    },
+    {
+      "eventId": "7c5ca074-1cff-4537-b962-4529468da1f6",
+      "questionId": "body-m1-02-check-1",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:47.697Z"
+    },
+    {
+      "eventId": "7d8d4eec-0b61-4575-8982-0b50e898ca8f",
+      "questionId": "sl-m1-04-check-1",
+      "lessonId": "sl-m1-04",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T18:31:06.717Z"
+    },
+    {
+      "eventId": "8e425aeb-ff1f-4872-a159-83696dbec23c",
+      "questionId": "body-m1-02-check-2",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 3,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:47.697Z"
+    },
+    {
+      "eventId": "92def9c3-4398-4bcb-9068-e52b5f791c65",
+      "questionId": "hb-1-12-check-1",
+      "lessonId": "hb-1-12",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T17:29:51.376Z"
+    },
+    {
+      "eventId": "97f79e5d-c201-4afb-9b85-6fa3bf053b12",
+      "questionId": "ge-sides-v0",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:24:32.483Z"
+    },
+    {
+      "eventId": "99110cf2-a89e-4f01-9f7f-0a0c7a0c0804",
+      "questionId": "t-hbm101j",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T13:42:02.147Z"
+    },
+    {
+      "eventId": "9a6819de-293a-4891-bcb3-1b6a5902e688",
+      "questionId": "hb-m1-05-check-2",
+      "lessonId": "hb-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T17:45:14.881Z"
+    },
+    {
+      "eventId": "9bd08ec4-a556-4d09-a006-d1b9ad49240c",
+      "questionId": "ws-02",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:50:04.589Z"
+    },
+    {
+      "eventId": "a081ca34-9375-4c9a-88c6-6af2914a274c",
+      "questionId": "md-units-v0",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:25:40.155Z"
+    },
+    {
+      "eventId": "a0c33c5d-5751-4d19-9a01-4aa407db0c47",
+      "questionId": "t-hbm101g",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T13:25:03.638Z"
+    },
+    {
+      "eventId": "a0dd7715-57bb-4505-b65f-369b1f5c12af",
+      "questionId": "md-units-v2",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:29:26.269Z"
+    },
+    {
+      "eventId": "aa928b0f-fd56-42d3-b9a9-df1b41d71dfc",
+      "questionId": "ws-17",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:30:56.140Z"
+    },
+    {
+      "eventId": "ac119990-55a7-4c93-9196-e4febe1be574",
+      "questionId": "hb-m1-05-check-3",
+      "lessonId": "hb-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T17:45:14.881Z"
+    },
+    {
+      "eventId": "af8767b0-f70f-4fe5-a416-93fdccb3f91e",
+      "questionId": "body-m1-02-check-1",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:33:21.532Z"
+    },
+    {
+      "eventId": "b66f392a-b3a3-4a94-a3f1-ae432a4de41a",
+      "questionId": "t-bodym102c",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:29:32.242Z"
+    },
+    {
+      "eventId": "bd9240c7-4ad5-4e3d-9ca4-220a4c3e775c",
+      "questionId": "t-bodym102f",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "practice",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:30:44.403Z"
+    },
+    {
+      "eventId": "c62804cd-40b3-4778-b3c7-45c9546935ea",
+      "questionId": "hb-m1-05-check-1",
+      "lessonId": "hb-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T17:45:14.881Z"
+    },
+    {
+      "eventId": "d0611bdb-05cc-4782-bd47-42872bf5375a",
+      "questionId": "gr-16",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:29:59.273Z"
+    },
+    {
+      "eventId": "d27398e5-4656-4380-beb2-ccdf370c8d29",
+      "questionId": "hb-1-12-check-3",
+      "lessonId": "hb-1-12",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T17:29:51.376Z"
+    },
+    {
+      "eventId": "d801850f-abd5-4865-b261-aa43db10fbda",
+      "questionId": "ge-perim-v1",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 2,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:50:33.186Z"
+    },
+    {
+      "eventId": "d8518ce4-522c-4f7c-9d70-5a8485a0a921",
+      "questionId": "hb-1-01-check-3",
+      "lessonId": "hb-1-01",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T17:34:46.289Z"
+    },
+    {
+      "eventId": "e5342c97-fe54-4653-a653-f849d42527bc",
+      "questionId": "t-slm102i",
+      "lessonId": "sl-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:14:41.658Z"
+    },
+    {
+      "eventId": "e5590404-aa29-4c8f-b9fd-dff78bed2cb9",
+      "questionId": "body-m1-02-check-3",
+      "lessonId": "body-m1-02",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T19:33:21.532Z"
+    },
+    {
+      "eventId": "e6c89658-133f-465c-8a20-01353d091a43",
+      "questionId": "ss-m1-01-q4",
+      "lessonId": "ss-m1-01",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.592Z"
+    },
+    {
+      "eventId": "ec09e901-272d-4c8b-96c3-c27ad441467c",
+      "questionId": "t-hbm101b",
+      "lessonId": null,
+      "evidenceSource": "review",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": null,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-21",
+      "at": "2026-08-21T13:02:49.002Z"
+    },
+    {
+      "eventId": "f4ee7a9a-21cf-4d03-adbd-e22f68b73a07",
+      "questionId": "sl-m1-05-check-1",
+      "lessonId": "sl-m1-05",
+      "evidenceSource": "instruction",
+      "attemptState": "complete",
+      "correct": true,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-25",
+      "at": "2026-08-25T18:31:23.428Z"
+    },
+    {
+      "eventId": "f604cff8-639b-4707-ab0b-77525d986587",
+      "questionId": "gr-02",
+      "lessonId": null,
+      "evidenceSource": "diagnostic",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 0,
+      "attemptNumber": 1,
+      "readAloud": true,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:31:18.766Z"
+    },
+    {
+      "eventId": "f9ff613d-bdfc-4bf4-a14a-a7239f2ab041",
+      "questionId": "ss-m1-02-q2",
+      "lessonId": "ss-m1-02",
+      "evidenceSource": "test",
+      "attemptState": "complete",
+      "correct": false,
+      "chosen": 1,
+      "attemptNumber": 1,
+      "readAloud": false,
+      "dayKey": "2026-08-24",
+      "at": "2026-08-24T18:51:49.592Z"
+    }
+  ],
+  "baselines": [
+    {
+      "trackId": "herbalism",
+      "capturedOn": "2026-08-21T17:45:14.949Z",
+      "dayKey": "2026-08-21",
+      "instrument": "none",
+      "note": "Where she stood the first time this course was opened. Not a benchmark — this app has no fixed-form instrument, so growth may not be computed across it (§3.10.8).",
+      "firstLessonId": "hb-m1-05",
+      "lessonsReadInCourse": 0,
+      "strandLevels": {
+        "numbers-operations": {
+          "level": 3.4799999999999995,
+          "asked": 6,
+          "settled": true
+        },
+        "fractions-decimals": {
+          "level": 3.8899999999999997,
+          "asked": 7,
+          "settled": true
+        },
+        "measurement-data": {
+          "level": 2.6999999999999997,
+          "asked": 3,
+          "settled": false
+        },
+        "geometry": {
+          "level": 2.6999999999999997,
+          "asked": 3,
+          "settled": false
+        },
+        "patterns-algebra": {
+          "level": 2.98,
+          "asked": 6,
+          "settled": true
+        },
+        "reading-comprehension": {
+          "level": 3.46,
+          "asked": 6,
+          "settled": true
+        },
+        "vocabulary": {
+          "level": 2.91,
+          "asked": 7,
+          "settled": true
+        },
+        "grammar-usage": {
+          "level": 2.1999999999999997,
+          "asked": 4,
+          "settled": false
+        },
+        "writing-strategies": {
+          "level": 2.7,
+          "asked": 3,
+          "settled": false
+        }
+      }
+    },
+    {
+      "trackId": "humanbody",
+      "capturedOn": "2026-08-25T19:30:47.704Z",
+      "dayKey": "2026-08-25",
+      "instrument": "none",
+      "note": "Where she stood the first time this course was opened. Not a benchmark — this app has no fixed-form instrument, so growth may not be computed across it (§3.10.8).",
+      "firstLessonId": "body-m1-02",
+      "lessonsReadInCourse": 0,
+      "strandLevels": {
+        "numbers-operations": {
+          "level": 3.4799999999999995,
+          "asked": 6,
+          "settled": true
+        },
+        "fractions-decimals": {
+          "level": 3.8899999999999997,
+          "asked": 7,
+          "settled": true
+        },
+        "measurement-data": {
+          "level": 2.4399999999999995,
+          "asked": 8,
+          "settled": true
+        },
+        "geometry": {
+          "level": 2.67,
+          "asked": 7,
+          "settled": true
+        },
+        "patterns-algebra": {
+          "level": 2.98,
+          "asked": 6,
+          "settled": true
+        },
+        "reading-comprehension": {
+          "level": 3.46,
+          "asked": 6,
+          "settled": true
+        },
+        "vocabulary": {
+          "level": 2.91,
+          "asked": 7,
+          "settled": true
+        },
+        "grammar-usage": {
+          "level": 2.35,
+          "asked": 7,
+          "settled": true
+        },
+        "writing-strategies": {
+          "level": 2.6700000000000004,
+          "asked": 7,
+          "settled": true
+        }
+      }
+    },
+    {
+      "trackId": "sciencelab",
+      "capturedOn": "2026-08-21T18:31:06.835Z",
+      "dayKey": "2026-08-21",
+      "instrument": "none",
+      "note": "Where she stood the first time this course was opened. Not a benchmark — this app has no fixed-form instrument, so growth may not be computed across it (§3.10.8).",
+      "firstLessonId": "sl-m1-04",
+      "lessonsReadInCourse": 0,
+      "strandLevels": {
+        "numbers-operations": {
+          "level": 3.4799999999999995,
+          "asked": 6,
+          "settled": true
+        },
+        "fractions-decimals": {
+          "level": 3.8899999999999997,
+          "asked": 7,
+          "settled": true
+        },
+        "measurement-data": {
+          "level": 2.6999999999999997,
+          "asked": 3,
+          "settled": false
+        },
+        "geometry": {
+          "level": 2.6999999999999997,
+          "asked": 3,
+          "settled": false
+        },
+        "patterns-algebra": {
+          "level": 2.98,
+          "asked": 6,
+          "settled": true
+        },
+        "reading-comprehension": {
+          "level": 3.46,
+          "asked": 6,
+          "settled": true
+        },
+        "vocabulary": {
+          "level": 2.91,
+          "asked": 7,
+          "settled": true
+        },
+        "grammar-usage": {
+          "level": 2.1999999999999997,
+          "asked": 4,
+          "settled": false
+        },
+        "writing-strategies": {
+          "level": 2.7,
+          "asked": 3,
+          "settled": false
+        }
+      }
+    }
+  ],
+  "goals": [],
+  "journalMarks": []
+}

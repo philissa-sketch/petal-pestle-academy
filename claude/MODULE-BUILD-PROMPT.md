@@ -10,7 +10,9 @@ You are writing lessons for **Petal & Pestle Academy**, my 9-year-old granddaugh
 
 **App:** `C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy` · `localhost:5180`, `strictPort` on · database `PetalPestleDB` · **currently v3.28 · 25 automated checks, all passing.**
 
-**Lamar's app is at `C:\Users\pknot\Downloads\petal-pestle-academy\Lamar DOC\docs` and is READ-ONLY.** Read it for comparison. Never write to it.
+**Lamar's app is at `C:\Users\pknot\Downloads\mission-control-homeschool-school-start-gate\mission-control-homeschool` and is READ-ONLY.** Read the **code** for what his app does; read his `docs/` for why. Never write to it.
+
+> ⚠️ **Updated Aug 26 2026.** This line used to point at `Lamar DOC\docs`, which held documents and no code. Gigi deleted that folder on Aug 26 after it caused two wrong answers in three days — a grading scale read out of a stale log, and a whole book report feature built from notes while his running app sat unopened. **Do not go looking for it.**
 
 Read these first:
 
