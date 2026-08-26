@@ -200,7 +200,27 @@ export function isChallenge(g) {
 
 /** Newest first. `min` is inclusive, the same shape as RUBRIC_BANDS. */
 export const KHAN_LETTER_BANDS = [
-  { min: 97, grade: 'A+', assumed: true },
+  // ⚠️ `assumed: true` CAME OFF THIS BAND AT v3.84, AND ONLY BECAUSE THE
+  // EVIDENCE ARRIVED.
+  //
+  // v3.75 derived this ladder from a SCREENSHOT of Lamar's report card. The
+  // screenshot proved A+ exists and that 99 earns one; it could not say where
+  // A+ STARTS. 97 is the ordinary threshold, so 97 was used — and the flag was
+  // put on it precisely so nobody would later read a guess as a fact.
+  //
+  // On Aug 26 2026 his running app became readable. src/lib/gradeScale.js:
+  //
+  //     { letter: 'A+', min: 97, max: 100 },
+  //
+  // The guess was right. All thirteen bands below match his file exactly,
+  // threshold for threshold. The flag is removed because it is no longer a
+  // guess — not because it stopped being convenient.
+  //
+  // ⚠️ WHAT IS STILL NOT CLAIMED: that his scale is right for her, or that
+  // Georgia requires it. His own note says Georgia prescribes no scale for home
+  // study and the parent sets it; this is the same scale for both children
+  // because Gigi asked for that, and for no other reason.
+  { min: 97, grade: 'A+' },
   { min: 93, grade: 'A' },
   { min: 90, grade: 'A-' },
   { min: 87, grade: 'B+' },
@@ -246,6 +266,85 @@ export function letterForPercent(percent) {
  * read off Khan; 80 and B- are what this app worked out from them, and a
  * stored conclusion drifts from its source the first time the ladder changes.
  */
+/**
+ * ONE BOX. A fraction or a percentage, whichever Khan is showing her. v3.84.
+ *
+ * ---- WHY THIS EXISTS ----
+ *
+ * Gigi, Aug 26 2026: "i want the format the same. when putting in a fraction
+ * for kahn academy the learning app converts the fraction to a percentage and
+ * letter grade."
+ *
+ * v3.75 already converted a fraction — but through TWO little number boxes, one
+ * for 8 and one for 10. His takes ONE text box and works out which shape it is.
+ * His parser, `parseScore` in src/lib/gradeScale.js, read off his running app
+ * on Aug 26.
+ *
+ * ---- AND ONE BOX IS NOT A COSMETIC DIFFERENCE ----
+ *
+ * Khan does not print a constant denominator. His note: "Khan's progress page
+ * reports a unit test as 9/11, 8/10, 4/6 — a fraction, and the denominator is
+ * not even constant between units." Two boxes make her decide which number goes
+ * where, 151 times a year. One box takes what is on the screen in front of her.
+ *
+ * It also takes a plain percentage, because a Course Challenge and a mastery
+ * screen sometimes give one, and making her convert it back into a fraction to
+ * fit the form would be the same lossy step in the other direction.
+ *
+ * ---- WHAT IT REFUSES, AND WHY IT REFUSES RATHER THAN GUESSES ----
+ *
+ * His rejects, kept exactly: blank, 'abc', -5, 120, '12/10' (more right than
+ * there were), 'x/0'. His reason, which is the right one: "An out-of-range
+ * number is a typo, and silently clamping it to 100 would record a grade she
+ * did not mean."
+ *
+ * Returns { percent, raw, correct, total } or null. `raw` keeps the fraction as
+ * she typed it — v3.75's rule: keep what she observed, compute the conclusion
+ * every time it is shown, so a total can never quietly disagree with what it
+ * came from. A percentage typed straight in has raw null, because there was no
+ * fraction to keep.
+ */
+export function parseScore(input) {
+  if (input === null || input === undefined) return null;
+  const cleaned = String(input).trim().replace(/%$/, '').trim();
+  if (cleaned === '') return null;
+
+  // A fraction, exactly as Khan prints it. Spaces around the slash are allowed
+  // because she is copying, not typing to a format.
+  const fraction = cleaned.match(/^(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/);
+  if (fraction) {
+    const correct = Number(fraction[1]);
+    const total = Number(fraction[2]);
+    if (!Number.isFinite(correct) || !Number.isFinite(total)) return null;
+    // A zero total is a division by zero. More correct than there were is a
+    // typo. Neither may quietly become a grade on a record kept for three years.
+    if (total <= 0 || correct < 0 || correct > total) return null;
+    return {
+      percent: Math.round((correct / total) * 100),
+      raw: `${fraction[1]}/${fraction[2]}`,
+      correct,
+      total
+    };
+  }
+
+  const n = Number(cleaned);
+  if (!Number.isFinite(n)) return null;
+  if (n < 0 || n > 100) return null;
+  return { percent: Math.round(n), raw: null, correct: null, total: null };
+}
+
+/** The percentage alone, or null. One parser — a second is how two disagree. */
+export function parsePercent(input) {
+  const parsed = parseScore(input);
+  return parsed === null ? null : parsed.percent;
+}
+
+/** One line describing the whole scale, to print beside the box she types in. */
+export const GRADE_SCALE_SUMMARY = KHAN_LETTER_BANDS.map((b, i, all) => {
+  const max = i === 0 ? 100 : all[i - 1].min - 1;
+  return b.min === 0 ? `F below ${max + 1}` : `${b.grade} ${b.min}–${max}`;
+}).join(' · ');
+
 export function percentFromFraction(correct, total) {
   if (!isNum(correct) || !isNum(total)) return null;
   const c = Number(correct);

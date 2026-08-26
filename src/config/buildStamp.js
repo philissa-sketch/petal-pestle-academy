@@ -20,12 +20,28 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.83';
+export const VERSION = '3.84';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.84',
+    date: 'Aug 26, 2026',
+    notes: [
+      '\u26a0\ufe0f\u26a0\ufe0f THIS APP HAD TWO GRADING LADDERS AND THEY DISAGREED. Gigi: "i want the grading system to be similar." Reading Lamar\u2019s real gradeScale.js made it visible: KHAN_LETTER_BANDS has THIRTEEN bands, RUBRIC_BANDS had TWELVE, and the missing one was the top. A book report scored 4 on every row \u2014 the top of a rubric she was shown BEFORE she started \u2014 came out an A, while the same 100% on a Khan unit came out an A+. SAME PERCENTAGE, TWO LETTERS, ON ONE GEORGIA RECORD.',
+      'AND IT SURVIVED BECAUSE THEY AGREED EVERYWHERE ANYONE HAD LOOKED. Every band below 97 was identical. Her record holds zero writing marks, so no piece had ever scored one. v3.78 wrote the rule \u2014 "two implementations of one metric drift, and the day they disagree neither number can be trusted" \u2014 and check-annual-report asserts the REPORT uses one ladder. NOTHING ASSERTED THE TWO LADDERS WERE ONE. That guard exists now, and it tests IDENTITY plus all 101 percentages, because a copied table with the same contents today is two tables tomorrow.',
+      '\u2b50 GIGI\u2019S CALL, ASKED DIRECTLY: "yes" \u2014 a perfect book report is an A+. It raises a grade on a record kept for three years, so it was hers to make and not mine. Every band below 97 is unchanged.',
+      '\u2b50\u2b50 AND THE A+ THRESHOLD IS CONFIRMED NOW, NOT ASSUMED. v3.75 derived this ladder from a SCREENSHOT that proved 99 earns an A+ and could not say where A+ STARTS. 97 was used and flagged `assumed: true` precisely so nobody would read a guess as a fact. His running app says `{ letter: \u2018A+\u2019, min: 97, max: 100 }`. THE GUESS WAS RIGHT, and all thirteen bands match his file threshold for threshold. The flag is off \u2014 and check-khan-advance now fails if the flag returns OR if the citation is removed, because a confirmation that stops naming its source is a number somebody typed.',
+      '\u2b50 ONE BOX NOW, NOT TWO. Gigi: "when putting in a fraction for kahn academy the learning app converts the fraction to a percentage and letter grade." v3.75 already converted a fraction \u2014 through two little number boxes, one for 8 and one for 10. HIS TAKES ONE, and his reason is the one that matters: "Khan\u2019s progress page reports a unit test as 9/11, 8/10, 4/6 \u2014 a fraction, and the denominator is not even constant between units." Two boxes make her decide which number goes where, 151 times a year. One box takes what is on the screen in front of her.',
+      'IT ACCEPTS WHAT HIS ACCEPTS AND REFUSES WHAT HIS REFUSES: 8/10, 9/11, 4/6, "9 / 11", 82, 82%, 82.4 \u00b7 and it refuses blank, abc, -5, 120, 12/10 (more right than there were) and x/0. His rule, kept exactly: "An out-of-range number is a typo, and silently clamping it to 100 would record a grade she did not mean." A `type="number"` box cannot hold "8/10" at all, so the whole feature is one attribute \u2014 and the check asserts that attribute.',
+      'THE FRACTION IS STILL WHAT GETS STORED. v3.75\u2019s rule is untouched: keep what she observed, compute the conclusion every time it is shown. A percentage typed straight in stores NO fraction rather than having one invented from it.',
+      '\u26a0\ufe0f I DID NOT COPY HIS RUBRIC CURVE, AND THAT WAS DELIBERATE. His suggestedGradeFromRubric uses a SEVEN-BAND curve that is not his own thirteen-band GRADE_SCALE \u2014 all 3s comes out a B there and a C on his main ladder. Both apps spotted the same real problem (dividing a 4-point rubric by 4 puts "meets the standard" on a C) and fixed it differently. HERS ALREADY DOES HIS IDEA PROPERLY, via RUBRIC_LEVEL_PERCENT 1\u219260, 2\u219273, 3\u219287, 4\u2192100 \u2014 which came from his own log. Copying the curve would have replaced a good fix with a worse one because it was his.',
+      '\u26a0\ufe0f TWO CHECKS WERE ASSERTING RULES GIGI HAD JUST OVERTURNED. check-writing required a full-marks report to be an A, and check-khan-advance required the assumed flag. BOTH INVERTED, NOT DELETED, with her words, the date and the way back \u2014 the same as check-writing at v3.68 and check-yearplan at v3.23.',
+      '\u26a0\ufe0f AND THREE MORE OF MY OWN ASSERTIONS WERE SATISFIED BY SOMETHING ADJACENT. One looked for parseScore(score) anywhere in the panel \u2014 mark() calls it too, so deleting the live preview left the check green. One counted two number inputs within 200 characters when the two entry points are hundreds of lines apart, so it never fired. And parseScore\u2019s refusals had no test at all: a clamp is invisible to a text search and obvious to a call, so the function is now ASKED, with all nine good inputs and eleven bad ones. Fifth, sixth and seventh in the family that began with aria-disabled at v3.79.'
+    ]
+  },
   {
     version: '3.83',
     date: 'Aug 26, 2026',

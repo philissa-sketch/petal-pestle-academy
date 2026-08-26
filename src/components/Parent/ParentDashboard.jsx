@@ -40,6 +40,8 @@ import {
   courseAverage,
   gradeAdvances,
   letterForPercent,
+  parseScore,
+  GRADE_SCALE_SUMMARY,
   percentFromFraction
 } from '../../lib/khanGrade.js';
 import { resolveBlockTarget } from '../../lib/blockLinks.js';
@@ -806,17 +808,23 @@ function KhanGradesPanel() {
    * The fraction being typed on the open row. Gigi, Aug 24: "I'll type 8/10.
    * The app will make that into a percentage and a letter grade."
    */
-  const [correct, setCorrect] = useState('');
-  const [total, setTotal] = useState('');
+  // ⚠️ ONE BOX, NOT TWO — v3.84. Gigi, Aug 26: "i want the format the same."
+  //
+  // v3.75 gave this two little number boxes, 8 and 10. Lamar's takes ONE, and
+  // his reason is the one that matters: Khan's denominator is not constant
+  // between units — 9/11, 8/10, 4/6 — so two boxes make her decide which number
+  // goes where, every time. One box takes what is on the screen in front of her,
+  // fraction or percentage, and `parseScore` works out which it is.
+  const [score, setScore] = useState('');
 
   /** The letter as it stands, shown live while she types. Never stored from here. */
-  const livePercent = percentFromFraction(correct, total);
+  const parsed = parseScore(score);
+  const livePercent = parsed === null ? null : parsed.percent;
   const liveLetter = livePercent === null ? null : letterForPercent(livePercent);
 
   function openRow(key) {
     setPicking(key);
-    setCorrect('');
-    setTotal('');
+    setScore('');
     setProblem('');
   }
 
@@ -849,15 +857,26 @@ function KhanGradesPanel() {
    * is no fraction to type, or when Gigi overrides one.
    */
   async function mark(courseId, unitN, extra = {}) {
-    const r = await addKhanGrade({ courseId, unitN, correct, total, ...extra });
+    // The fraction is still what gets STORED when she typed one — v3.75's rule,
+    // keep what she observed and compute the conclusion every time it is shown.
+    // A percentage typed straight in has no fraction behind it and stores none,
+    // rather than having one invented from the percentage.
+    const p = parseScore(score);
+    const r = await addKhanGrade({
+      courseId,
+      unitN,
+      correct: p?.correct ?? null,
+      total: p?.total ?? null,
+      percent: p?.percent ?? null,
+      ...extra
+    });
     if (!r.ok) {
       setProblem(r.reason);
       return;
     }
     setProblem('');
     setPicking(null);
-    setCorrect('');
-    setTotal('');
+    setScore('');
   }
 
   /**
@@ -1020,27 +1039,15 @@ function KhanGradesPanel() {
                            types rather than after she saves — she can see what
                            the row is about to record before it records it. */
                         <span className="flex flex-wrap items-center gap-2">
-                          <span className="flex items-center gap-1">
-                            <input
-                              type="number"
-                              min="0"
-                              inputMode="numeric"
-                              value={correct}
-                              onChange={(e) => setCorrect(e.target.value)}
-                              aria-label={`How many she got right on Unit ${u.n}`}
-                              className="w-14 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
-                            />
-                            <span className="text-xs text-ink-500">of</span>
-                            <input
-                              type="number"
-                              min="1"
-                              inputMode="numeric"
-                              value={total}
-                              onChange={(e) => setTotal(e.target.value)}
-                              aria-label={`How many questions Unit ${u.n} had`}
-                              className="w-14 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
-                            />
-                          </span>
+                          <input
+                            type="text"
+                            inputMode="text"
+                            value={score}
+                            onChange={(e) => setScore(e.target.value)}
+                            placeholder="8/10 or 82%"
+                            aria-label={`How many she got right on Unit ${u.n}, as a fraction or a percentage`}
+                            className="w-28 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
+                          />
 
                           {liveLetter ? (
                             <span className="text-xs font-700 text-ink-900 tnum">
@@ -1152,27 +1159,15 @@ function KhanGradesPanel() {
                     </span>
                   ) : picking === `${c.courseId}:challenge` ? (
                     <span className="flex flex-wrap items-center gap-2">
-                      <span className="flex items-center gap-1">
-                        <input
-                          type="number"
-                          min="0"
-                          inputMode="numeric"
-                          value={correct}
-                          onChange={(e) => setCorrect(e.target.value)}
-                          aria-label={`How many she got right on the ${c.label} Course Challenge`}
-                          className="w-14 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
-                        />
-                        <span className="text-xs text-ink-500">of</span>
-                        <input
-                          type="number"
-                          min="1"
-                          inputMode="numeric"
-                          value={total}
-                          onChange={(e) => setTotal(e.target.value)}
-                          aria-label={`How many questions the ${c.label} Course Challenge had`}
-                          className="w-14 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
-                        />
-                      </span>
+                      <input
+                            type="text"
+                            inputMode="text"
+                            value={score}
+                            onChange={(e) => setScore(e.target.value)}
+                            placeholder="8/10 or 82%"
+                            aria-label={`How many she got right on the ${c.label} Course Challenge, as a fraction or a percentage`}
+                            className="w-28 rounded-petal border border-cream-300 px-2 py-1 text-sm font-400 tnum text-ink-900"
+                          />
                       {liveLetter && (
                         <span className="text-xs font-700 text-ink-900 tnum">
                           = {livePercent}% · {liveLetter}

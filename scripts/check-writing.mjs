@@ -45,6 +45,9 @@ const {
   WRITING_PIECES, piecesForYear, gradePiece, RUBRIC_BANDS, PIECES_PER_YEAR,
   RUBRIC_LEVEL_PERCENT, RUBRIC_SCORE_MAPPING
 } = await import(pathToFileURL(resolve(ROOT, 'src/data/writing/writingPieces.js')).href);
+const { KHAN_LETTER_BANDS, letterForPercent } = await import(
+  pathToFileURL(resolve(ROOT, 'src/lib/khanGrade.js')).href
+);
 
 const errors = [];
 const notes = [];
@@ -657,8 +660,30 @@ const notes = [];
   const ladder = RUBRIC_BANDS.map((b) => b.grade);
   const rank = (g) => ladder.indexOf(g);
 
+  // ---- ⚠️ INVERTED AT v3.84. A FULL-MARKS REPORT IS AN A+ NOW. ----
+  //
+  // From v3.56 to v3.83 this required 'A', because RUBRIC_BANDS was its own
+  // twelve-band table with no A+ in it. KHAN_LETTER_BANDS has thirteen — and
+  // the two agreed on every band below 97, which is exactly why the drift
+  // survived: nobody had scored a 97.
+  //
+  // A book report with 4 on every row — the top of a rubric she was shown
+  // BEFORE she started — came out an A, while the same 100% on a Khan unit came
+  // out an A+. Same percentage, two letters, on one Georgia record.
+  //
+  // Gigi, Aug 26 2026, asked directly whether a perfect book report should
+  // become an A+: "yes". It raises a grade on a record kept for three years and
+  // it was her call to make.
+  //
+  // THE WAY BACK: re-declare a table in writingPieces.js and invert this again,
+  // with the new decision and its date. Never delete it.
   const full = gradePiece('book-report', [4, 4, 4, 4]);
-  if (!full || full.percent !== 100 || full.grade !== 'A') errors.push('a full-marks book report does not grade as 100% and an A');
+  if (!full || full.percent !== 100 || full.grade !== 'A+') {
+    errors.push(
+      `a full-marks book report grades as ${full?.percent}% and ${full?.grade} — it must be 100% ` +
+        `and an A+, the same letter a Khan unit gets for the same percentage`
+    );
+  }
 
   // ---- THE ASSERTION THAT WOULD HAVE CAUGHT IT. Derived, never typed. ----
   const floor = RUBRIC_SCORE_MAPPING.meetsTheStandardIsAtLeast;
@@ -728,8 +753,36 @@ const notes = [];
 
   if (gradePiece('book-report', [4, 4, 4]) !== null) errors.push('gradePiece accepts a short mark list');
   if (gradePiece('book-report', [4, 4, 4, 5]) !== null) errors.push('gradePiece accepts a mark above 4');
-  if (RUBRIC_BANDS[0].grade !== 'A' || RUBRIC_BANDS[RUBRIC_BANDS.length - 1].grade !== 'F') {
-    errors.push('the rubric ladder does not run from A to F');
+  if (RUBRIC_BANDS[0].grade !== 'A+' || RUBRIC_BANDS[RUBRIC_BANDS.length - 1].grade !== 'F') {
+    errors.push('the rubric ladder does not run from A+ to F');
+  }
+
+  // ---- ⚠️ AND THERE IS ONE LADDER, NOT TWO. THE GUARD THAT WAS MISSING. ----
+  //
+  // v3.78 wrote the rule — "two implementations of one metric drift, and the
+  // day they disagree neither number can be trusted" — and check-annual-report
+  // asserts the REPORT uses one ladder. NOTHING ASSERTED THE TWO LADDERS WERE
+  // ONE, so a second table sat in writingPieces.js for twenty-eight versions
+  // disagreeing with the first above 97%.
+  //
+  // Identity, not equality: a copied table with the same contents today is two
+  // tables tomorrow.
+  if (RUBRIC_BANDS !== KHAN_LETTER_BANDS) {
+    errors.push(
+      'RUBRIC_BANDS is not the same table as KHAN_LETTER_BANDS. A second ladder with identical ' +
+        'contents is still a second ladder, and the last one drifted at the top band where nobody ' +
+        'was looking.'
+    );
+  }
+  // Every band, both directions, so a divergence anywhere is caught rather than
+  // just at the ends.
+  for (let pct = 0; pct <= 100; pct += 1) {
+    const viaRubric = RUBRIC_BANDS.find((b) => pct >= b.min)?.grade;
+    const viaKhan = letterForPercent(pct);
+    if (viaRubric !== viaKhan) {
+      errors.push(`at ${pct}% the rubric says ${viaRubric} and the Khan ladder says ${viaKhan}`);
+      break;
+    }
   }
 
   const year = piecesForYear();

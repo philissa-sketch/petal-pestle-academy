@@ -110,21 +110,40 @@ export const RUBRIC_SCORE_MAPPING = {
   bottomOfRubric: 'D-'
 };
 
-/** Lamar's +/- ladder, so a rubric total lands on the same scale as everything else. */
-export const RUBRIC_BANDS = [
-  { min: 93, grade: 'A' },
-  { min: 90, grade: 'A-' },
-  { min: 87, grade: 'B+' },
-  { min: 83, grade: 'B' },
-  { min: 80, grade: 'B-' },
-  { min: 77, grade: 'C+' },
-  { min: 73, grade: 'C' },
-  { min: 70, grade: 'C-' },
-  { min: 67, grade: 'D+' },
-  { min: 63, grade: 'D' },
-  { min: 60, grade: 'D-' },
-  { min: 0, grade: 'F' }
-];
+/* ---------------------------------------------------------------------------
+ * ⚠️ THERE WAS A SECOND LADDER HERE, AND IT DISAGREED WITH THE FIRST — v3.84.
+ *
+ * `RUBRIC_BANDS` was a twelve-band table declared in this file. `KHAN_LETTER_BANDS`
+ * in khanGrade.js has thirteen. The difference was the top one:
+ *
+ *      100%  ·  Khan unit -> A+   ·  book report -> A
+ *       99%  ·  Khan unit -> A+   ·  book report -> A
+ *       97%  ·  Khan unit -> A+   ·  book report -> A
+ *
+ * Every band below 97 was identical, which is exactly why it survived: the
+ * two ladders agreed everywhere anyone had looked. A book report where she
+ * scored 4 on every row — the top of a rubric she was shown before she started
+ * — came out an A, while the same 100% on Khan came out an A+.
+ *
+ * SAME PERCENTAGE, TWO LETTERS, ON ONE GEORGIA RECORD.
+ *
+ * v3.78 wrote the rule: "two implementations of one metric drift, and the day
+ * they disagree neither number can be trusted." check-annual-report asserts the
+ * REPORT uses one ladder; nothing asserted the two ladders WERE one. It became
+ * visible on Aug 26 2026 only because Lamar's running app became readable and
+ * his thirteen-band gradeScale.js could be compared against both.
+ *
+ * Gigi, asked directly whether a perfect book report should become an A+:
+ * "yes". Her call, and it raises a grade on a record kept for three years.
+ *
+ * THE WAY BACK, so this cannot become permanent by accident: re-declare a table
+ * here and invert the one-ladder assertion in check-writing, with the new
+ * decision and its date beside it. Never delete it.
+ * ------------------------------------------------------------------------ */
+import { KHAN_LETTER_BANDS } from '../../lib/khanGrade.js';
+
+/** The one ladder, under the name this file has always used it by. */
+export const RUBRIC_BANDS = KHAN_LETTER_BANDS;
 
 /**
  * A rubric row is scored 1 to 4. She sees the words for every level BEFORE she

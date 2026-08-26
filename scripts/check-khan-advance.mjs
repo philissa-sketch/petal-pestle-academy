@@ -80,7 +80,7 @@ const load = (p) => import(pathToFileURL(resolve(ROOT, p)).href);
 
 const {
   khanGradeRow, gradeAdvances, KHAN_GRADEABLE_COURSES, KHAN_GRADE_LETTERS, KHAN_MASTERY_GUIDE,
-  KHAN_LETTER_BANDS, letterForPercent, percentFromFraction, courseAverage, bandForPercent,
+  KHAN_LETTER_BANDS, letterForPercent, percentFromFraction, parseScore, courseAverage, bandForPercent,
   KIND_UNIT, KIND_CHALLENGE, kindOf, isChallenge, challengeFor
 } = await load('src/lib/khanGrade.js');
 const { KHAN_UNIT_COURSES, nextUnitFor, countsAsUnitDone } = await load('src/data/khan/khanUnits.js');
@@ -148,16 +148,41 @@ const notes = [];
   // ⚠️ THE ASSUMED BAND MUST STAY DECLARED. The screenshot proves 99 earns an
   // A+ and does not say where A+ starts. 97 is the ordinary threshold and it
   // is a guess. A guess that stops announcing itself becomes a fact.
+  // ---- ⚠️ INVERTED AT v3.84, BECAUSE THE EVIDENCE ARRIVED ----
+  //
+  // From v3.75 to v3.83 this REQUIRED `assumed: true` on the A+ band, and it was
+  // right to: the ladder was derived from a screenshot that proved 99 earns an
+  // A+ and could not say where A+ STARTS. The flag existed so nobody would read
+  // a guess as a fact, and this check existed so nobody could quietly remove it.
+  //
+  // On Aug 26 2026 Lamar's running app became readable. src/lib/gradeScale.js:
+  // `{ letter: 'A+', min: 97, max: 100 }`. The guess was right, and all thirteen
+  // bands match his file threshold for threshold.
+  //
+  // So the assertion inverts: the flag must now be GONE, and the citation must
+  // be present in its place. A guess that stops announcing itself becomes a
+  // fact — and a confirmation that stops naming its source becomes one too.
+  //
+  // THE WAY BACK: if his scale ever changes, put the flag back and invert this
+  // again, with the date and the reason beside it. Never delete it.
   const assumed = KHAN_LETTER_BANDS.filter((b) => b.assumed);
-  if (assumed.length !== 1 || assumed[0].grade !== 'A+') {
+  if (assumed.length > 0) {
     errors.push(
-      'the A+ threshold is no longer marked `assumed: true`. It was never confirmed against ' +
-        "Lamar's app — only that 99% earns an A+. Confirm it or keep the flag."
+      `${assumed.length} band(s) still marked \`assumed: true\` — the A+ threshold was confirmed ` +
+        `against Lamar's src/lib/gradeScale.js on Aug 26 2026. A flag left on a confirmed fact ` +
+        `teaches the next reader to ignore the flag.`
     );
   } else {
-    notes.push(`A+ starts at ${assumed[0].min}% — ASSUMED, not confirmed. Affects 97, 98, 99 only.`);
+    const src = readFileSync(resolve(ROOT, 'src/lib/khanGrade.js'), 'utf8');
+    if (!/gradeScale\.js/.test(src)) {
+      errors.push(
+        'the A+ band no longer carries `assumed: true` AND khanGrade.js does not cite where it was ' +
+          'confirmed. An unflagged threshold with no source is a number somebody typed.'
+      );
+    } else {
+      notes.push('A+ starts at 97% — CONFIRMED against Lamar\u2019s gradeScale.js, not assumed');
+    }
   }
-
   /* ---- WHAT THE SCREENSHOT PINS, AND WHAT IT DOES NOT ----
    *
    * Found by a negative test that CORRECTLY STAYED GREEN. Moving the B- floor
@@ -236,6 +261,40 @@ const notes = [];
   }
 
   // A fraction that cannot be true must be refused, never rounded into shape.
+  // ---- ⚠️ parseScore REFUSES RATHER THAN GUESSES. v3.84. ----
+  //
+  // His rule, kept exactly: "An out-of-range number is a typo, and silently
+  // clamping it to 100 would record a grade she did not mean." Asked of the
+  // function itself, not grepped for — a clamp is invisible to a text search
+  // and obvious to a call.
+  {
+    const good = [
+      ['8/10', 80], ['9/11', 82], ['4/6', 67], ['9 / 11', 82],
+      ['82', 82], ['82%', 82], [' 82.4 ', 82], ['100', 100], ['0/10', 0]
+    ];
+    for (const [input, want] of good) {
+      const got = parseScore(input);
+      if (!got || got.percent !== want) {
+        errors.push(`parseScore(${JSON.stringify(input)}) gave ${JSON.stringify(got?.percent)}, expected ${want}`);
+      }
+    }
+    // The fraction is KEPT, the percentage is not invented into one.
+    if (parseScore('8/10')?.raw !== '8/10') {
+      errors.push('parseScore does not keep the fraction she typed — v3.75: keep what she observed');
+    }
+    if (parseScore('82')?.raw !== null) {
+      errors.push('parseScore invented a fraction from a plain percentage');
+    }
+    for (const bad of ['', '   ', 'abc', '-5', '120', '12/10', 'x/0', '5/0', '8//10', null, undefined]) {
+      if (parseScore(bad) !== null) {
+        errors.push(
+          `parseScore(${JSON.stringify(bad)}) returned a grade instead of refusing. An out-of-range ` +
+            `number is a typo, and clamping it would record a grade she did not mean.`
+        );
+      }
+    }
+  }
+
   for (const bad of [
     { correct: 11, total: 10, why: 'more right than there were' },
     { correct: -1, total: 10, why: 'a negative score' },
@@ -603,16 +662,57 @@ for (const c of KHAN_GRADEABLE_COURSES) {
           'than picked, the row cannot name a unit and cannot advance her'
       );
     }
-    if (!/addKhanGrade\(\{ courseId, unitN, correct, total/.test(panel)) {
+    // ⚠️ v3.84 — THESE TWO ASSERTED THE OLD TWO-BOX FORM, not the rule.
+    // Gigi, Aug 26: "i want the format the same." Lamar takes ONE box that
+    // accepts a fraction or a percentage; hers took two number boxes. The rule
+    // was never "two boxes" — it was that the row carries a course, a unit and
+    // what she actually saw, and that she sees the result before it is saved.
+    if (!/addKhanGrade\(\{[\s\S]{0,200}courseId,[\s\S]{0,200}unitN,/.test(panel)) {
       errors.push(
-        'the Khan panel does not pass courseId, unitN and the fraction to addKhanGrade'
+        'the Khan panel does not pass courseId and unitN to addKhanGrade — without both, the row ' +
+          'cannot name a unit and cannot advance her'
       );
     }
-    if (!/percentFromFraction\(correct, total\)/.test(panel)) {
+    if (!/correct:[\s\S]{0,60}total:/.test(panel)) {
       errors.push(
-        'the Khan panel does not work the percent out from the fraction as Gigi types. ' +
-          'She should see what the row is about to record before it records it.'
+        'the Khan panel no longer passes the fraction through. v3.75\u2019s rule: the fraction is ' +
+          'what gets stored, and the percent is computed every time it is shown, so a total can ' +
+          'never quietly disagree with what it came from.'
       );
+    }
+    // ⚠️ THE LIVE PREVIEW, PINNED TO THE LINE THAT MAKES IT. An earlier version
+    // of this assertion just looked for `parseScore(score)` anywhere in the
+    // panel — and `mark()` calls it too, so deleting the live preview left the
+    // check green. Satisfied by an adjacent call, which is the same family as
+    // aria-disabled at v3.79.
+    if (!/const parsed = parseScore\(score\)/.test(panel)) {
+      errors.push(
+        'the Khan panel does not parse what she typed AS SHE TYPES IT. She should see the percent ' +
+          'and the letter the row is about to record BEFORE it records it.'
+      );
+    }
+    if (!/livePercent[\s\S]{0,120}liveLetter/.test(panel)) {
+      errors.push('the Khan panel no longer derives a live percent and letter from what she typed');
+    }
+    // ⚠️ ONE BOX, AND THE RULE IS THAT IT TAKES TEXT. Khan\u2019s denominator is
+    // not constant between units — 9/11, 8/10, 4/6 — so two number boxes make
+    // her decide which number goes where, every time. A `type="number"` box
+    // cannot hold "8/10" at all, so this is the whole feature in one attribute.
+    //
+    // An earlier version counted two number inputs within 200 characters. The
+    // two entry points are hundreds of lines apart, so it never fired.
+    const scoreBoxes = panel.match(/value=\{score\}/g) || [];
+    if (!scoreBoxes.length) {
+      errors.push('the Khan panel has no score box bound to the one score field');
+    }
+    for (const m of panel.matchAll(/<input([\s\S]{0,260}?)value=\{score\}/g)) {
+      if (!/type="text"/.test(m[1])) {
+        errors.push(
+          'the score box is not a text box. It has to accept "8/10" as well as "82%", and a ' +
+            'number input cannot hold a fraction at all — this is the v3.75 two-box form coming back.'
+        );
+        break;
+      }
     }
     // Lamar's shape: rows with an inline picker, not a control you choose from
     // first. Gigi, Aug 24: "I don't like the dropdown that is currently there."

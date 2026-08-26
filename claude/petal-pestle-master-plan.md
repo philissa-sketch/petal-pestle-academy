@@ -1887,3 +1887,96 @@ Three fields now, and `toggleWritingStep` refuses the last step until `final` ha
 **A write test was run on a read-only folder, and it was not read-only.** Checking that `Lamar DOC` refused writes created a file that then could not be deleted — rule 13 enforced by the machine — and Gigi removed it by hand. **A rule already written down does not need testing. It needs obeying.**
 
 **A negative test stayed green because the fixture omitted the field.** Deleting the `final` merge rule changed nothing the check could see, because the merge fixture carried only `notes` and `draft`. **A fixture that omits a field is a fixture that exempts it** — #27's cousin, a mutation with nothing to mutate.
+
+---
+
+## 46. ONE LADDER, ONE BOX — v3.84
+
+**Gigi, Aug 26 2026:**
+
+> *"ok since you can now see lamars folder. i will like the grading system to be similar."*
+>
+> *"yes and i want the format the same. when putting in a fraction for kahn academy the learning app converts the fraction to a percentage and letter grade."*
+
+### ⚠️ There were two ladders, and they disagreed
+
+Reading his real `src/lib/gradeScale.js` made it visible in a minute. **`KHAN_LETTER_BANDS` has thirteen bands. `RUBRIC_BANDS` had twelve.** The missing one was the top.
+
+| Percent | Khan unit | Book report |
+|---|---|---|
+| **100%** | **A+** | **A** |
+| 99% | A+ | A |
+| 97% | A+ | A |
+| 96% and below | *identical* | *identical* |
+
+A book report scored **4 on every row** — the top of a rubric she was shown *before* she started — came out an **A**, while the same 100% on Khan came out an **A+**. **Same percentage, two letters, on one Georgia record.**
+
+**And it survived for twenty-eight versions because they agreed everywhere anyone had looked.** Her record holds zero writing marks, so no piece had ever scored above 96.
+
+v3.78 wrote the rule — *"two implementations of one metric drift, and the day they disagree neither number can be trusted"* — and `check-annual-report` asserts the **report** uses one ladder. **Nothing asserted the two ladders were one.**
+
+That guard exists now, and it tests **identity** plus **all 101 percentages**. Identity because a copied table with the same contents today is two tables tomorrow.
+
+**Gigi's call, asked directly before anything changed: "yes."** A perfect book report is an A+. It raises a grade on a record kept for three years, which is why it was hers.
+
+### ⭐⭐ The A+ threshold is confirmed now, not assumed
+
+v3.75 derived this ladder from a **screenshot** of Lamar's report card. It proved A+ exists and that 99 earns one; it could not say where A+ **starts**. 97 is the ordinary threshold, so 97 was used — and flagged `assumed: true` precisely so nobody would later read a guess as a fact.
+
+His running app:
+
+```
+{ letter: 'A+', min: 97, max: 100 },
+```
+
+**The guess was right.** All thirteen bands match his file threshold for threshold.
+
+The flag is off — and `check-khan-advance` now fails if the flag **returns** *or* if the citation is **removed**. A guess that stops announcing itself becomes a fact; a confirmation that stops naming its source becomes a number somebody typed.
+
+---
+
+### ⭐ One box, not two
+
+v3.75 already converted a fraction — through **two little number boxes**, one for 8 and one for 10. His takes **one text box** and works out which shape it is.
+
+His reason, and it is the one that matters:
+
+> *"Khan's progress page reports a unit test as **9/11**, **8/10**, **4/6** — a fraction, and the denominator is not even constant between units."*
+
+Two boxes make her decide which number goes where, every time, 151 times a year. One box takes what is on the screen in front of her.
+
+**It accepts what his accepts and refuses what his refuses:**
+
+| Takes | `8/10` · `9/11` · `4/6` · `9 / 11` · `82` · `82%` · `82.4` |
+|---|---|
+| **Refuses** | blank · `abc` · `-5` · `120` · `12/10` · `x/0` |
+
+His rule, kept exactly: *"An out-of-range number is a typo, and silently clamping it to 100 would record a grade she did not mean."*
+
+**A `type="number"` box cannot hold "8/10" at all**, so the whole feature is one attribute — and the check asserts that attribute rather than counting boxes.
+
+**The fraction is still what gets stored.** v3.75's rule is untouched: keep what she observed, compute the conclusion every time it is shown. A percentage typed straight in stores **no** fraction rather than having one invented from it.
+
+### ⚠️ What I did not copy, and why
+
+**His rubric curve.** `suggestedGradeFromRubric` uses a **seven-band** curve that is not his own thirteen-band `GRADE_SCALE` — all 3s comes out a **B** there and a **C** on his main ladder.
+
+Both apps spotted the same real problem — dividing a 4-point rubric by 4 puts *"meets the standard"* on a C — and fixed it differently. **Hers already does his idea properly**, via `RUBRIC_LEVEL_PERCENT` mapping `1→60, 2→73, 3→87, 4→100` and averaging the percentages. That mapping came from his own log.
+
+**Copying the curve would have replaced a good fix with a worse one because it was his.** "Similar" is not "identical", and the difference is which one is right for her.
+
+---
+
+### ⚠️ Two checks were asserting rules she had just overturned
+
+`check-writing` required a full-marks report to be an **A**. `check-khan-advance` required the `assumed` flag.
+
+**Both inverted, not deleted**, with her words, the date and the way back — the same as `check-writing` at v3.68 and `check-yearplan` at v3.23.
+
+### ⚠️ And three more of my own assertions were satisfied by something adjacent
+
+- One looked for `parseScore(score)` **anywhere in the panel** — and `mark()` calls it too, so deleting the live preview left the check green.
+- One counted **two number inputs within 200 characters**, when the two entry points are hundreds of lines apart. It could never fire.
+- **`parseScore`'s refusals had no test at all.** A clamp is invisible to a text search and obvious to a call, so the function is now *asked* — nine good inputs and eleven bad ones.
+
+**Fifth, sixth and seventh in the family that began with `aria-disabled` at v3.79**, five versions ago. The pattern is always the same: an assertion that can be satisfied by something *near* the rule instead of the rule.
