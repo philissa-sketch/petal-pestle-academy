@@ -14,6 +14,7 @@ import {
 import { resolveBlockTarget } from '../../lib/blockLinks.js';
 import { blockLabelOnDay, blockIconOnDay, isRotatingBlock } from '../../lib/rotatingBlock.js';
 import { currentReadingCheck } from '../../lib/readingCheck.js';
+import { bookReportNow } from '../../lib/bookReportSchedule.js';
 
 // ---------------------------------------------------------------------------
 // TODAY — her school day, with a bell.
@@ -71,6 +72,12 @@ export function TodayView({ onNavigate }) {
   // check-curriculum-volume asserts by reading this file that it is passed.
   const lessonReads = useAppStore((s) => s.lessonReads);
   const lessonsRead = Object.keys(lessonReads || {});
+  // v3.82 — what she has already ticked wins over what the week suggests, so a
+  // child who worked ahead is not dragged back to a step she has finished.
+  const writingDrafts = useAppStore((s) => s.writingDrafts);
+  const stepsBySlot = Object.fromEntries(
+    Object.values(writingDrafts || {}).map((d) => [d.slotId, d.steps || []])
+  );
 
   const day = todayKey();
   const done = useAppStore((s) => s.scheduleDays[day]?.done || {});
@@ -284,6 +291,18 @@ export function TodayView({ onNavigate }) {
           // block asked, so the two can never point at different units.
           const readingCheck =
             b.subject === 'reading' ? currentReadingCheck(strands, khanGrades) : null;
+          // v3.82 — THIS WEEK'S BOOK REPORT STEP, on the writing block.
+          //
+          // Lamar's log, on why this sits here rather than only in the Journal:
+          // "the Academic Center card now leads with THIS WEEK'S STEP rather
+          // than 'a paper is due in five weeks', which invites doing nothing"
+          // for four of them.
+          //
+          // Her book reports had no door at all — four a year, sitting at the
+          // bottom of the Journal, with nothing that ever said it was time. This
+          // is the knock.
+          const bookStep =
+            b.subject === 'writing' ? bookReportNow(lessonsRead, stepsBySlot) : null;
           return (
             <div
               key={b.id}
@@ -405,6 +424,29 @@ export function TodayView({ onNavigate }) {
                         <span className="text-[0.7rem] text-ink-500">{target.detail}</span>
                       )}
                     </div>
+                  )}
+
+                  {/* v3.82 — THIS WEEK'S BOOK REPORT STEP.
+                      It leads with the step, never with "a report is due" — a
+                      thing due later is a thing to do later, and four a year
+                      announced once is how her record ended up with zero.
+                      Nothing here says she is behind: §32's rule. */}
+                  {bookStep && bookStep.state === 'open' && !bookStep.allDone && (
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.('journal')}
+                      className="mt-2 block w-full rounded-petal border border-gold-300 bg-gold-300/15 px-3.5 py-2.5 text-left hover:bg-gold-300/30"
+                    >
+                      <span className="label-caps text-ink-500">
+                        Book report · step {bookStep.stepNumber} of {bookStep.of}
+                      </span>
+                      <span className="mt-0.5 block text-sm font-700 text-ink-900">
+                        {bookStep.step.step}
+                      </span>
+                      <span className="mt-0.5 block text-[0.7rem] text-ink-700">
+                        {bookStep.step.ask}
+                      </span>
+                    </button>
                   )}
                 </div>
               </div>

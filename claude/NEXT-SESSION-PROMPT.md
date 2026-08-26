@@ -81,13 +81,39 @@ I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nin
 
 ---
 
-## ⚠️ A DOCUMENT ABOUT AN APP IS NOT THE APP
+## ⚠️ LAMAR'S APP — READ THE CODE, NOT THE NOTES
 
-**Lamar's app is at `C:\Users\pknot\Downloads\petal-pestle-academy\Lamar DOC` and is READ-ONLY. Never write to it.**
+**Rewritten Aug 26 2026, because the old version of this section caused the mistake it was written to prevent.**
 
-It contains **docs and no code**, so **its newest page is still older than his running app.** On Aug 24 a session read `PROJECT_LOG.md`, found *"A 90-100, B 80-89, C 70-79, D 60-69, F below 60"*, and stated it in a build log as his grading scale. **I sent a screenshot of the report card his app actually renders: A+ 99%, A 93%, B 86%, B- 82%.** A+ and B- cannot exist on a five-band scale.
+There are **two** folders and they are not the same thing:
 
-**Read his docs for reasoning. Do not read them for current fact.** Ask me for a screenshot.
+| `...\petal-pestle-academy\Lamar DOC` | **Documents only. No code.** Newest file **Aug 16.** |
+|---|---|
+| `...\mission-control-homeschool-school-start-gate\mission-control-homeschool` | **His running app.** Source, data, checks, and docs updated **Aug 25.** |
+
+**READ THE SECOND ONE.** Gigi's instruction, Aug 26 2026: read his app directly.
+
+**Both are READ-ONLY. Never write to either.** ⚠️ On Aug 26 a session ran a write test to *confirm* `Lamar DOC` was read-only. It was not — the file was created and then could not be deleted, and Gigi had to remove it by hand. **A rule that is already written down does not need testing. It needs obeying.**
+
+### Why this section changed
+
+**Aug 24:** a session read `Lamar DOC/PROJECT_LOG.md`, found *"A 90-100, B 80-89, C 70-79, D 60-69, F below 60"*, and stated it in a build log as his grading scale. Gigi sent a screenshot of the report card his app actually renders — **A+ 99%, A 93%, B 86%, B- 82%.** A+ and B- cannot exist on a five-band scale.
+
+**Aug 25, v3.82:** a session built her whole book report feature out of `Lamar DOC`, **while his running app sat mounted and unopened.** It got his step 2 wrong, missed all sixteen of his report formats, and built two writing boxes where his has three. Fixed at v3.83 by reading `src/data/academicSuccessCenter/reportFormats.js` and `assignmentMilestones.js` — the actual files.
+
+**The same mistake, twice, eight days apart, in a project whose §38 is named after it.**
+
+### The rule now
+
+**Read his code for what his app does. Read his docs for why.** His `PROJECT_LOG.md` is the best reasoning in either project and it is still worth reading — it is where *"a checkbox is not an artifact"* and *"one fact, one place"* come from. It is simply not evidence about what his app currently renders.
+
+⚠️ **And what fits him does not always fit her.** Three things did not transfer at v3.83, each for a stated reason:
+
+- **His dates.** His milestones count backward from a due date; **this app has no calendar and refuses one.** Translated to pace on her progress.
+- **His 350–500 word reports.** That is a twelve-year-old. Hers are 80–150.
+- **All sixteen formats.** Engineering Analysis and Scientific Review are aerospace-shaped. Six were taken; the rest would be a table that looks complete and aims at the wrong child.
+
+**Copying a mechanism out of an app that has something this one does not is the same error as copying a fact out of a stale document.** Ask for a screenshot when the code cannot answer it — how something *looks* on his screen is still a thing only Gigi can see.
 
 ---
 

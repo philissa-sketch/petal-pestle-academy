@@ -386,3 +386,53 @@ export function pickGoal(local, incoming) {
   if (!incoming) return local;
   return String(incoming.updatedAt || '') >= String(local.updatedAt || '') ? incoming : local;
 }
+
+/**
+ * Merge one book report draft. v11 / v3.82.
+ *
+ * ⚠️ THIS IS THE ONLY MERGE IN THIS FILE THAT MAY NEVER LOSE TEXT, AND IT IS
+ * NOT DECIDED BY TIMESTAMP.
+ *
+ * Every other row here takes the newer of two. That is right for a mark, a goal
+ * or a grade — the newer one is the correction. It is WRONG for prose. A stale
+ * export loaded onto the wrong machine, or a draft opened and saved without
+ * typing, is newer and shorter, and "newer wins" would silently delete a
+ * paragraph she wrote.
+ *
+ * db.js's own words about the journal, from v3: "A lost maths answer is an
+ * inconvenience; a lost page of her own writing is not."
+ *
+ * So each FIELD is merged on its own and the longer text wins, per field. The
+ * fields cannot overwrite one another — notes and draft stay two boxes through
+ * the merge as well as on the screen, which is the whole reason they are two.
+ *
+ * Ticked steps take the UNION. A step ticked on either machine happened on one
+ * of them, and un-ticking is a thing she does deliberately on the machine she is
+ * sitting at, never something a merge should do for her.
+ */
+export function pickWritingDraft(local, incoming) {
+  if (!local) return incoming;
+  if (!incoming) return local;
+  const longer = (a, b) => (String(b || '').length > String(a || '').length ? b : a);
+  const steps = [
+    ...new Set([...(local.steps || []), ...(incoming.steps || [])])
+  ].sort((a, b) => a - b);
+  return {
+    ...local,
+    ...incoming,
+    notes: longer(local.notes, incoming.notes),
+    draft: longer(local.draft, incoming.draft),
+    // v3.83 — the finished piece, merged the same way and for the same reason.
+    final: longer(local.final, incoming.final),
+    bookTitle: longer(local.bookTitle, incoming.bookTitle),
+    // A format chosen on either machine is a choice she made. Local wins only
+    // when incoming has none, so loading a backup never silently re-picks it.
+    formatId: incoming.formatId || local.formatId || null,
+    checked: { ...(local.checked || {}), ...(incoming.checked || {}) },
+    steps,
+    updatedAt:
+      String(incoming.updatedAt || '') > String(local.updatedAt || '')
+        ? incoming.updatedAt
+        : local.updatedAt
+  };
+}

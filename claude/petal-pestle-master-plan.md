@@ -1723,3 +1723,167 @@ From v3.20 to v3.80, `check-khan-units` read `if (t.unitN !== 1)`.
 **It would have gone on printing *"with nothing graded all three start at UNIT 1"* on every run.** The assertion was inverted; the sentence printed beside it was not. **A check that announces the opposite of what it tests is worse than one that claims too much, because it reads as confirmation.** Rule 4, in the file that has now been guilty three times.
 
 **And its own loop was grading the wrong unit.** It recorded `unitN: i` — the loop counter — which was the same as the offered unit only while the block walked 1 to 8. With lanes it would have filed a result against a unit Azianna never opened: the exact harm `khanGrade.js` refuses free-text rows to prevent, arriving **inside the check that guards it.**
+
+---
+
+## 44. THE BOOK REPORTS — v3.82
+
+**Gigi, Aug 25 2026:**
+
+> *"Azianna is also supposed to have book reports but I don't see them anywhere."*
+>
+> *"Put the book reports on her schedule... Also, do the book report like Lamar's. Structured so she will know what to do."*
+
+### ⚠️ They were there, and nothing ever knocked
+
+Four a year, one per quarter, 45 minutes, read-aloud allowed, with a four-part frame and a four-row rubric — sitting at the bottom of the Journal screen under *"Writing you hand in"* **since v3.38.** She could open them and read what a good one looks like.
+
+**No schedule. No block. No prompt. No date. Nothing that ever said it was time.**
+
+Her record holds **zero writing marks**, which is exactly what that produces.
+
+It is the inverse of the Singing & Movement bug at v3.64 — that was a tick-box with no door behind it; this was a door nothing ever knocked on. **Sixth in the same family**, after the Science Lab course (v3.24), the rubrics (v3.38), the read-aloud breakdown (v3.56), the goals engine (v3.58) and Singing & Movement (v3.64).
+
+---
+
+### Four weekly steps, and the design is Lamar's
+
+His log, quoting the source his parent brought:
+
+> *"Break a single project down into tiny daily pieces instead of asking for a full paper at once... Write exactly one short paragraph per day. By Friday, he will easily have a full rough draft done without a single late-night writing session."*
+
+And his diagnosis of what it fixed:
+
+> *"A Research Paper had been one task with one date six weeks out — which for a 12-year-old means nothing happens for five weeks and then a bad weekend."*
+
+A 45-minute book report announced once and left alone is that same bad weekend at nine.
+
+| 1 | Pick your book and start it | *"Choose a book you actually want to read — nobody writes well about a book they were made to finish."* |
+|---|---|---|
+| 2 | Finish it, and mark two places | *"One where something important happens, and one you would change. A scrap of paper in the page is enough."* |
+| 3 | Write the rough draft | *"One short paragraph a day, and none of it has to be good yet. Do not go back and fix anything this week."* |
+| 4 | Read it out loud, then fix it | *"Reading aloud catches more than checking with your eyes does — anywhere you stumble is a sentence worth changing."* |
+
+**Every step carries a real instruction, never a label** — his rule, and `check-book-report` enforces a minimum instruction length exactly as his verification does. *"Rough draft"* tells a nine-year-old nothing.
+
+---
+
+### ⚠️ What could not be copied: his dates
+
+His steps count **backward from a real due date**, one week apart, the last landing on it. It is a good design and it depends on something her app does not have.
+
+**This app has no calendar and refuses one**, in five files and on purpose. §7.1's own words:
+
+> *"A quarter here means roughly nine weeks of her four-day, four-hour week. It is a sequence, not a set of dates. Anyone who treats these as deadlines has turned a plan into a stick."*
+
+So the mechanism is **translated, not lifted**: the steps pace on her progress through **Herbalism**, the only course running eight weeks in all four quarters. A child who moves faster moves on; a child who needs longer takes longer, and a book report never becomes a date she has missed.
+
+**Lifting a mechanism out of an app that has something this one deliberately does not is §38 in a new form** — a document about an app is not the app, and neither is a design detached from what it stood on.
+
+**The report opens at week 5 of eight**, so the first half of every quarter is clear of it and she gets four weeks of ordinary reading before being asked to write about a book. **A step is never offered before it opens** — his rule, Aug 16 — and **what she has ticked beats what the week suggests**: a child who read the whole book in week 5 is on step 3, not step 1.
+
+---
+
+### ⚠️ A checkbox is not an artifact, and this app was in that exact state
+
+His log, Aug 15 2026:
+
+> *"A book report ticked but not written leaves the app recording that work happened while holding no evidence of it. For a homeschool portfolio that is backwards — the artifact IS the record."*
+
+`writingMarks` held Gigi's rubric marks — the **grade** — and **there was nowhere for Azianna to type a word.** The report would have been written on paper and ticked here, and the app would have shown four completed book reports holding nothing she wrote.
+
+**Georgia asks for the portfolio (§40), not the tick.** `db.version(11)` adds `writingDrafts`, and the final step **cannot be ticked on an empty draft.** The earlier steps tick freely — reading a book leaves no artifact in an app, and demanding one would teach her to type something to get past a screen.
+
+**Two boxes, never one.** His reason: *"collapsing notes and draft would quietly delete the planning week the milestone exists to protect."* Step 2 marks two places in the book; step 3 writes the draft. One box means week 3 eats week 2.
+
+The **"start from the four headings"** button is offered **only while the draft box is empty**, so it can never eat her work. He learned that one the same way.
+
+### ⚠️ And the merge may never lose a word she wrote
+
+Every other row in `mergeBackup.js` takes the **newer** of two. That is right for a mark, a goal or a grade — the newer one is the correction. **It is wrong for prose.** A stale export loaded onto the wrong machine is newer and shorter, and "newer wins" would silently delete a paragraph.
+
+So each **field** is merged on its own and the longer text wins, per field. Ticked steps take the **union** — a step ticked on either machine happened on one of them.
+
+`db.js`, from v3: *"A lost maths answer is an inconvenience; a lost page of her own writing is not."*
+
+### ⚠️ Two of my own assertions were too weak, and their negative tests said so
+
+**One used `OPENS_AT_WEEK_IN_QUARTER` as its own yardstick.** When the mutation moved that constant to 1, the expectation moved with it and the rule could never fire — the check drifted along with the bug and went red by luck, on something else. **A check whose yardstick is the thing being measured is not measuring.**
+
+**The other required the words `WRITING_FINAL_STEP` and `draft` to appear in the tick function** — and both survived deleting the guard, because they sit outside it. The check stayed green on a store that would happily tick a finished book report holding nothing she wrote.
+
+Third and fourth in the family that began with `aria-disabled` at v3.79.
+
+---
+
+## 45. READING HIS CODE INSTEAD OF HIS NOTES — v3.83
+
+**Gigi, Aug 26 2026:**
+
+> *"i gave you the newest folder. you arent checking it well."*
+
+She was right, and the miss was not a small one.
+
+### Two folders, and only one of them is his app
+
+| `...\petal-pestle-academy\Lamar DOC` | Documents only. **No code.** Newest file **Aug 16.** |
+|---|---|
+| `...\mission-control-homeschool-school-start-gate\mission-control-homeschool` | **His running app** — source, data, checks. `reportFormats.js` updated **Aug 25 22:05.** |
+
+**The second one was mounted the whole session and never opened.** v3.82 built her entire book report feature out of the first.
+
+**That is §38 committed inside the version that quoted §38** — and the second time in eight days, after the grading-ladder error of Aug 24. The rule was not wrong. It was followed while the better source sat one directory away, unlooked-at.
+
+⚠️ **And the standing rule in the handoff caused it.** It said *"Lamar's app is at `Lamar DOC`… it contains docs and no code."* True — and it never mentioned that his actual app was mounted beside it. A rule that names one path and stays silent about a better one is a rule that points away from the answer. Rewritten.
+
+---
+
+### What was wrong, from reading the real thing
+
+**His four steps, off `assignmentMilestones.js`:** Read the book · Notes & structure · Rough draft · Edit & finish.
+
+⚠️ **v3.82 got step 2 wrong.** It had her still *finishing the book* in week 2. His marking happens during week 1 — *"Just read. Mark anything worth coming back to"* — and week 2 turns those marks into **the three or four points the report will actually make.** Week 3 then writes *"one paragraph a day against the points from last week."*
+
+That is a planning week doing real work, and the version built from his notes lost it entirely.
+
+### Six formats, because one shape four times is a chore
+
+His file, in his words:
+
+> *"Five book reports and five presentations are scheduled this year, and every one of them said only 'write a report.' **SAME SHAPE FIVE TIMES IS HOW A BOOK REPORT BECOMES A CHORE.**"*
+
+Hers were four identical ones. Now: **The usual one · One person, close up · A real life · Two things side by side · A poster · Gigi asks the questions.** Each carries its own required **sections** and its own **checklist** — and the sections *are* the outline, on screen while she writes, dropped in as headings on request.
+
+⚠️ **Six, not his sixteen.** Engineering Analysis is for aerospace design stories; Scientific Review is for nonfiction that makes claims; Podcast and Video need kit and an audience. Copying all sixteen so the table matched his would be **§35's mistake** — a list that looks complete and aims at the wrong child.
+
+### ⚠️ Three things that did not transfer, each for a stated reason
+
+**His dates.** Milestones counted backward from a due date. This app has no calendar and refuses one. Translated at v3.82 to pace on her progress — the one thing that version got right.
+
+**His word counts.** *"5 paragraphs · about 350–500 words"* is a twelve-year-old's report. Her Grammar & Usage is **2.35** and **her longest journal entry to date is eleven words.** Hers is four short paragraphs, 80–150 words. A target she cannot reach is not a standard, it is a wall — and the check fails the build if it creeps back up.
+
+**His prose.** All 60 section and checklist lines were run through the app's own `analyse()` against her Quarter 1 cap. **Six came back over and were reworded rather than exempted.**
+
+**Copying a mechanism out of an app that has something this one does not is the same error as copying a fact out of a stale document.** Both are §38; only the shape differs.
+
+---
+
+### ⚠️ Three boxes, and the bug that had only moved along
+
+His writer has **notes, draft and final.** v3.82 built two.
+
+With two, *"Edit and finish"* could be ticked on **last week's unrevised rough draft** — and the guard passed. The checkbox-without-an-artifact bug **had moved one box along rather than been fixed**, and the week that exists to prove she revised proved nothing.
+
+Three fields now, and `toggleWritingStep` refuses the last step until `final` has something in it.
+
+**The checklist is tickable, and only on step 4.** His note: *"it was a static bulleted list of things to check — the same information, but nothing to do with it. On the Edit & finish step it is what he works through."* On day one it is a wall of rules.
+
+### ⭐ "Gigi asks the questions" — his Parent Interview, kept for her reason
+
+**63% of every answer Azianna has ever given was read aloud to her**, and her independent reading has never been measured. A written report on a hard week measures her handwriting stamina, not the book. Gigi's notes from the talk go in the draft box, so **there is still an artifact.**
+
+### ⚠️ Two smaller failures worth keeping
+
+**A write test was run on a read-only folder, and it was not read-only.** Checking that `Lamar DOC` refused writes created a file that then could not be deleted — rule 13 enforced by the machine — and Gigi removed it by hand. **A rule already written down does not need testing. It needs obeying.**
+
+**A negative test stayed green because the fixture omitted the field.** Deleting the `final` merge rule changed nothing the check could see, because the merge fixture carried only `notes` and `draft`. **A fixture that omits a field is a fixture that exempts it** — #27's cousin, a mutation with nothing to mutate.

@@ -10,7 +10,14 @@ import {
   wordCount
 } from '../../data/journal/journalPrompts.js';
 import { miniLessonFor } from '../../data/writing/writingProgramme.js';
-import { WRITING_PIECES, piecesForYear } from '../../data/writing/writingPieces.js';
+import { WRITING_PIECES, piecesForYear, BOOK_REPORT } from '../../data/writing/writingPieces.js';
+import { bookReportNow } from '../../lib/bookReportSchedule.js';
+import {
+  BOOK_REPORT_FORMATS,
+  formatById,
+  REPORT_SIZE,
+  DEFAULT_FORMAT_ID
+} from '../../data/writing/reportFormats.js';
 
 // ---------------------------------------------------------------------------
 // THE HERBALIST'S JOURNAL.
@@ -340,6 +347,267 @@ function EntryCard({ entry, onDelete }) {
 // and the research paper shows its five steps, because it is taught as five
 // sessions rather than handed over whole.
 // ---------------------------------------------------------------------------
+/**
+ * THIS WEEK'S STEP, AND SOMEWHERE TO WRITE IT. v3.82.
+ *
+ * Gigi, Aug 25 2026: "Azianna is also supposed to have book reports but I don't
+ * see them anywhere... do the book report like Lamar's. Structured so she will
+ * know what to do."
+ *
+ * ⚠️ THEY WERE HERE ALL ALONG AND NOTHING EVER KNOCKED. Four a year, with a
+ * frame and a rubric, sitting below this line since v3.38 — and no schedule, no
+ * block, no prompt, no date. Zero writing marks on her record, which is exactly
+ * what a door nobody knocks on produces.
+ *
+ * ⚠️ AND THERE WAS NOWHERE TO TYPE. Lamar's app had the same hole and named it:
+ * "the report was written elsewhere and ticked here — so the app recorded that a
+ * book report happened and held no evidence of it. The artifact is the record,
+ * and a checkbox is not an artifact."
+ *
+ * Two boxes, never one. Week 2 marks two places in the book; week 3 writes the
+ * draft. One box means week 3 eats week 2 and the milestone protects nothing.
+ */
+function ThisWeeksStep() {
+  const lessonReads = useAppStore((s) => s.lessonReads);
+  const drafts = useAppStore((s) => s.writingDrafts);
+  const saveWritingDraft = useAppStore((s) => s.saveWritingDraft);
+  const toggleWritingStep = useAppStore((s) => s.toggleWritingStep);
+  const [refused, setRefused] = useState(false);
+
+  const lessonsRead = Object.keys(lessonReads || {});
+  const stepsBySlot = Object.fromEntries(
+    Object.values(drafts || {}).map((d) => [d.slotId, d.steps || []])
+  );
+  const now = bookReportNow(lessonsRead, stepsBySlot);
+  const draft = drafts?.[now.slotId] || { bookTitle: '', notes: '', draft: '', steps: [] };
+  const done = new Set(draft.steps || []);
+  const fmt = formatById(draft.formatId) || formatById(DEFAULT_FORMAT_ID);
+
+  if (now.state === 'not-yet') {
+    return (
+      <section className="mt-10">
+        <h2 className="font-display text-lg text-ink-900">Your book report</h2>
+        <p className="mt-1 text-sm text-ink-700">
+          The Quarter {now.quarter} book report starts in{' '}
+          <span className="font-700">
+            {now.weeksAway === 1 ? 'one week' : `${now.weeksAway} weeks`}
+          </span>
+          . Nothing to do for it yet — you can read what it asks for below whenever you like.
+        </p>
+      </section>
+    );
+  }
+
+  async function tick(n) {
+    const r = await toggleWritingStep(now.slotId, n);
+    setRefused(r?.ok === false);
+  }
+
+  return (
+    <section className="mt-10">
+      <div className="panel px-5 py-5">
+        <p className="label-caps text-sage-700">
+          Your book report · Quarter {now.quarter} · step {now.stepNumber} of {now.of}
+        </p>
+        <h2 className="mt-1 font-display text-xl text-ink-900">{now.step.step}</h2>
+        <p className="mt-2 text-[1.02rem] leading-relaxed text-ink-900">{now.step.ask}</p>
+        {now.step.example && (
+          <p className="mt-2 text-sm text-ink-500">{now.step.example}</p>
+        )}
+
+        {/* All four steps, so she can see where this one sits. Ticking is one
+            tap and undoable — the point of a weekly step is that the week's
+            question is just "did I do it". */}
+        <div className="mt-4 space-y-1.5">
+          {BOOK_REPORT.steps.map((st) => {
+            const isDone = done.has(st.n);
+            return (
+              <button
+                key={st.n}
+                type="button"
+                onClick={() => tick(st.n)}
+                className={`flex w-full items-center gap-2.5 rounded-petal border px-3 py-2 text-left text-sm ${
+                  st.n === now.stepNumber
+                    ? 'border-sage-500 bg-sage-300/15'
+                    : 'border-cream-300 bg-white'
+                }`}
+              >
+                <span
+                  className={`flex h-5 w-5 flex-none items-center justify-center rounded-full text-[0.65rem] font-700 ${
+                    isDone ? 'bg-sage-500 text-white' : 'bg-cream-200 text-ink-700'
+                  }`}
+                >
+                  {isDone ? '✓' : st.n}
+                </span>
+                <span className={isDone ? 'text-ink-500 line-through' : 'text-ink-900'}>
+                  {st.step}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        {refused && (
+          <p className="mt-3 rounded-petal bg-gold-300/25 px-3.5 py-2.5 text-sm text-ink-900">
+            Put your finished report in the last box first, then tick that one. A tick on its own
+            does not save any of your writing.
+          </p>
+        )}
+
+        {/* ---- WHICH KIND OF REPORT. v3.83, and it is the point of the
+             rewrite. His file: "Five book reports are scheduled this year, and
+             every one of them said only 'write a report.' SAME SHAPE FIVE TIMES
+             IS HOW A BOOK REPORT BECOMES A CHORE." Hers were four identical
+             ones. Chosen once per report; the sections and the checklist below
+             follow from it. ---- */}
+        <div className="mt-5">
+          <span className="label-caps text-ink-500">What kind of report</span>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {BOOK_REPORT_FORMATS.map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => saveWritingDraft(now.slotId, { formatId: f.id })}
+                className={`rounded-full px-3 py-1.5 text-xs font-700 ${
+                  fmt.id === f.id
+                    ? 'bg-lavender-500 text-white'
+                    : 'border border-cream-300 bg-white text-ink-700 hover:border-lavender-500'
+                }`}
+              >
+                {f.name}
+              </button>
+            ))}
+          </div>
+          <p className="mt-1.5 text-[0.7rem] text-ink-500">{fmt.bestFor}</p>
+        </div>
+
+        {/* The sections ARE the outline. On screen while she writes, not on a
+            different page she has to remember. */}
+        <div className="mt-4 rounded-petal bg-cream-100 px-4 py-3">
+          <p className="label-caps text-ink-500">What it needs in it</p>
+          <ol className="mt-1.5 space-y-1">
+            {fmt.sections.map((sec, i) => (
+              <li key={i} className="text-sm text-ink-900">
+                {i + 1}. {sec}
+              </li>
+            ))}
+          </ol>
+          {fmt.kind === 'written' && (
+            <p className="mt-2 text-[0.7rem] text-ink-500">{REPORT_SIZE.headline}</p>
+          )}
+        </div>
+
+        <label className="mt-5 block">
+          <span className="label-caps text-ink-500">The book</span>
+          <input
+            type="text"
+            value={draft.bookTitle || ''}
+            onChange={(e) => saveWritingDraft(now.slotId, { bookTitle: e.target.value })}
+            placeholder="What are you reading?"
+            className="mt-1 w-full rounded-petal border border-cream-300 px-3 py-2 text-sm"
+          />
+        </label>
+
+        {/* THREE BOXES, NOT TWO. Notes is the plan, draft is the rough writing,
+            final is the finished piece. Collapsing any pair deletes the week
+            between them — and the last step is ticked against `final`, so the
+            polish week cannot be claimed on the unrevised draft. */}
+        <label className="mt-4 block">
+          <span className="label-caps text-ink-500">My plan · three or four lines</span>
+          <textarea
+            rows={3}
+            value={draft.notes || ''}
+            onChange={(e) => saveWritingDraft(now.slotId, { notes: e.target.value })}
+            placeholder="Short lines, not sentences. One for each paragraph you will write."
+            className="mt-1 w-full rounded-petal border border-cream-300 px-3 py-2 text-sm"
+          />
+        </label>
+
+        <label className="mt-4 block">
+          <span className="label-caps text-ink-500">Rough draft</span>
+          <textarea
+            rows={8}
+            value={draft.draft || ''}
+            onChange={(e) => saveWritingDraft(now.slotId, { draft: e.target.value })}
+            placeholder="One paragraph a day. It does not have to be good yet."
+            className="mt-1 w-full rounded-petal border border-cream-300 px-3 py-2 text-sm leading-relaxed"
+          />
+        </label>
+
+        <button
+          type="button"
+          onClick={() =>
+            saveWritingDraft(now.slotId, {
+              draft: draft.draft || fmt.sections.map((sec) => `${sec.toUpperCase()}\n\n`).join('\n')
+            })
+          }
+          disabled={Boolean(String(draft.draft || '').trim())}
+          className={`mt-2 rounded-full px-4 py-1.5 text-xs font-700 ${
+            String(draft.draft || '').trim()
+              ? 'cursor-not-allowed bg-cream-200 text-ink-500'
+              : 'border border-lavender-500 bg-white text-lavender-700 hover:bg-lavender-300/25'
+          }`}
+        >
+          Start from the headings
+        </button>
+        {/* ⚠️ OFFERED ONLY WHILE THE BOX IS EMPTY, so it can never eat her work. */}
+        <p className="mt-1 text-[0.68rem] text-ink-500">
+          Only while the box is empty, so it can never write over what you have.
+        </p>
+
+        <label className="mt-4 block">
+          <span className="label-caps text-ink-500">The finished one</span>
+          <textarea
+            rows={8}
+            value={draft.final || ''}
+            onChange={(e) => saveWritingDraft(now.slotId, { final: e.target.value })}
+            placeholder="Copy your draft here and fix it as you go. This is the one you hand in."
+            className="mt-1 w-full rounded-petal border border-cream-300 px-3 py-2 text-sm leading-relaxed"
+          />
+        </label>
+
+        {/* ---- THE CHECKLIST, TICKABLE, ON THE LAST STEP ONLY. ----
+             His note: it "was a static bulleted list of things to check — the
+             same information, but nothing to do with it. On the Edit & finish
+             step it is what he works through." Shown once she is on step 4, so
+             it is a job rather than a wall of rules on day one. ---- */}
+        {now.stepNumber === BOOK_REPORT.steps.length && (
+          <div className="mt-5 rounded-petal border border-sage-500 bg-sage-300/10 px-4 py-3.5">
+            <p className="label-caps text-sage-700">Before you hand it in</p>
+            <div className="mt-2 space-y-1.5">
+              {fmt.checklist.map((line, i) => {
+                const key = `${fmt.id}-${i}`;
+                const on = Boolean(draft.checked?.[key]);
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() =>
+                      saveWritingDraft(now.slotId, {
+                        checked: { ...(draft.checked || {}), [key]: !on }
+                      })
+                    }
+                    className="flex w-full items-center gap-2.5 text-left text-sm"
+                  >
+                    <span
+                      className={`flex h-5 w-5 flex-none items-center justify-center rounded-full text-[0.65rem] font-700 ${
+                        on ? 'bg-sage-500 text-white' : 'bg-white text-ink-500 ring-1 ring-cream-300'
+                      }`}
+                    >
+                      {on ? '✓' : ''}
+                    </span>
+                    <span className={on ? 'text-ink-500 line-through' : 'text-ink-900'}>{line}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function HandedInWriting() {
   const [open, setOpen] = useState(null);
   const slots = piecesForYear();
@@ -518,6 +786,7 @@ export function JournalView() {
         )}
       </section>
 
+      <ThisWeeksStep />
       <HandedInWriting />
 
       {confirming && (

@@ -139,6 +139,97 @@ export const BOOK_REPORT = {
   quarters: [1, 2, 3, 4],
   minutes: 45,
   readAloudAllowed: true,
+
+  /**
+   * FOUR WEEKLY STEPS. v3.82, and it is Lamar's shape.
+   *
+   * Gigi, Aug 25 2026: "Also, do the book report like Lamar's. Structured so she
+   * will know what to do."
+   *
+   * ---- WHERE THIS COMES FROM ----
+   *
+   * His build log, Aug 2026, quoting the parent's own source:
+   *
+   *     "Break a single project down into tiny daily pieces instead of asking
+   *      for a full paper at once... Write exactly one short paragraph per day.
+   *      By Friday, he will easily have a full rough draft done without a single
+   *      late-night writing session."
+   *
+   * And his diagnosis of the thing it fixed: "A Research Paper had been one task
+   * with one date six weeks out — which for a 12-year-old means nothing happens
+   * for five weeks and then a bad weekend."
+   *
+   * A book report worth 45 minutes, announced once and then left alone, is that
+   * same bad weekend at nine years old.
+   *
+   * ---- ⚠️ WHAT COULD NOT BE COPIED, AND WHY ----
+   *
+   * HIS STEPS ARE DATED. They count backward from a real due date, one week
+   * apart, the last landing ON it. THIS APP HAS NO CALENDAR AND REFUSES ONE —
+   * five files say so, and §7.1's own words: "A quarter here means roughly nine
+   * weeks. It is a sequence, not a set of dates. Anyone who treats these as
+   * deadlines has turned a plan into a stick."
+   *
+   * So the mechanism is translated rather than copied: the steps pace on HER
+   * PROGRESS, the way every other pacing decision in this app works. See
+   * src/lib/bookReportSchedule.js.
+   *
+   * Copying the dates would have been §38 in a new place — a document about an
+   * app is not the app, and neither is a mechanism lifted out of one that has
+   * something this one deliberately does not.
+   *
+   * ---- ⚠️ EVERY STEP CARRIES A REAL INSTRUCTION, NEVER A LABEL ----
+   *
+   * His log again: "Steps carry real instructions, not labels... The
+   * verification enforces a minimum instruction length so a future step can't
+   * ship as a bare label." check-book-report asserts the same here.
+   *
+   * "Rough draft" tells a nine-year-old nothing. "One short paragraph a day,
+   * and none of it has to be good yet" tells her exactly what tomorrow is.
+   */
+  steps: [
+    {
+      n: 1,
+      id: 'read',
+      step: 'Read the book',
+      ask:
+        'Just read it. When something matters, mark the page — a line you liked, ' +
+        'a moment where somebody changes. A scrap of paper is enough. ' +
+        'You do not write anything this week.',
+      example: 'Marking as you go is the trick. Those places are very hard to find again later.'
+    },
+    {
+      n: 2,
+      id: 'notes',
+      step: 'Notes and what it will say',
+      ask:
+        'Go back to the places you marked. Out of those, choose the three or four ' +
+        'things your report will say. Write them in the notes box as short lines, ' +
+        'not sentences. This is a plan, not writing.',
+      example: 'Next week you write one paragraph for each line. That is why there are three or four.'
+    },
+    {
+      n: 3,
+      id: 'draft',
+      step: 'Rough draft',
+      ask:
+        'One paragraph a day. One for each line in your plan. Give a real bit of ' +
+        'the book each time. None of it has to be good yet. Do not go back and ' +
+        'fix anything this week.',
+      example: 'Four short days and the whole draft is done. No long afternoon at the end.'
+    },
+    {
+      n: 4,
+      id: 'polish',
+      step: 'Edit and finish',
+      ask:
+        'Read your draft out loud to somebody. Reading it out loud finds more than ' +
+        'your eyes do. Fix the places where you stumble, copy it into the last box, ' +
+        'and tick the list.',
+      example: 'You are listening for the parts where you run out of breath.'
+    }
+  ],
+
   frame: [
     { n: 1, heading: 'What happened', ask: 'Tell the story in your own words. Do not tell me the ending in the first line.' },
     { n: 2, heading: 'A character worth talking about', ask: 'Pick one person in the book. What did they want, and did they get it?' },
@@ -243,6 +334,15 @@ export const RESEARCH_PAPER = {
 };
 
 export const WRITING_PIECES = [BOOK_REPORT, RESEARCH_PAPER];
+
+/**
+ * The step that says the report is FINISHED — derived, never typed.
+ *
+ * The store refuses to tick this one on an empty draft. It is computed from the
+ * steps array rather than written as `4`, so adding a fifth step moves the
+ * guard with it. Every hand-typed number in this project has drifted.
+ */
+export const WRITING_FINAL_STEP = BOOK_REPORT.steps[BOOK_REPORT.steps.length - 1].n;
 
 /** Every piece she owes in a year, with the quarter it belongs to. */
 export function piecesForYear() {

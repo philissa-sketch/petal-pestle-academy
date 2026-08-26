@@ -56,6 +56,8 @@ import {
   readGoals,
   readJournalMarks,
   putJournalMark,
+  readWritingDrafts,
+  putWritingDraft,
   clearJournalMark,
   putGoal
 } from '../db/db.js';
@@ -105,6 +107,7 @@ import { HUMANBODY_MODULES } from '../data/lessons/humanbodyCourse.js';
 import { getCurrentRank } from '../lib/ranks.js';
 import { DEFAULT_SCHEDULE } from '../config/schedule.js';
 import { wordCount } from '../data/journal/journalPrompts.js';
+import { WRITING_FINAL_STEP } from '../data/writing/writingPieces.js';
 
 function todayKey(now = new Date()) {
   // Local date, not UTC. A 7pm session in Georgia must not count as tomorrow.
@@ -132,6 +135,8 @@ export const useAppStore = create((set, get) => ({
   baselines: {},
   goals: [],
   journalMarks: {},
+  // v11 — her book report drafts, keyed by slot. Her own words.
+  writingDrafts: {},
   streak: 0,
   lastActiveDay: null,
   parentPasscode: null,
@@ -212,7 +217,8 @@ export const useAppStore = create((set, get) => ({
         itemEventRows,
         baselineRows,
         goalRows,
-        journalMarkRows
+        journalMarkRows,
+        writingDraftRows
       ] = await Promise.all([
         readAllStrandStates(),
         readAnswers(),
@@ -243,7 +249,8 @@ export const useAppStore = create((set, get) => ({
         readItemEvents(),
         readBaselines(),
         readGoals(),
-        readJournalMarks()
+        readJournalMarks(),
+        readWritingDrafts()
       ]);
 
       const scheduleDays = {};
@@ -277,6 +284,7 @@ export const useAppStore = create((set, get) => ({
         baselines,
         goals: goalRows || [],
         journalMarks: Object.fromEntries((journalMarkRows || []).map((m) => [m.entryId, m])),
+        writingDrafts: Object.fromEntries((writingDraftRows || []).map((w) => [w.slotId, w])),
         learnerName: name,
         streak,
         lastActiveDay: lastDay,
@@ -1452,6 +1460,83 @@ export const useAppStore = create((set, get) => ({
    * things. A row here must never advance her Khan unit, because Khan has not
    * seen this paper.
    */
+  /**
+   * Save a book report draft. v3.82.
+   *
+   * ⚠️ NOTHING HERE GRADES ANYTHING, AND NOTHING HERE TICKS A STEP THAT HAS NO
+   * WRITING BEHIND IT.
+   *
+   * Lamar's rule, Aug 15 2026: "A book report ticked but not written leaves the
+   * app recording that work happened while holding no evidence of it. For a
+   * homeschool portfolio that is backwards — the artifact IS the record."
+   *
+   * `patch` carries any of { bookTitle, notes, draft, steps }. The two text
+   * fields are written separately and one may never overwrite the other — see
+   * pickWritingDraft. The mark still lives in `writingMarks`, where Gigi puts
+   * it, and is kept apart from the words the same way a journal mark is kept
+   * apart from the entry: a bad merge can lose a MARK, never a word she wrote.
+   */
+  async saveWritingDraft(slotId, patch) {
+    if (!slotId) return null;
+    const existing = get().writingDrafts[slotId] || {
+      slotId,
+      formatId: null,
+      bookTitle: '',
+      notes: '',
+      draft: '',
+      // v3.83 — THE THIRD BOX. His writer has notes, draft AND final, and v3.82
+      // built two because it read his notes instead of his code. The polish week
+      // needs somewhere to land that is not the rough draft: overwriting the
+      // draft with the fixed version destroys the evidence that she revised at
+      // all, which is the one thing the last step exists to produce.
+      final: '',
+      checked: {},
+      steps: []
+    };
+    const row = {
+      ...existing,
+      ...patch,
+      slotId,
+      steps: [...new Set(patch.steps ?? existing.steps ?? [])].sort((a, b) => a - b),
+      checked: patch.checked ?? existing.checked ?? {},
+      updatedAt: new Date().toISOString()
+    };
+    await putWritingDraft(row);
+    set({ writingDrafts: { ...get().writingDrafts, [slotId]: row } });
+    return row;
+  },
+
+  /**
+   * Tick or un-tick one weekly step.
+   *
+   * ⚠️ STEP 4 CANNOT BE TICKED ON AN EMPTY DRAFT. Step 4 is "read it out loud,
+   * then fix it and hand it in" — the step that says the report is finished. A
+   * tick there with nothing in the draft box is precisely the checkbox-without-
+   * an-artifact this table was added to prevent, and it would put a finished
+   * book report on a Georgia portfolio holding no writing.
+   *
+   * The earlier steps are free to tick. Reading a book leaves no artifact in an
+   * app and pretending otherwise would make her type something to prove she
+   * read — which is how a child learns to type something to get past a screen.
+   */
+  async toggleWritingStep(slotId, n) {
+    const row = get().writingDrafts[slotId] || { slotId, bookTitle: '', notes: '', draft: '', final: '', steps: [] };
+    const have = new Set(row.steps || []);
+    const finalStep = WRITING_FINAL_STEP;
+    // ⚠️ THE LAST STEP NEEDS THE FINISHED PIECE, NOT THE ROUGH DRAFT. v3.83.
+    // v3.82 checked `draft`, which meant the polish week could be ticked on last
+    // week's unrevised writing — the checkbox-without-an-artifact bug moved one
+    // box along rather than fixed. "Edit and finish" claims a finished piece
+    // exists; this is what makes that claim true.
+    if (!have.has(n) && n === finalStep && !String(row.final || '').trim()) {
+      return { ok: false, reason: 'nothing-finished' };
+    }
+    if (have.has(n)) have.delete(n);
+    else have.add(n);
+    await get().saveWritingDraft(slotId, { steps: [...have] });
+    return { ok: true };
+  },
+
   async recordReadingCheck(form, grade) {
     const attempt = {
       attemptId: newEntryId(),

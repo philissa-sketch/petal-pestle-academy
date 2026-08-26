@@ -31,7 +31,8 @@ import {
   pickBaseline,
   pickItemEvent,
   pickGoal,
-  pickJournalMark
+  pickJournalMark,
+  pickWritingDraft
 } from '../lib/mergeBackup.js';
 
 export const db = new Dexie('PetalPestleDB');
@@ -450,6 +451,62 @@ db.version(10).stores({
 });
 
 /**
+ * v11 — WHERE THE BOOK REPORT IS ACTUALLY WRITTEN.
+ *
+ * ---- ⚠️ A CHECKBOX IS NOT AN ARTIFACT ----
+ *
+ * Lamar's app hit this and wrote it down, Aug 15 2026:
+ *
+ *     "A book report ticked but not written leaves the app recording that work
+ *      happened while holding no evidence of it. For a homeschool portfolio that
+ *      is backwards — the artifact IS the record."
+ *
+ * This app was in that exact state. `writingMarks` holds Gigi's rubric marks —
+ * the GRADE — and there was nowhere for Azianna to type a word. The report was
+ * going to be written on paper and marked in here, and the app would have shown
+ * four completed book reports holding nothing she wrote.
+ *
+ * Georgia asks for a written annual assessment kept on file for three years
+ * (§40). A portfolio whose evidence is four ticks is not a portfolio.
+ *
+ * ---- TWO BOXES, NEVER ONE ----
+ *
+ * His rule, and the reason for it: "Notes and draft are stored on the
+ * assignment, and they are two boxes, never one: collapsing them deletes the
+ * planning week the milestone protects."
+ *
+ * Step 2 is where she marks two places in the book. Step 3 is the draft. If
+ * those share a box, week 2's work is overwritten by week 3's and the step that
+ * makes the draft possible leaves no trace — the milestone becomes decoration.
+ *
+ * Keyed by slotId ('book-report-q1'), because that is what the schedule
+ * derives. Nothing here stores a date: the pacing lives in
+ * lib/bookReportSchedule.js and is computed from her lesson reads.
+ */
+db.version(11).stores({
+  meta: 'key',
+  strandStates: 'strandId',
+  answers: '++id, itemId, strandId, at',
+  sittings: '++id, startedAt',
+  ledger: 'entryId, currency, at',
+  requests: 'requestId, status, at',
+  journal: 'entryId, at, kind',
+  messages: 'messageId, at, from, readAt',
+  scheduleDays: 'dayKey',
+  attempts: 'attemptId, testId, dayKey, at',
+  reviewItems: 'questionId, dueOn, box',
+  lessonReads: 'lessonId, lastReadAt',
+  projects: 'projectId, doneAt',
+  khanGrades: 'gradeId, subject, at',
+  writingMarks: 'markId, pieceId, at',
+  itemEvents: 'eventId, questionId, evidenceSource, dayKey',
+  baselines: 'trackId',
+  goals: 'goalId, strandId, status, termId',
+  journalMarks: 'entryId, dayKey, at',
+  writingDrafts: 'slotId, updatedAt'
+});
+
+/**
  * The version stamped on every backup this app writes, and the one it checks
  * on every backup it reads.
  *
@@ -458,7 +515,7 @@ db.version(10).stores({
  * hand-typed number in this project has drifted; check-import now asserts this
  * constant equals the highest db.version on disk, so the next one cannot.
  */
-export const BACKUP_VERSION = 10;
+export const BACKUP_VERSION = 11;
 
 export const EXPORT_TABLE_POLICY = {
   meta: true,
@@ -485,7 +542,11 @@ export const EXPORT_TABLE_POLICY = {
   goals: true,
   // Added v10. Her daily journal mark — six graded pieces a year were never
   // going to measure daily writing, and this is the record that does.
-  journalMarks: true
+  journalMarks: true,
+  // Added v11. HER OWN WORDS in a book report — the artifact the portfolio is
+  // actually made of. It carries more of her writing than anything else in this
+  // table, so it is the last thing that may be dropped from a backup.
+  writingDrafts: true
 };
 
 db.on('blocked', () => window.dispatchEvent(new CustomEvent('pp-db-blocked')));
@@ -748,7 +809,7 @@ export async function previewImport(data) {
   const [
     answers, strandStates, journal, messages, ledger, sittings, scheduleDays, attempts,
     lessonReads, projects, khanGrades, writingMarks, requests, itemEvents, baselines, goals,
-    journalMarks
+    journalMarks, writingDrafts
   ] = await Promise.all([
       db.answers.toArray(),
       db.strandStates.toArray(),
@@ -766,7 +827,8 @@ export async function previewImport(data) {
       db.itemEvents.toArray(),
       db.baselines.toArray(),
       db.goals.toArray(),
-      db.journalMarks.toArray()
+      db.journalMarks.toArray(),
+      db.writingDrafts.toArray()
     ]);
   const haveAttempts = new Set(attempts.map((a) => a.attemptId));
   const haveLessons = new Set(lessonReads.map((l) => l.lessonId));
@@ -785,6 +847,7 @@ export async function previewImport(data) {
   const haveBaselines = new Set(baselines.map((b) => b.trackId));
   const haveGoals = new Set(goals.map((g) => g.goalId));
   const haveJournalMarks = new Set(journalMarks.map((m) => m.entryId));
+  const haveDrafts = new Map(writingDrafts.map((w) => [w.slotId, w]));
   const localStrands = new Map(strandStates.map((s) => [s.strandId, s]));
 
   const inAnswers = data.answers || [];
@@ -887,6 +950,10 @@ export async function previewImport(data) {
       incoming: (data.goals || []).length,
       new: (data.goals || []).filter((g) => !haveGoals.has(g.goalId)).length
     },
+    writingDrafts: {
+      incoming: (data.writingDrafts || []).length,
+      new: (data.writingDrafts || []).filter((w) => !haveDrafts.has(w.slotId)).length
+    },
     journalMarks: {
       incoming: (data.journalMarks || []).length,
       new: (data.journalMarks || []).filter((m) => !haveJournalMarks.has(m.entryId)).length
@@ -919,7 +986,7 @@ export async function importBackup(data) {
     db.meta, db.strandStates, db.answers, db.sittings, db.ledger, db.requests,
     db.journal, db.messages, db.scheduleDays,
     db.attempts, db.reviewItems, db.lessonReads, db.projects, db.khanGrades,
-    db.writingMarks, db.itemEvents, db.baselines, db.goals, db.journalMarks,
+    db.writingMarks, db.itemEvents, db.baselines, db.goals, db.journalMarks, db.writingDrafts,
     async () => {
       // ---- answers: append only what is genuinely new, id stripped ----
       const existing = new Set((await db.answers.toArray()).map(answerKey));
@@ -1045,6 +1112,13 @@ export async function importBackup(data) {
       // worth reading twice before changing either.
       // A mark is meant to change — she may re-read an entry and think better of
       // it — so the later edit wins, the opposite of a baseline.
+      // v11 — her own words, merged field by field so nothing she wrote is
+      // dropped by a stale file being newer. See pickWritingDraft.
+      for (const w of data.writingDrafts || []) {
+        if (!w || !w.slotId) continue;
+        const local = await db.writingDrafts.get(w.slotId);
+        await db.writingDrafts.put(pickWritingDraft(local, w));
+      }
       for (const m of data.journalMarks || []) {
         const local = await db.journalMarks.get(m.entryId);
         await db.journalMarks.put(pickJournalMark(local, m));
@@ -1094,7 +1168,7 @@ export async function exportAll() {
   const [
     meta, strandStates, answers, sittings, ledger, requests, journal, messages, scheduleDays,
     attempts, reviewItems, lessonReads, projects, khanGrades, writingMarks,
-    itemEvents, baselines, goals, journalMarks
+    itemEvents, baselines, goals, journalMarks, writingDrafts
   ] = await Promise.all([
       db.meta.toArray(),
       db.strandStates.toArray(),
@@ -1114,7 +1188,8 @@ export async function exportAll() {
       db.itemEvents.toArray(),
       db.baselines.toArray(),
       db.goals.toArray(),
-      db.journalMarks.toArray()
+      db.journalMarks.toArray(),
+      db.writingDrafts.toArray()
     ]);
   // The passcode is a household convenience, not a secret worth exporting.
   const safeMeta = meta.filter((m) => m.key !== 'parentPasscode');
@@ -1167,7 +1242,13 @@ export async function exportAll() {
     // get one that does — so this is now the densest written-work evidence in
     // the record, and it travels with everything else. Kept apart from the
     // entry it grades: a bad merge can lose a mark, never a word she wrote.
-    journalMarks
+    journalMarks,
+    // Added v11. HER OWN WORDS — the book report itself, not the mark on it.
+    // "A checkbox is not an artifact": before this, four completed book reports
+    // could sit on the record with nothing she wrote behind them. This is the
+    // densest piece of her own writing the app holds, and Georgia asks for the
+    // portfolio, not the tick.
+    writingDrafts
   };
 }
 
@@ -1227,6 +1308,28 @@ export async function putGoal(row) {
 /** Every journal mark. One row per graded entry, keyed by entryId. Added v10. */
 export async function readJournalMarks() {
   return db.journalMarks.toArray();
+}
+
+/** Every book report draft on this machine. */
+export async function readWritingDrafts() {
+  return db.writingDrafts.toArray();
+}
+
+/**
+ * Save a draft. v11.
+ *
+ * ⚠️ NOTES AND DRAFT ARE SEPARATE FIELDS AND MERGING THEM IS A BUG, not a
+ * tidy-up. Week 2's marked places are what makes week 3's draft possible, and a
+ * single box means week 3 overwrites week 2 — the milestone then protects
+ * nothing. Lamar's app wrote that rule down after making the mistake.
+ *
+ * `steps` is the list of step numbers she has ticked. It lives beside the words
+ * rather than in its own table because a tick with no writing behind it is the
+ * thing this whole table exists to prevent: they should be impossible to
+ * separate.
+ */
+export async function putWritingDraft(row) {
+  await db.writingDrafts.put({ ...row, updatedAt: new Date().toISOString() });
 }
 
 /**
