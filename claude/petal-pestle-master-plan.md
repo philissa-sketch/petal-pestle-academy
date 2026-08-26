@@ -1980,3 +1980,107 @@ Both apps spotted the same real problem — dividing a 4-point rubric by 4 puts 
 - **`parseScore`'s refusals had no test at all.** A clamp is invisible to a text search and obvious to a call, so the function is now *asked* — nine good inputs and eleven bad ones.
 
 **Fifth, sixth and seventh in the family that began with `aria-disabled` at v3.79**, five versions ago. The pattern is always the same: an assertion that can be satisfied by something *near* the rule instead of the rule.
+
+---
+
+## 47. THE NEAR-MISS, AND THE CLEAN-UP — v3.85
+
+**Gigi, Aug 26 2026:**
+
+> *"Add everything that isn't needed in a delete file so we can clean the folder. when i go in there i am confused. i added a backup folder where i will put the exports."*
+
+The clean-up was the request. **The backup folder was the emergency.**
+
+---
+
+### ⚠️ Her whole record was one commit from a public repository
+
+She made a folder called **`Backup folder`** inside the project to keep her exports in. That is the right habit — it is what §36 has been asking for since the near-miss at v3.72.
+
+The file she put in it: **`petal-pestle-backup-2026-08-26.json`** — 93KB, **99 rows**, her name, all nine measured levels, and her journal in her own words.
+
+**None of the four `.gitignore` patterns matched that name:**
+
+```
+local/
+*her-latest-export*.json
+*her-backup*.json
+her-*.json
+```
+
+They look for `her-backup`. Hers said `petal-pestle-backup`. **The repository is PUBLIC, and a public commit cannot be taken back.**
+
+### And the check caught it, which is the entire reason it exists
+
+`check-publish-safety` walks **every JSON on disk** and identifies an export **structurally** — the file parses as JSON and says `app: Petal & Pestle Academy` — rather than by looking for words in its name.
+
+That design came from **v3.73**, when the check failed four files that were all correct because it was scanning `dist/assets/index-*.js` for the words `strandStates` and `learnerName` and finding the compiled app's own field names. The fix was to stop reading names and start reading structure.
+
+**Three versions later it caught a file that was not renamed at all.** It was simply called something nobody had thought of. A word scan would have missed it completely.
+
+### ⚠️ So the folder is excluded, not a filename
+
+```
+Backup folder/
+Backup Folder/
+backup folder/
+```
+
+**A rule that depends on what she names a file fails the first time she names it something else** — and she will name the next one whatever the app suggests. Three spellings because Windows is case-insensitive and her folder has a capital and a space in it.
+
+**And the check asserts two paths by name.** The file she actually saved, and **a file she has not saved yet in the same folder.**
+
+The second is the one that matters. If the exclusion is ever narrowed back to the one filename, the first assertion would still pass and the next export would go public. Negative-tested both ways: deleting the folder rule goes red on her real file, narrowing it to one filename goes red on the imaginary next one.
+
+---
+
+### The clean-up
+
+**17 files moved to `_to_delete/`.** Nothing live pointed at any of them.
+
+- **13 per-version delivery notes** — `v1-delivered` through `v3.40-writing-rebuilt`, plus `phase-2-delivered` and `units-to-weeks-refactor`. All superseded by the build log.
+- **`her-backup-2026-08-18.json`** — a stale copy of her record, superseded twice over.
+- **`GITHUB-TO-NETLIFY-STEPS.md`** — finished, and wrong about `claude/` since v3.77 changed the rule underneath it.
+- **`writing-mini-lessons-v3.40.html`** and a superseded export.
+
+**`claude/` went from 43 files to 28.**
+
+⚠️ **Two live references pointed at files that had just moved**, and both were fixed rather than left to rot: `MODULE-BUILD-PROMPT.md` told a future session to read a delivery note, and `check-publish-safety` named the old backup path. **A moved file with a live pointer at it is a broken instruction, not tidy.**
+
+### ⚠️ A second write-probe, from a different session
+
+`.writetest` — empty, dated **Aug 24** — was sitting in the parent folder. That is **two days before** the one left in `Lamar DOC` on Aug 26.
+
+**Two sessions ran the same pointless test on the same kind of folder and both left litter they could not remove.** Rule 13 is enforced by the machine: this environment allows creating files and not removing them.
+
+**A rule already written down does not need testing. It needs obeying.**
+
+---
+
+### Two things done earlier today that had never been logged
+
+**`RUN-THE-CHECKS.bat`.** Gigi does not use the command line — rule 14 has said so for days — so *"run `npm run check`"* was an instruction she could not follow, printed at the end of every session. It is a double-click now, and it answers in words: **ALL CHECKS PASSED — safe to commit**, or **DO NOT COMMIT YET** with the reason above it.
+
+Netlify runs the same 36 before it builds. That is the **second** pair of eyes: Netlify is Linux, her machine is Windows, and **v3.73 is the version where eighteen of thirty checks turned out never to have run on Windows at all.**
+
+**The Quarter 4 reading cap was reviewed and held at 14** — and what is recorded is the *reason*, not the decision. §34 said: review after the next Check-In. She sat one on Aug 24, **and it did not measure her reading.** It re-took the four unsettled strands and correctly left the five settled ones alone, so **Reading Comprehension and Vocabulary have not been asked since Aug 13.** The review that was supposed to settle the number could not, because the instrument was pointed somewhere else. Writing *"reviewed, held at 14"* without that would make it look like a second reading supported the number.
+
+---
+
+### ⭐⭐ And all nine strands are settled, for the first time
+
+She finished the re-measure on **Aug 25 at 17:49**.
+
+| Strand | Level | | Strand | Level |
+|---|---|---|---|---|
+| Grammar & Usage | 2.35 | | Patterns & Algebra | 2.98 |
+| **Measurement & Data** | **2.44** | | Reading Comprehension | 3.46 |
+| Geometry | 2.67 | | Numbers & Operations | 3.48 |
+| Writing Strategies | 2.67 | | **Fractions & Decimals** | **3.89** |
+| Vocabulary | 2.91 | | | |
+
+⚠️ **All three strands still running that morning finished LOWER than their mid-re-measure numbers** — Measurement 2.50 → **2.44**, Geometry 2.82 → **2.67**, Writing 2.82 → **2.67**. **Measurement & Data is now her lowest strand.**
+
+That is not a decline. A reading in progress is not a reading, and §1 of her diagnostic file has said since v3.74 that unsettled numbers *"must not be quoted as final"*. These are the final ones.
+
+**Her diagnostic document still describes those three as still re-measuring** — correct when it was written that morning, and wrong by the evening. **It is the first job of the next session**, and §1b, the Aug 13 baseline, must not be touched.

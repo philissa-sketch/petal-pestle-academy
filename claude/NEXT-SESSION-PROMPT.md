@@ -2,11 +2,11 @@
 
 *Rewritten Aug 26 2026, end of the reading-check / book-report / grading session.*
 
-**Where things stand:** the app is at **v3.84**, **all 36 checks green**, live at **https://unrivaled-caramel-e28469.netlify.app/**, deploying itself from **github.com/philissa-sketch/petal-pestle-academy**. Azianna works on an Acer Chromebook and it holds the live copy of her data.
+**Where things stand:** the app is at **v3.85**, **all 36 checks green**, live at **https://unrivaled-caramel-e28469.netlify.app/**, deploying itself from **github.com/philissa-sketch/petal-pestle-academy**. Azianna works on an Acer Chromebook and it holds the live copy of her data.
 
 **Three things before you start:**
 
-1. **⚠️ There is uncommitted work on disk.** v3.79 through v3.84 were all built today and may not be pushed yet. Ask.
+1. **⚠️ There is uncommitted work on disk.** v3.79 through v3.85 were all built today and may not be pushed yet. Ask.
 2. **⚠️ Her Backup folder was one commit from going public today.** The repository is PUBLIC. See "the thing that nearly happened".
 3. **All nine strands are settled for the first time.** The re-measure finished Aug 25.
 
@@ -18,12 +18,12 @@ I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nin
 
 **Read these first, in this order:**
 
-1. `claude/petal-pestle-master-plan.md` — the plan. **§41 to §46 are from Aug 25–26.**
+1. `claude/petal-pestle-master-plan.md` — the plan. **§41 to §47 are from Aug 25–26.**
 2. `claude/petal-pestle-build-log.md` — every version, every bug, all 36 checks
 3. `claude/azianna-diagnostic-results.md` — **her measured levels. These govern every lesson you write.** ⚠️ **NOT in the GitHub repo** — a full assessment of a named child, excluded deliberately. **And §1c of it is out of date — see the first job.**
 4. `claude/BLUEPRINT_A_LOCAL_FIRST.md` — the standard above this document
 
-**The app is at v3.84, installed at `C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy`, runs on `localhost:5180` (strictPort), database `PetalPestleDB` at v11.**
+**The app is at v3.85, installed at `C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy`, runs on `localhost:5180` (strictPort), database `PetalPestleDB` at v11.**
 
 ---
 
@@ -181,5 +181,6 @@ rmdir /s /q "C:\Users\pknot\Downloads\petal-pestle-academy\_to_delete"
 - **v3.82** — **Book reports on her schedule, four weekly steps.** They had existed since v3.38 with **nothing that ever said it was time.** ⚠️ Built from his notes — see v3.83.
 - **v3.83** — **Rebuilt from his code.** His real four steps, six formats, **three writing boxes**, tickable checklist. ⚠️ **A checkbox is not an artifact** — there had been nowhere for her to type a word.
 - **v3.84** — **One grading ladder, one entry box.** ⚠️ **This app had TWO ladders and they disagreed above 97%** — a perfect book report was an A, a perfect Khan unit an A+. Now one table, and **a perfect report is an A+ (my call)**. ⚠️ **The A+ threshold is CONFIRMED against his code, not assumed.** The Khan box takes **`8/10` or `82%`** in one field, like his.
+- **v3.85** — **The near-miss, and the clean-up.** ⚠️ **My Backup folder was one commit from a public repo** — none of the four ignore patterns matched the filename. The **folder** is excluded now, not a name. **17 files to `_to_delete/`, `claude/` 43 → 28.** ⚠️ A **second write-probe** was found, from an Aug 24 session. `RUN-THE-CHECKS.bat` and the **Q4 cap review** logged at last. ⭐⭐ **All nine strands settled.**
 
 **Start by reading the four documents, then confirm back to me: the version on disk, the check count, how many Khan grades are on my record, and what you intend to do first.**

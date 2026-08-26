@@ -20,12 +20,27 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.84';
+export const VERSION = '3.85';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.85',
+    date: 'Aug 26, 2026',
+    notes: [
+      '\u26a0\ufe0f\u26a0\ufe0f HER WHOLE RECORD WAS ONE COMMIT FROM A PUBLIC REPOSITORY, AGAIN. Gigi made a folder called "Backup folder" to keep her exports in \u2014 exactly the right habit \u2014 and saved petal-pestle-backup-2026-08-26.json into it: 93KB, 99 rows, her name, all nine measured levels, her journal in her own words. NONE OF THE FOUR .gitignore PATTERNS MATCHED THAT NAME. They look for her-backup, her-latest-export and her-*; hers said petal-pestle-backup.',
+      'check-publish-safety CAUGHT IT, AND THAT IS THE WHOLE REASON IT EXISTS. v3.77 built it to walk every JSON on disk and identify an export STRUCTURALLY \u2014 the file parses as JSON and says app: Petal & Pestle Academy \u2014 rather than by its name. v3.73\u2019s lesson, doing its job three versions later: a word scan misses a renamed file, and this one was not even renamed. It was simply called something nobody had thought of.',
+      '\u26a0\ufe0f SO THE FOLDER IS EXCLUDED, NOT A FILENAME PATTERN. A rule that depends on what she names a file fails the first time she names it something else \u2014 and she will name the next one whatever the app suggests. Three spellings are covered because Windows is case-insensitive and her folder has a capital B and a space in it.',
+      'AND THE CHECK ASSERTS TWO PATHS BY NAME NOW: the file she actually saved, and a file she has NOT saved yet in the same folder. The second is the one that matters \u2014 if the exclusion is ever narrowed back to one filename, the first assertion would still pass and the next export would go public. Negative-tested both ways: deleting the folder rule goes red on her real file, and narrowing it to the one filename goes red on the imaginary next one.',
+      '\u2b50 THE FOLDERS ARE CLEAN. 17 files moved to _to_delete/ \u2014 13 per-version delivery notes superseded by the build log, a stale Aug 18 copy of her record, the GitHub steps sheet that was both finished and wrong about claude/, a v3.40 HTML artifact and a superseded export. claude/ went from 43 files to 28. ⚠️ TWO LIVE REFERENCES POINTED AT MOVED FILES and were fixed: MODULE-BUILD-PROMPT.md told a future session to read a delivery note, and check-publish-safety named the old backup path.',
+      '\u26a0\ufe0f AND A SECOND WRITE-PROBE WAS FOUND, FROM A DIFFERENT SESSION. `.writetest`, empty, dated Aug 24, sitting in the parent folder \u2014 two days before the one left in Lamar DOC on Aug 26. TWO SESSIONS RAN THE SAME POINTLESS TEST AND BOTH LEFT LITTER THEY COULD NOT REMOVE. A rule already written down does not need testing; it needs obeying. Both are now in _to_delete/.',
+      'RUN-THE-CHECKS.bat IS RECORDED AT LAST \u2014 built earlier today and never logged. Gigi does not use the command line, and "run npm run check" was an instruction she could not follow. Double-click, wait, and it says either ALL CHECKS PASSED \u2014 safe to commit, or DO NOT COMMIT YET with the reason above it. Netlify runs the same 36 before it builds, but that is the second pair of eyes: Netlify is Linux and her machine is Windows, and v3.73 is the version where eighteen of thirty checks turned out never to have run on Windows at all.',
+      'THE QUARTER 4 READING CAP WAS REVIEWED AND HELD AT 14, and the reason is recorded rather than the decision. \u00a734 said review it after the next Check-In. She sat one on Aug 24 \u2014 AND IT DID NOT MEASURE HER READING. It re-took the four unsettled strands and correctly left the five settled ones alone, so Reading Comprehension and Vocabulary have not been asked since Aug 13. The review that was meant to settle the number could not: the instrument was pointed somewhere else.',
+      '\u2b50\u2b50 AND ALL NINE STRANDS ARE SETTLED FOR THE FIRST TIME. She finished the re-measure on Aug 25 at 17:49. \u26a0\ufe0f ALL THREE OF THE STRANDS STILL RUNNING THAT MORNING FINISHED LOWER THAN THEIR MID-RE-MEASURE NUMBERS: Measurement & Data 2.50 \u2192 2.44, Geometry 2.82 \u2192 2.67, Writing Strategies 2.82 \u2192 2.67. Measurement is now her lowest strand at 2.44. Her diagnostic document still describes those three as "still re-measuring, not final" \u2014 true when it was written that morning, and the first job of the next session.'
+    ]
+  },
   {
     version: '3.84',
     date: 'Aug 26, 2026',
