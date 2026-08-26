@@ -54,6 +54,9 @@ const LessonsView = lazy(() =>
 const JournalView = lazy(() =>
   import('./components/Journal/JournalView.jsx').then((m) => ({ default: m.JournalView }))
 );
+const WordStudyView = lazy(() =>
+  import('./components/Assess/WordStudyView.jsx').then((m) => ({ default: m.WordStudyView }))
+);
 const ReadingCheckView = lazy(() =>
   import('./components/Assess/ReadingCheckView.jsx').then((m) => ({ default: m.ReadingCheckView }))
 );
@@ -255,6 +258,11 @@ export default function App() {
               one definition of "which Khan reading unit is she in", asked by
               both the button on Today and the screen it opens. */}
           {view === 'reading' && <ReadingCheckView unitId={readingUnitId} onExit={() => navigate('today')} />}
+          {/* v3.91 — word study. Like the reading check, it works out which
+              week she is on ITSELF, from the lessons she has finished, rather
+              than being handed one: one definition of "which week is she in",
+              asked by both the button on Today and the screen it opens. */}
+          {view === 'words' && <WordStudyView onExit={() => navigate('today')} />}
           {view === 'friday' && <CatchUpView onNavigate={navigate} />}
           {view === 'journal' && <JournalView />}
           {view === 'diagnostic' && <DiagnosticView onNavigate={navigate} />}

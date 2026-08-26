@@ -67,6 +67,20 @@ export const NAV = [
       // It is safe to show always: the screen says so plainly when no check is
       // written for the unit she is currently in, rather than opening blank.
       { id: 'reading', label: 'Reading check' },
+      // v3.91 — word study, and check-links caught this one too, in exactly the
+      // same way and for exactly the same reason as the reading check above.
+      //
+      // The button on the Language Arts block is a real door, and it is the one
+      // that KNOCKS — which the book reports went four months without. But the
+      // rule here is stricter and better: every screen App.jsx can render has
+      // ONE home in the nav, so "where am I" and "how do I get back" always have
+      // an answer. A screen reachable only from a button inside another screen
+      // is one layout change from being the seventh thing in this app that is
+      // correct and unreachable.
+      //
+      // Safe to show always: the screen says so plainly when there are no words
+      // for the week she is in, rather than opening blank.
+      { id: 'words', label: 'Word Study' },
       // She asked for this one herself, Aug 19. The 15:40 block has existed
       // since v3.2 and opened nothing.
       { id: 'movement', label: 'Singing & Movement' }

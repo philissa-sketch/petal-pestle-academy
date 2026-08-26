@@ -14,6 +14,7 @@ import {
 import { resolveBlockTarget } from '../../lib/blockLinks.js';
 import { blockLabelOnDay, blockIconOnDay, isRotatingBlock } from '../../lib/rotatingBlock.js';
 import { currentReadingCheck } from '../../lib/readingCheck.js';
+import { wordListFor } from '../../lib/wordStudy.js';
 import { bookReportNow } from '../../lib/bookReportSchedule.js';
 
 // ---------------------------------------------------------------------------
@@ -72,6 +73,9 @@ export function TodayView({ onNavigate }) {
   // check-curriculum-volume asserts by reading this file that it is passed.
   const lessonReads = useAppStore((s) => s.lessonReads);
   const lessonsRead = Object.keys(lessonReads || {});
+  // v3.91 — her sat spelling tests. The carry-over rule reads them to decide
+  // what follows her into this week, so the button and the screen agree.
+  const spellingResults = useAppStore((s) => s.spellingResults);
   // v3.82 — what she has already ticked wins over what the week suggests, so a
   // child who worked ahead is not dragged back to a step she has finished.
   const writingDrafts = useAppStore((s) => s.writingDrafts);
@@ -291,6 +295,17 @@ export function TodayView({ onNavigate }) {
           // block asked, so the two can never point at different units.
           const readingCheck =
             b.subject === 'reading' ? currentReadingCheck(strands, khanGrades) : null;
+          // v3.91 — THIS WEEK'S WORD LIST, on the writing block.
+          //
+          // ⚠️ IT KNOCKS, AND THAT IS THE ENTIRE POINT. The book reports
+          // existed from v3.38 with nothing that ever said it was time, and
+          // her record still holds zero writing marks four months later. A
+          // door nobody knocks on is the same as a door that is not there.
+          //
+          // Asked with the SAME function the screen asks, so the button and
+          // the list it opens can never disagree about which week she is in.
+          const wordStudy =
+            b.subject === 'writing' ? wordListFor(lessonsRead, spellingResults) : null;
           // v3.82 — THIS WEEK'S BOOK REPORT STEP, on the writing block.
           //
           // Lamar's log, on why this sits here rather than only in the Journal:
@@ -388,6 +403,18 @@ export function TodayView({ onNavigate }) {
                               className="rounded-full border-2 border-sage-500 bg-sage-300/20 px-4 py-1.5 text-xs font-700 text-sage-700 hover:bg-sage-300/40"
                             >
                               Then: reading check
+                            </button>
+                          )}
+                          {/* v3.91 — and her ten words. Only when there are
+                              ten: a button opening an empty list is the dead
+                              end this app has built five times. */}
+                          {wordStudy && wordStudy.list.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => onNavigate?.('words')}
+                              className="rounded-full border-2 border-sage-500 bg-sage-300/20 px-4 py-1.5 text-xs font-700 text-sage-700 hover:bg-sage-300/40"
+                            >
+                              Then: word study
                             </button>
                           )}
                         </>

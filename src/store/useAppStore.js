@@ -58,6 +58,8 @@ import {
   putJournalMark,
   readWritingDrafts,
   putWritingDraft,
+  loadSpellingResults,
+  putSpellingResult,
   clearJournalMark,
   putGoal
 } from '../db/db.js';
@@ -137,6 +139,8 @@ export const useAppStore = create((set, get) => ({
   journalMarks: {},
   // v11 — her book report drafts, keyed by slot. Her own words.
   writingDrafts: {},
+  // Append-only, like `attempts`. A sat spelling test is a historical event.
+  spellingResults: [],
   streak: 0,
   lastActiveDay: null,
   parentPasscode: null,
@@ -218,7 +222,8 @@ export const useAppStore = create((set, get) => ({
         baselineRows,
         goalRows,
         journalMarkRows,
-        writingDraftRows
+        writingDraftRows,
+        spellingResultRows
       ] = await Promise.all([
         readAllStrandStates(),
         readAnswers(),
@@ -250,7 +255,8 @@ export const useAppStore = create((set, get) => ({
         readBaselines(),
         readGoals(),
         readJournalMarks(),
-        readWritingDrafts()
+        readWritingDrafts(),
+        loadSpellingResults()
       ]);
 
       const scheduleDays = {};
@@ -285,6 +291,7 @@ export const useAppStore = create((set, get) => ({
         goals: goalRows || [],
         journalMarks: Object.fromEntries((journalMarkRows || []).map((m) => [m.entryId, m])),
         writingDrafts: Object.fromEntries((writingDraftRows || []).map((w) => [w.slotId, w])),
+        spellingResults: (spellingResultRows || []).sort((a, b) => (a.at < b.at ? -1 : 1)),
         learnerName: name,
         streak,
         lastActiveDay: lastDay,
@@ -1535,6 +1542,59 @@ export const useAppStore = create((set, get) => ({
     else have.add(n);
     await get().saveWritingDraft(slotId, { steps: [...have] });
     return { ok: true };
+  },
+
+  /**
+   * Record one sat spelling test.
+   *
+   * ⚠️ APPENDED, NEVER UPDATED. Keyed by a UUID like `attempts`, because a week
+   * can be sat twice and keying on the week would destroy the first result.
+   *
+   * ⚠️ AND NO `unaidedPercent`. Everywhere else in this app that number exists
+   * because being read to contaminates the measurement. A SPELLING TEST IS THE
+   * OPPOSITE — hearing the word IS the test, and the word is deliberately not
+   * on screen while she types. A number that means nothing is worse than no
+   * number, because somebody will grade her against it.
+   */
+  async recordSpellingResult(listId, grade, meta = {}) {
+    const row = {
+      resultId: newEntryId(),
+      listId,
+      kind: 'spelling',
+      dayKey: dayKeyOf(),
+      at: new Date().toISOString(),
+      week: meta.week ?? null,
+      quarter: meta.quarter ?? null,
+      weekInQuarter: meta.weekInQuarter ?? null,
+      right: grade.right,
+      total: grade.total,
+      percent: grade.percent,
+      letter: grade.letter,
+      carriedCount: meta.carriedCount ?? 0,
+      rows: grade.rows.map((r) => ({
+        word: r.word,
+        from: r.from,
+        given: r.given,
+        correct: r.correct,
+        skipped: r.skipped
+      }))
+    };
+    await putSpellingResult(row);
+    set({ spellingResults: [...get().spellingResults, row] });
+
+    // Petals for SITTING it, never for the score — the rule the weekly tests
+    // and the reading check both follow. She has to be able to walk into a
+    // spelling test she might fail without it costing her anything.
+    await get().addLedgerEntry(
+      makeEntry({
+        currency: 'petal',
+        amount: PETALS.unitTest,
+        kind: 'grant',
+        source: 'test-taken',
+        note: 'Sat a spelling test'
+      })
+    );
+    return row;
   },
 
   async recordReadingCheck(form, grade) {

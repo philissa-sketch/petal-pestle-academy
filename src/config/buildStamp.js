@@ -20,12 +20,27 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.90';
+export const VERSION = '3.91';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.91',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⭐⭐ THE WORDS HAVE A SCREEN, AND SOMETHING KNOCKS ON IT. v3.90 shipped 320 spelling words and 320 vocabulary terms with nowhere to see them and no table to record a result. That is the state the book reports sat in from v3.38 to v3.82 — four months, and her record still holds zero writing marks. Word Study has a home in the nav AND a button on the Language Arts block, and check-word-study asserts both.',
+      '⚠️ THE WORD IS NEVER ON SCREEN WHILE SHE TYPES IT. That is the whole mechanism: she presses a flower, the word is SPOKEN, and she types what she heard. A spelling test where the word is visible is a copying test.',
+      '⚠️ AND THIS INVERTS THE READ-ALOUD RULE, DELIBERATELY. Everywhere else in this app being read to contaminates the score, and unaidedPercent exists because 63% of everything she has ever answered was read to her. HERE, HEARING THE WORD IS THE TEST. So nothing on this screen records an unaided percentage and nothing ever should — a number that means nothing is worse than no number, because somebody will grade her against it. The check fails if the word appears in the component at all, reading the CODE with comments stripped.',
+      '⚠️ IF THE DEVICE CANNOT SPEAK, THE TEST REFUSES TO RUN. No silent fallback to showing her the word — that would write a grade to her Georgia record for a copying exercise and look completely normal on screen. The study list still works; the TEST says why it will not, in words a grown-up can act on.',
+      '⚠️ HIS CARRY-OVER RULE IS A CALENDAR AND THIS APP REFUSES ONE. year-plan-03, from Lamar: "the list rotates on a strict 7-day calendar whether or not the test was passed." The seven days cannot come across — §7.1, a quarter is a sequence, not a set of dates. So the rotation is translated the way §44 translated his book-report due dates: THE LIST ROTATES WHEN HER WEEK ADVANCES, and her week advances when she finishes the lessons in it. That is spineWeek, which is what "week 3" already means everywhere else in this app.',
+      'WHAT SURVIVES THE TRANSLATION IS THE PART THAT MATTERS: the list moves on WHETHER OR NOT SHE PASSED. A rotation gated on passing is a child stuck on week 4 in April, and the check asserts it by failing every word of week 1 and demanding the week still advance.',
+      '⚠️ A WEEK NEVER SAT CARRIES ALL TEN, treated as fully missed. That is the half of his rule that stops a list being escaped by not sitting it, and it has its own negative test. Carried words come FIRST and are never displaced by new ones — moving her on from words she cannot spell makes the list decoration — and when ten carried words fill the list the engine reports `stalled` rather than going quiet, because a child stalling for a month is something a grown-up has to be TOLD.',
+      'db.version(12) — spellingResults, keyed by a UUID like attempts, because a week can be sat twice and keying on the week would destroy the first result. Merge is a UNION that never overwrites. BACKUP_VERSION is 12 and check-import passed the schema change on the first run.',
+      '⚠️ AND check-links CAUGHT THE SCREEN BEING UNREACHABLE, exactly as it caught the reading check at v3.80. The button on Today is a real door, but every screen App.jsx can render must have ONE home in the nav — otherwise it is one layout change from being the seventh thing in this app that is correct and unreachable. ⚠️ One assertion also went RED against the COMMENT explaining why there is no unaided percentage; it reads the code with comments stripped now. An assertion satisfied by a comment is the mirror of a mutation that lands on one. SEVEN NEGATIVE TESTS, ALL RED.'
+    ]
+  },
   {
     version: '3.90',
     date: 'Aug 26, 2026',

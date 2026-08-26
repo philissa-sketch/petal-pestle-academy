@@ -27,6 +27,23 @@
 //      syllables, and not a proper noun.
 //   5. The week count matches the week table, so this cannot quietly describe a
 //      year the schedule does not have.
+//   6. ⚠️ THE CARRY-OVER RULE, ASKED OF THE ENGINE DIRECTLY — v3.91.
+//      A word she got wrong comes back. A week never sat carries ALL ten, which
+//      is the half that stops a list being escaped by not sitting it. A word
+//      spelled correctly never returns. Carried words come FIRST and are never
+//      dropped to make room for new ones, and when they fill the ten the engine
+//      says `stalled` rather than going quiet.
+//   7. ⚠️ THE ROTATION IS NOT GATED ON PASSING. Lamar's rule is six words —
+//      "whether or not the test was passed" — and a rotation that waits for a
+//      pass is a child stuck on week 4 in April.
+//   8. ⚠️ ONE LADDER. gradeSpelling uses letterForPercent, the same thirteen
+//      bands the Khan units and the book reports use. v3.84 exists because this
+//      app once had two ladders that disagreed above 97%.
+//   9. ⚠️ SHE CAN REACH IT, AND SOMETHING KNOCKS. The screen has a home in the
+//      nav AND the Language Arts block offers it. The book reports had neither
+//      for four months and her record still holds zero writing marks.
+//  10. ⚠️ THE TEST REFUSES TO RUN WITHOUT SPEECH. A silent fallback to showing
+//      her the word would write a grade for a copying exercise.
 //
 // ---- WHAT IT DOES NOT ASSERT, so it never claims more than it tests ----
 //
@@ -34,16 +51,21 @@
 //     a judgement for Gigi, and a check that pretended to make it would be
 //     dressing an opinion as a measurement.
 //   · That she can spell them. Nothing here has been in front of her.
-//   · ⚠️ THAT SHE CAN REACH THEM. THERE IS NO SCREEN. This check going green
-//     means the DATA is sound and nothing more — the words are still paper.
-//     Said here because "correct and unreachable" is this project's most
-//     repeated failure, and a green check is exactly how it hides.
+//   · Whether she can actually spell them, or whether the SCREEN works. This
+//     asserts the screen exists, is reachable and refuses to run mute. It has
+//     never been in front of a child.
 //
 // NOTE ON REGEXES BELOW: no quote character appears inside a character class —
 // see the header of check-version-stamp.mjs.
 // ---------------------------------------------------------------------------
 
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
 import { proseOf, properNounsIn, syllablesIn as syllables } from '../src/lib/lessonProse.js';
+import { wordListFor, gradeSpelling, listIdFor, WORDS_PER_WEEK as ENGINE_PER_WEEK } from '../src/lib/wordStudy.js';
+import { letterForPercent } from '../src/lib/khanGrade.js';
 import { WORD_STUDY_WEEKS, WORDS_PER_WEEK, WORD_STUDY_WEEK_COUNT } from '../src/data/words/wordStudy.js';
 import { WEEKS } from '../src/config/assessment.js';
 import { ALL_LESSONS } from '../src/data/lessons/appCourses.js';
@@ -52,7 +74,12 @@ const failures = [];
 const fail = (rule, detail) => failures.push({ rule, detail });
 const notes = [];
 
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const BY_ID = new Map(ALL_LESSONS.map((l) => [l.id, l]));
+
+if (ENGINE_PER_WEEK !== WORDS_PER_WEEK) {
+  fail('one-words-per-week-constant', `the engine says ${ENGINE_PER_WEEK}, the data says ${WORDS_PER_WEEK}`);
+}
 
 
 /** Which lesson ids the week table schedules in one (quarter, n). */
@@ -223,6 +250,175 @@ for (const w of WORD_STUDY_WEEKS) {
   }
 }
 
+// ---- 6..10. THE ENGINE AND THE SCREEN, ASKED DIRECTLY ---------------------
+//
+// Fixtures, not her real record. Her record holds ZERO spelling results, so
+// every carry-over assertion below would pass vacuously against it — "a fixture
+// that omits a field is a fixture that exempts it", v3.83.
+
+{
+  const first = WORD_STUDY_WEEKS[0];
+  const second = WORD_STUDY_WEEKS[1];
+  const wordsOf = (entry) => entry.spelling.map((x) => x.word);
+
+  // Finishing week 1's lessons puts her in week 2.
+  const weekOneLessons = lessonsScheduledIn(first.quarter, first.n);
+
+  // (a) a word she got WRONG comes back; a word she got RIGHT does not.
+  const w1 = wordsOf(first);
+  const mixed = [{
+    listId: listIdFor(first.quarter, first.n),
+    rows: w1.map((word, i) => ({ word, correct: i < 5 }))
+  }];
+  const after = wordListFor(weekOneLessons, mixed);
+  const carriedWords = after.carried.map((c) => c.word);
+
+  for (const right of w1.slice(0, 5)) {
+    if (carriedWords.includes(right)) {
+      fail('a-correct-word-never-comes-back', `"${right}" was spelled correctly and carried anyway`);
+    }
+  }
+  for (const wrong of w1.slice(5)) {
+    if (!carriedWords.includes(wrong)) {
+      fail(
+        'a-missed-word-comes-back',
+        `"${wrong}" was missed in ${listIdFor(first.quarter, first.n)} and did not carry. ` +
+          `Words missed carry into next week — year-plan-03, taken from Lamar\u2019s app.`
+      );
+    }
+  }
+  if (after.list.length !== WORDS_PER_WEEK) {
+    fail('the-list-is-topped-up-to-ten', `carried ${after.carried.length} + fresh ${after.fresh.length} = ${after.list.length}`);
+  }
+
+  // (b) ⚠️ A WEEK NEVER SAT CARRIES ALL TEN.
+  const untested = wordListFor(weekOneLessons, []);
+  if (untested.carried.length !== WORDS_PER_WEEK) {
+    fail(
+      'an-untaken-test-carries-the-whole-list',
+      `week 1 was never sat and only ${untested.carried.length} of ${WORDS_PER_WEEK} words carried. ` +
+        `"A test never taken carries the whole list forward, treated as fully missed — never ` +
+        `silently dropped." That is the half that stops a list being escaped by not sitting it.`
+    );
+  }
+  if (!untested.stalled) {
+    fail('ten-carried-words-report-stalled', 'ten carried words filled the list and `stalled` was false');
+  }
+  if (untested.fresh.length !== 0) {
+    fail(
+      'carried-words-are-never-displaced',
+      `${untested.fresh.length} new words were added while ten carried ones were waiting. Carried ` +
+        `words come first; moving her on from words she cannot spell makes the list decoration.`
+    );
+  }
+
+  // (c) ⚠️ THE ROTATION IS NOT GATED ON PASSING.
+  const allWrong = [{
+    listId: listIdFor(first.quarter, first.n),
+    rows: w1.map((word) => ({ word, correct: false }))
+  }];
+  const rotated = wordListFor(weekOneLessons, allWrong);
+  if (rotated.week <= 1) {
+    fail(
+      'the-list-rotates-whether-or-not-she-passed',
+      `she failed every word of week 1 and the engine still reports week ${rotated.week}. ` +
+        `"The list rotates whether or not the test was passed" — a rotation that waits for a ` +
+        `pass is a child stuck on week 4 in April.`
+    );
+  }
+  if (rotated.listId === listIdFor(first.quarter, first.n)) {
+    fail('the-list-id-advances-with-the-week', 'the week advanced but the listId did not');
+  }
+  if (!second) fail('there-is-a-second-week', 'the word list has only one week');
+}
+
+// (d) ⚠️ ONE LADDER, AND NO SECOND TABLE.
+{
+  const list = [{ word: 'seed', from: 'x' }, { word: 'root', from: 'x' }];
+  const perfect = gradeSpelling(list, { seed: 'seed', root: 'root' });
+  if (perfect.percent !== 100 || perfect.letter !== letterForPercent(100)) {
+    fail(
+      'spelling-uses-the-one-ladder',
+      `a perfect spelling test graded ${perfect.percent}% / ${perfect.letter}, and letterForPercent(100) ` +
+        `is ${letterForPercent(100)}. v3.84 exists because this app had TWO ladders that disagreed ` +
+        `above 97% and put two different letters on one Georgia record.`
+    );
+  }
+  // Trimmed and case-insensitive: a nine-year-old typing "Seed " has spelled seed.
+  const sloppy = gradeSpelling(list, { seed: ' Seed ', root: 'root' });
+  if (!sloppy.rows[0].correct) {
+    fail('spelling-is-trimmed-and-case-insensitive', '" Seed " was marked wrong for "seed"');
+  }
+  // A blank is skipped AND wrong, never quietly correct.
+  const blank = gradeSpelling(list, { seed: '', root: 'root' });
+  if (blank.rows[0].correct || !blank.rows[0].skipped) {
+    fail('a-blank-is-wrong-and-skipped', 'an empty answer was not recorded as both skipped and incorrect');
+  }
+}
+
+// (e) ⚠️ SHE CAN REACH IT, AND SOMETHING KNOCKS.
+{
+  const nav = readFileSync(resolve(ROOT, 'src/config/navigation.js'), 'utf8');
+  if (!/id: 'words'/.test(nav)) {
+    fail(
+      'word-study-has-a-home-in-the-nav',
+      'no nav section with id "words". A screen reachable only from a button inside another ' +
+        'screen is one layout change from being the seventh thing here that is correct and ' +
+        'unreachable.'
+    );
+  }
+  const today = readFileSync(resolve(ROOT, 'src/components/Schedule/TodayView.jsx'), 'utf8');
+  if (!/onNavigate\?\.\('words'\)/.test(today)) {
+    fail(
+      'something-knocks-on-the-door',
+      "Today's Planner does not offer word study. The book reports existed from v3.38 with " +
+        'nothing that ever said it was time, and her record still holds zero writing marks. ' +
+        'A door nobody knocks on is the same as a door that is not there.'
+    );
+  }
+  if (!/wordListFor\(/.test(today)) {
+    fail(
+      'the-button-asks-the-same-function-the-screen-asks',
+      'TodayView does not call wordListFor, so the button and the screen it opens can disagree ' +
+        'about which week she is in.'
+    );
+  }
+}
+
+// (f) ⚠️ THE TEST REFUSES TO RUN WITHOUT SPEECH.
+{
+  const viewRaw = readFileSync(resolve(ROOT, 'src/components/Assess/WordStudyView.jsx'), 'utf8');
+
+  // ⚠️ COMMENTS STRIPPED BEFORE ANY OF THIS IS ASKED. The first version of the
+  // "no unaided percentage" assertion went RED against the comment EXPLAINING
+  // why there is no unaided percentage. An assertion satisfied by a comment is
+  // the mirror of a mutation that lands on one, and this project has now met
+  // that family eight times. A check must read what the file DOES.
+  const view = viewRaw
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/(^|[^:])\/\/[^\n]*/g, '$1 ');
+  if (!/speechSupported/.test(view)) {
+    fail('the-screen-asks-whether-it-can-speak', 'WordStudyView never calls speechSupported');
+  }
+  // The ready button must be BEHIND the speech guard, not merely near it.
+  const guard = view.match(/\{canSpeak \? \(([\s\S]{0,900}?)\) : \(/);
+  if (!guard || !/I am ready for the test/.test(guard[1])) {
+    fail(
+      'the-test-button-is-behind-the-speech-guard',
+      'the "I am ready for the test" button is not inside the canSpeak branch. Falling back to ' +
+        'showing her the word turns a spelling test into a copying test and still writes a grade ' +
+        'to her Georgia record.'
+    );
+  }
+  if (/unaided/i.test(view)) {
+    fail(
+      'no-unaided-percentage-on-a-spelling-test',
+      'WordStudyView mentions "unaided". Hearing the word IS the test here — an unaided number ' +
+        'would mean nothing, and somebody would grade her against it.'
+    );
+  }
+}
+
 // ---- report ----------------------------------------------------------------
 
 console.log('\nPetal & Pestle — word study check');
@@ -235,9 +431,10 @@ console.log(`  distinct words         ${seen.size}`);
 for (const n of notes) console.log(`  ${n}`);
 console.log(
   '\n  NOT TESTED HERE: whether these are the RIGHT words — that is Gigi’s\n' +
-    '  judgement, not a measurement — or whether she can spell them.\n' +
-    '  ⚠️ AND NOT THAT SHE CAN REACH THEM. THERE IS NO SCREEN YET. Green here\n' +
-    '  means the data is sound; the words are still paper.\n'
+    '  judgement, not a measurement — nor whether she can spell them, nor\n' +
+    '  whether the screen is any good in front of a child. It asserts the\n' +
+    '  screen EXISTS, is reachable from the nav, is knocked on by the planner,\n' +
+    '  and refuses to run mute. None of that is the same as it working.\n'
 );
 
 if (failures.length === 0) {

@@ -2324,3 +2324,59 @@ All seven are recorded in `readingCaps.js` — the six as commented lines kept i
 **There is no screen.** She cannot see a list, sit a test, or have a result recorded, and `db` has no table for one. Until that exists **this is paper** — and *correct and unreachable* is the failure this project has made six times, so it is written in the data file, in the check's own output, and here.
 
 **The carry-over rule is already decided and not yet implemented.** From `year-plan-03`, taken from Lamar's app: the list rotates on a strict 7-day cycle whether or not the test was passed; missed words carry into next week and are topped up to ten; **a test never taken carries the whole list forward, treated as fully missed, never silently dropped.**
+
+---
+
+## 53. THE WORDS GET A SCREEN, AND SOMETHING KNOCKS ON IT — v3.91
+
+**v3.90 shipped 320 spelling words and 320 vocabulary terms with nowhere to see them and no table to record a result.** It said so, in the data file, in the check's own output and in §52 — but saying so is not fixing it.
+
+**That is exactly the state the book reports sat in from v3.38 to v3.82.** Four months of existing, correctly, with nothing that ever said it was time. **Her record still holds zero writing marks**, and that number is what a door nobody knocks on produces.
+
+So Word Study has **a home in the nav** *and* **a button on the Language Arts block**, and `check-word-study` asserts both. ⚠️ **`check-links` caught the missing nav home**, exactly as it caught the reading check at v3.80 and for the same stated reason: every screen `App.jsx` can render has ONE home, so *"where am I"* and *"how do I get back"* always have an answer.
+
+### ⚠️ The word is never on screen while she types it
+
+That is the whole mechanism. She presses a flower, **the word is spoken**, and she types what she heard. A spelling test where the word is visible is a copying test.
+
+### ⚠️ And this inverts the read-aloud rule on purpose
+
+Everywhere else in this app, being read to **contaminates** the score. `unaidedPercent` exists (v3.80) because 63% of everything she has ever answered was read to her and nothing could tell a reading score from a listening one.
+
+**Here, hearing the word IS the test.** It is how every spelling test in every school works.
+
+So nothing on this screen records an unaided percentage, and **nothing ever should**. A number that means nothing is worse than no number, because somebody will grade her against it. The check fails if the word appears in the component at all — reading the **code**, with comments stripped.
+
+⚠️ **That stripping was itself a fix.** The first version of the assertion went red against the comment *explaining why there is no unaided percentage*. **An assertion satisfied by a comment is the mirror of a mutation that lands on one**, and this project has now met that family eight times.
+
+### ⚠️ If the device cannot speak, the test refuses to run
+
+**No silent fallback to showing her the word.** That would turn a spelling test into a copying exercise, write a grade to her Georgia record, and look completely normal on screen. The study list still works — a grown-up can read the words. The **test** says why it will not run, in words a grown-up can act on.
+
+### ⚠️ His carry-over rule is a calendar, and this app refuses one
+
+From `year-plan-03`, taken from Lamar's app:
+
+> *"The list rotates on a strict 7-day calendar whether or not the test was passed. Words missed carry into next week and are topped up to ten. A test never taken carries the whole list forward, treated as fully missed — never silently dropped."*
+
+**The seven days cannot come across.** §7.1: *a quarter is a sequence, not a set of dates.* Lifting a mechanism out of an app that has something this one deliberately does not is §38 — and it is what §44 caught when his book-report **due dates** were translated to her pace instead of copied.
+
+So the rotation is translated the same way: **the list rotates when her WEEK advances**, and her week advances when she finishes the lessons in it. That is `spineWeek`, which is already what *"week 3"* means everywhere else in this app.
+
+**What survives the translation is the part that matters: the list moves on whether or not she passed.** A rotation gated on passing is a child stuck on week 4 in April. The check asserts it by failing every word of week 1 and demanding the week still advance.
+
+### The three halves of the rule that are easy to lose
+
+- **A word she got right never comes back.** A word she missed does.
+- ⚠️ **A week never sat carries all ten**, treated as fully missed. **This is the half that stops a list being escaped by not sitting it**, and it has its own negative test.
+- ⚠️ **Carried words come first and are never displaced by new ones.** Moving her on from words she cannot spell makes the list decoration. When ten carried words fill the week, the engine reports **`stalled`** rather than going quiet — because a child stalling for a month is something a grown-up has to be **told**, not something for a check to notice later.
+
+### `db.version(12)`
+
+`spellingResults`, keyed by a **UUID** like `attempts` — because a week can be sat twice and keying on the week would silently destroy the first result. That is the `writingDrafts` lesson from v3.82, in a table that records marks rather than prose. The merge is a **union that never overwrites**. `BACKUP_VERSION` is 12, and `check-import` passed the schema change on its first run.
+
+**One ladder.** `gradeSpelling` uses `letterForPercent` — the same thirteen bands the Khan units and the book reports use. **v3.84 exists because this app once had two ladders that disagreed above 97% and put two different letters on one Georgia record.** The check compares against `letterForPercent(100)` directly rather than against a number typed here.
+
+### ⚠️ What this still does not do
+
+**It has never been in front of a child.** The check asserts the screen exists, is reachable, is knocked on, and refuses to run mute. **None of that is the same as it working.**

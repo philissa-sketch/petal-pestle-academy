@@ -507,6 +507,43 @@ db.version(11).stores({
 });
 
 /**
+ * v12 — HER SPELLING RESULTS.
+ *
+ * Keyed by `resultId`, a UUID, for the same reason `attempts` is: a sat test is
+ * a historical event, two machines can each hold one the other has never seen,
+ * and the merge must be a UNION that never overwrites. `listId` is indexed
+ * because the carry-over rule asks "was this week's list ever tested?" on every
+ * render, and "never taken" is treated as fully missed.
+ *
+ * ⚠️ NOT keyed by listId. A week can be sat twice — she can re-take — and
+ * keying on the week would silently destroy the first result. That is the
+ * writingDrafts lesson (v3.82) in a table that records marks rather than prose.
+ */
+db.version(12).stores({
+  meta: 'key',
+  strandStates: 'strandId',
+  answers: '++id, itemId, strandId, at',
+  sittings: '++id, startedAt',
+  ledger: 'entryId, currency, at',
+  requests: 'requestId, status, at',
+  journal: 'entryId, at, kind',
+  messages: 'messageId, at, from, readAt',
+  scheduleDays: 'dayKey',
+  attempts: 'attemptId, testId, dayKey, at',
+  reviewItems: 'questionId, dueOn, box',
+  lessonReads: 'lessonId, lastReadAt',
+  projects: 'projectId, doneAt',
+  khanGrades: 'gradeId, subject, at',
+  writingMarks: 'markId, pieceId, at',
+  itemEvents: 'eventId, questionId, evidenceSource, dayKey',
+  baselines: 'trackId',
+  goals: 'goalId, strandId, status, termId',
+  journalMarks: 'entryId, dayKey, at',
+  writingDrafts: 'slotId, updatedAt',
+  spellingResults: 'resultId, listId, dayKey, at'
+});
+
+/**
  * The version stamped on every backup this app writes, and the one it checks
  * on every backup it reads.
  *
@@ -515,7 +552,7 @@ db.version(11).stores({
  * hand-typed number in this project has drifted; check-import now asserts this
  * constant equals the highest db.version on disk, so the next one cannot.
  */
-export const BACKUP_VERSION = 11;
+export const BACKUP_VERSION = 12;
 
 export const EXPORT_TABLE_POLICY = {
   meta: true,
@@ -546,7 +583,11 @@ export const EXPORT_TABLE_POLICY = {
   // Added v11. HER OWN WORDS in a book report — the artifact the portfolio is
   // actually made of. It carries more of her writing than anything else in this
   // table, so it is the last thing that may be dropped from a backup.
-  writingDrafts: true
+  writingDrafts: true,
+  // Added v12. Her spelling results. Travels: it is the only record that a
+  // spelling test was ever sat, and the carry-over rule reads it to decide
+  // what follows her into next week.
+  spellingResults: true
 };
 
 db.on('blocked', () => window.dispatchEvent(new CustomEvent('pp-db-blocked')));
@@ -809,7 +850,7 @@ export async function previewImport(data) {
   const [
     answers, strandStates, journal, messages, ledger, sittings, scheduleDays, attempts,
     lessonReads, projects, khanGrades, writingMarks, requests, itemEvents, baselines, goals,
-    journalMarks, writingDrafts
+    journalMarks, writingDrafts, spellingResults
   ] = await Promise.all([
       db.answers.toArray(),
       db.strandStates.toArray(),
@@ -828,7 +869,8 @@ export async function previewImport(data) {
       db.baselines.toArray(),
       db.goals.toArray(),
       db.journalMarks.toArray(),
-      db.writingDrafts.toArray()
+      db.writingDrafts.toArray(),
+      db.spellingResults.toArray()
     ]);
   const haveAttempts = new Set(attempts.map((a) => a.attemptId));
   const haveLessons = new Set(lessonReads.map((l) => l.lessonId));
@@ -848,6 +890,7 @@ export async function previewImport(data) {
   const haveGoals = new Set(goals.map((g) => g.goalId));
   const haveJournalMarks = new Set(journalMarks.map((m) => m.entryId));
   const haveDrafts = new Map(writingDrafts.map((w) => [w.slotId, w]));
+  const haveSpelling = new Set(spellingResults.map((r) => r.resultId));
   const localStrands = new Map(strandStates.map((s) => [s.strandId, s]));
 
   const inAnswers = data.answers || [];
@@ -954,6 +997,10 @@ export async function previewImport(data) {
       incoming: (data.writingDrafts || []).length,
       new: (data.writingDrafts || []).filter((w) => !haveDrafts.has(w.slotId)).length
     },
+    spellingResults: {
+      incoming: (data.spellingResults || []).length,
+      new: (data.spellingResults || []).filter((r) => !haveSpelling.has(r.resultId)).length
+    },
     journalMarks: {
       incoming: (data.journalMarks || []).length,
       new: (data.journalMarks || []).filter((m) => !haveJournalMarks.has(m.entryId)).length
@@ -987,6 +1034,7 @@ export async function importBackup(data) {
     db.journal, db.messages, db.scheduleDays,
     db.attempts, db.reviewItems, db.lessonReads, db.projects, db.khanGrades,
     db.writingMarks, db.itemEvents, db.baselines, db.goals, db.journalMarks, db.writingDrafts,
+    db.spellingResults,
     async () => {
       // ---- answers: append only what is genuinely new, id stripped ----
       const existing = new Set((await db.answers.toArray()).map(answerKey));
@@ -1114,6 +1162,15 @@ export async function importBackup(data) {
       // it — so the later edit wins, the opposite of a baseline.
       // v11 — her own words, merged field by field so nothing she wrote is
       // dropped by a stale file being newer. See pickWritingDraft.
+      // ---- spelling results: union, keyed by UUID, incoming never clobbers ----
+      //
+      // A sat spelling test is a historical event, exactly like an attempt. Two
+      // machines can each hold one the other has never seen, and there is no
+      // version of this where overwriting one is right.
+      for (const r of data.spellingResults || []) {
+        if (!(await db.spellingResults.get(r.resultId))) await db.spellingResults.put(r);
+      }
+
       for (const w of data.writingDrafts || []) {
         if (!w || !w.slotId) continue;
         const local = await db.writingDrafts.get(w.slotId);
@@ -1168,7 +1225,7 @@ export async function exportAll() {
   const [
     meta, strandStates, answers, sittings, ledger, requests, journal, messages, scheduleDays,
     attempts, reviewItems, lessonReads, projects, khanGrades, writingMarks,
-    itemEvents, baselines, goals, journalMarks, writingDrafts
+    itemEvents, baselines, goals, journalMarks, writingDrafts, spellingResults
   ] = await Promise.all([
       db.meta.toArray(),
       db.strandStates.toArray(),
@@ -1189,7 +1246,8 @@ export async function exportAll() {
       db.baselines.toArray(),
       db.goals.toArray(),
       db.journalMarks.toArray(),
-      db.writingDrafts.toArray()
+      db.writingDrafts.toArray(),
+      db.spellingResults.toArray()
     ]);
   // The passcode is a household convenience, not a secret worth exporting.
   const safeMeta = meta.filter((m) => m.key !== 'parentPasscode');
@@ -1248,7 +1306,8 @@ export async function exportAll() {
     // could sit on the record with nothing she wrote behind them. This is the
     // densest piece of her own writing the app holds, and Georgia asks for the
     // portfolio, not the tick.
-    writingDrafts
+    writingDrafts,
+    spellingResults
   };
 }
 
@@ -1328,6 +1387,15 @@ export async function readWritingDrafts() {
  * thing this whole table exists to prevent: they should be impossible to
  * separate.
  */
+export async function loadSpellingResults() {
+  return db.spellingResults.toArray();
+}
+
+/** Append one sat spelling test. Never an update — see db.version(12). */
+export async function putSpellingResult(row) {
+  await db.spellingResults.put(row);
+}
+
 export async function putWritingDraft(row) {
   await db.writingDrafts.put({ ...row, updatedAt: new Date().toISOString() });
 }
