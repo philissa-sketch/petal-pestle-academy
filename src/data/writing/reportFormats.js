@@ -5,7 +5,7 @@
 //
 // Gigi, Aug 25 2026: "do the book report like Lamar's."
 //
-// ⚠️ AND v3.82 BUILT IT FROM HIS NOTES INSTEAD OF HIS APP. `Lamar DOC` holds
+// ⚠️ AND v3.82 BUILT IT FROM HIS NOTES INSTEAD OF HIS APP. `Lamar DOC` held
 // documents and no code, newest file Aug 16. His running app was mounted the
 // whole time, with `reportFormats.js` updated Aug 25 at 22:05 — nine days
 // newer — and nobody opened it.
@@ -13,6 +13,11 @@
 // That is §38, committed in the version that quoted §38. A document about an
 // app is not the app, and this time the app itself was sitting right there.
 // Everything below is read off his code.
+//
+// ⚠️ `Lamar DOC` NO LONGER EXISTS. Gigi deleted it on Aug 26 2026, the same day,
+// which is the cleanest possible fix: a stale copy of his thinking cannot be
+// mistaken for his app if there is no stale copy. The folder is named here as
+// HISTORY — do not go looking for it. His app is the only source now.
 //
 // ---- HIS REASON, WHICH IS THE WHOLE POINT ----
 //

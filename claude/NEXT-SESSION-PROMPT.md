@@ -85,15 +85,20 @@ I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nin
 
 **Rewritten Aug 26 2026, because the old version of this section caused the mistake it was written to prevent.**
 
-There are **two** folders and they are not the same thing:
+**There is now exactly one, and that is the point.**
 
-| `...\petal-pestle-academy\Lamar DOC` | **Documents only. No code.** Newest file **Aug 16.** |
+| `...\mission-control-homeschool-school-start-gate\mission-control-homeschool` | **His running app.** Source, data, checks, and his docs — all current. |
 |---|---|
-| `...\mission-control-homeschool-school-start-gate\mission-control-homeschool` | **His running app.** Source, data, checks, and docs updated **Aug 25.** |
 
-**READ THE SECOND ONE.** Gigi's instruction, Aug 26 2026: read his app directly.
+**Read it directly.** Gigi's instruction, Aug 26 2026.
 
-**Both are READ-ONLY. Never write to either.** ⚠️ On Aug 26 a session ran a write test to *confirm* `Lamar DOC` was read-only. It was not — the file was created and then could not be deleted, and Gigi had to remove it by hand. **A rule that is already written down does not need testing. It needs obeying.**
+### ⚠️ `Lamar DOC` is gone — Gigi deleted it on Aug 26, and do not go looking for it
+
+It held **documents and no code**, newest file **Aug 16**, and it caused two wrong answers in three days (below). Deleting it removed the trap at the source: there is no longer a stale copy of his thinking that can be mistaken for his app.
+
+**If a comment anywhere in this project still points at `Lamar DOC`, it is describing history, not a path to open.** The build log and the master plan name it on purpose — that is the record of what happened and it is not rewritten.
+
+**His app is READ-ONLY. Never write to it.** ⚠️ On Aug 26 a session ran a write test to *confirm* `Lamar DOC` refused writes. It did not — the file was created and then could not be deleted. **A rule that is already written down does not need testing. It needs obeying.**
 
 ### Why this section changed
 
