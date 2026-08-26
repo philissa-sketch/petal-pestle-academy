@@ -34,6 +34,27 @@ local/
 *her-backup*.json
 her-*.json
 
+# ---- ⚠️ ADDED Aug 26 2026, AND IT WAS ALREADY LIVE WHEN IT WAS ADDED ----
+#
+# Gigi made a "Backup folder" to keep her exports in, which is exactly the right
+# habit — and the file she put in it is called
+# `petal-pestle-backup-2026-08-26.json`.
+#
+# NONE OF THE FOUR PATTERNS ABOVE MATCH THAT NAME. `*her-backup*.json` needs the
+# words "her-backup"; hers says "petal-pestle-backup". So a 93KB file carrying 99
+# rows of her record — her name, her nine measured levels, her journal in her own
+# words — was sitting in the folder, unignored, one commit away from a PUBLIC
+# repository. check-publish-safety caught it, which is the entire reason it walks
+# every JSON on disk and identifies an export by its STRUCTURE rather than by its
+# name (v3.73's lesson: a word scan misses a renamed file).
+#
+# So the FOLDER is excluded, not a filename pattern. She will name the next one
+# whatever the app suggests, and a rule that depends on her choosing a filename
+# is a rule that fails the first time she does not.
+Backup folder/
+Backup Folder/
+backup folder/
+
 # The scratch copies from v3.72's negative tests — eleven of them. This folder
 # is meant to be moved out of the project entirely; the ignore is the belt as
 # well as the braces.

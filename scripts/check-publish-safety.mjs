@@ -435,6 +435,22 @@ if (existsSync(DIST)) {
           'at all. The repository being private is the SECOND guard, not this one.'
       },
       { path: '_to_delete/her-latest-export.json', why: 'one of eleven old copies of her record' },
+      {
+        // ⚠️ ASSERTED BY NAME because on Aug 26 2026 it was NOT excluded and the
+        // repository is public. Gigi made a folder to keep her exports in — the
+        // right habit — and named the file petal-pestle-backup-2026-08-26.json,
+        // which none of the four her-* patterns match. The folder is excluded
+        // now rather than a filename pattern, because a rule that depends on her
+        // choosing a filename fails the first time she does not.
+        path: 'Backup folder/petal-pestle-backup-2026-08-26.json',
+        why: 'the folder she keeps her exports in — 99 rows of her record, and the repo is PUBLIC'
+      },
+      {
+        // The same folder, a name she has not used yet. If the exclusion is ever
+        // narrowed back to one filename this catches it.
+        path: 'Backup folder/anything-she-saves-next.json',
+        why: 'the NEXT export she saves there, whatever she calls it'
+      },
       { path: 'node_modules/react/package.json', why: '59MB, and Netlify installs it itself' },
       { path: 'dist/index.html', why: 'Netlify builds it, and dist/ has carried her export before' }
     ];
