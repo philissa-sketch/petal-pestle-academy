@@ -425,7 +425,11 @@ if (existsSync(DIST)) {
      */
     const PROTECTED = [
       { path: 'local/her-latest-export.json', why: 'her live record' },
-      { path: 'claude/her-backup-2026-08-18.json', why: 'her raw backup' },
+      // Moved to _to_delete/ during the Aug 26 clean-up. The path is still
+      // asserted because isIgnored() tests the RULE, not the file: if a backup
+      // ever lands here again it must still be excluded.
+      { path: 'claude/her-backup-2026-08-18.json', why: 'her raw backup (moved out Aug 26 — the rule still has to hold)' },
+      { path: '_to_delete/her-backup-2026-08-18.json', why: 'where that backup now sits' },
       {
         path: 'claude/azianna-diagnostic-results.md',
         why:

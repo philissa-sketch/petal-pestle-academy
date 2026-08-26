@@ -16,7 +16,7 @@ You are writing lessons for **Petal & Pestle Academy**, my 9-year-old granddaugh
 
 Read these first:
 
-- `claude/petal-pestle-v3.28-quarter-1-complete.md` — **what just happened, and the four rules that came out of it**
+- `claude/petal-pestle-build-log.md` — **every version, every bug, and the rules that came out of them.** *(The per-version delivery notes this line used to point at were moved to `_to_delete/` on Aug 26 2026 — the build log supersedes all of them.)*
 - `claude/science-lab-q1-videos-verified.md` — the 24 Quarter 1 videos, all re-verified Aug 16
 - `claude/petal-pestle-master-plan.md` and `claude/petal-pestle-build-log.md` — the plan, the history, the locked decisions
 - `claude/post-build-backlog-gigi.md` — my list, in my words
