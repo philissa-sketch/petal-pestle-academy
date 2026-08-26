@@ -1800,7 +1800,7 @@ export function ParentDashboard({ onExit }) {
   const [tab, setTab] = useState('report');
   const [confirmText, setConfirmText] = useState('');
 
-  const plan = buildActionPlan(strands);
+  const plan = buildActionPlan(strands, grades);
   const rows = planRows(plan);
 
   // Read-aloud usage, split by whether it landed on a strand where hearing the

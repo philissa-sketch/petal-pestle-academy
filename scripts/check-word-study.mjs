@@ -50,10 +50,10 @@
 //   · That these are the RIGHT words. Whether "bean" earns a spelling slot is
 //     a judgement for Gigi, and a check that pretended to make it would be
 //     dressing an opinion as a measurement.
-//   · That she can spell them. Nothing here has been in front of her.
-//   · Whether she can actually spell them, or whether the SCREEN works. This
-//     asserts the screen exists, is reachable and refuses to run mute. It has
-//     never been in front of a child.
+//   · Whether she can spell them, or whether the SCREEN works. This asserts the
+//     screen exists, is reachable from the nav, is knocked on by the planner,
+//     and refuses to run mute. NONE OF THAT IS THE SAME AS IT WORKING, and it
+//     has never been in front of a child.
 //
 // NOTE ON REGEXES BELOW: no quote character appears inside a character class —
 // see the header of check-version-stamp.mjs.

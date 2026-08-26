@@ -11,17 +11,25 @@
 // ---------------------------------------------------------------------------
 
 import { STRANDS, getStrand } from '../config/strands.js';
-import { khanFor } from '../data/khan/khanMap.js';
+import { unitForStrand } from '../data/khan/khanMap.js';
 import { confidenceFor, describeLevel } from '../engine/diagnosticEngine.js';
 
 export const FOCUS_COUNT = 3;
 
 /**
  * @param strands  the store's strand-state map
+ * @param grades   her recorded Khan grades — REQUIRED for the unit to be right
  * @returns { focus, steady, stretch, unmeasured } — every measured strand
  *          appears in exactly one bucket, each already carrying its Khan link.
+ *
+ * ⚠️ `grades` WAS NOT A PARAMETER UNTIL v3.92, AND THAT WAS THE BUG. Without it
+ * this file could only ask `khanFor`, whose unit is a static label from the
+ * v3.20 era — so Home said "Measurement" while the Mathematics block opened
+ * "Unit 5 · Money and time". Found by opening the live site and reading it.
+ * `unitForStrand` is the one answer now, and it needs her grades to know how
+ * far along her lane she is.
  */
-export function buildActionPlan(strands) {
+export function buildActionPlan(strands, grades = []) {
   const measured = [];
   const unmeasured = [];
 
@@ -37,7 +45,7 @@ export function buildActionPlan(strands) {
       level: state.level,
       confidence: confidenceFor(state),
       described: describeLevel(state.level),
-      khan: khanFor(strand.id, state.level),
+      khan: unitForStrand(strand.id, state.level, grades),
       accuracy: state.asked > 0 ? state.correct / state.asked : 0
     });
   }

@@ -191,12 +191,16 @@ export function HomeDashboard({ onNavigate }) {
   const rank = useAppStore((s) => s.rank());
   const progress = useAppStore((s) => s.progress());
   const answered = useAppStore((s) => s.totalAnswered());
+  // v3.92 — her grades decide how far along her lane she is. Read ABOVE the
+  // NameGate early return, because check-hooks asserts every hook runs before
+  // every one of them.
+  const khanGrades = useAppStore((s) => s.khanGrades);
 
   if (!name) return <NameGate onSave={setLearnerName} />;
 
   const next = getNextRank(rank.tier);
   const toNext = progressToNext(answered, progress.settledCount, rank);
-  const plan = buildActionPlan(strands);
+  const plan = buildActionPlan(strands, khanGrades);
   const started = answered > 0;
   const greeting = greetingFor({ progress, answered, streak, name });
   const daily = dailyLine();

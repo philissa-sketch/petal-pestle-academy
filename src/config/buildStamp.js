@@ -20,12 +20,25 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.91';
+export const VERSION = '3.92';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.92',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⚠️⚠️ THIS APP HAD TWO ANSWERS TO "WHICH UNIT IS SHE ON", AND THEY DISAGREED ON HER SCREEN. Her Home dashboard said "2nd Grade Math → Measurement" while the Mathematics block on Today opened "Unit 5 · Money and time". Both were live. Both were wrong to be two.',
+      'HOME ASKED khanFor, whose `unit` is a STATIC LABEL written into KHAN_MAP in the v3.20 era, when a strand had exactly one unit. THE BLOCK ASKED nextUnitForStrand, which walks the lane v3.81 gave her: measurement-data is [5, 6, 7] and she starts at the first. KHAN_MAP still carried unitN: 6 because Unit 6 is the one CALLED Measurement.',
+      '⚠️ AND GEOMETRY AGREED IN BOTH — lane [8], map unitN 8 — WHICH IS EXACTLY WHY NOBODY NOTICED. Measurement & Data is the only strand with a MULTI-UNIT lane, so it is the only place the two definitions could diverge. Two implementations of one metric, agreeing everywhere anyone looked and disagreeing in one place: v3.78, v3.84, and now this. THIRD TIME.',
+      '⚠️ AND IT WAS FOUND BY OPENING THE LIVE SITE AND READING IT, NOT BY A CHECK. All 38 were green while it was on screen. That is the uncomfortable part and it is why the fix is a check rather than an edit: check-strand-lanes now drives the two REAL entry points — buildActionPlan and unitForStrand — and fails if they name a different unit or a different unit NUMBER. Asserting it by calling one shared function twice would have asserted nothing.',
+      'ONE FUNCTION NOW. unitForStrand lives in khanMap.js, the lane decides when a strand has one, and the KHAN_MAP label is the answer only when it does not. ⚠️ It OVERWRITES `unit` rather than adding a new field beside it: every screen already renders khan.unit, and leaving the stale value in the field the components actually read is how this survived in the first place.',
+      'buildActionPlan takes her GRADES now. It could not have been right without them — how far along a lane she is depends on what she has finished — and the three screens that call it, Home, My Plan and the Grown-Up Corner, all pass them. ⚠️ check-hooks caught the new selector sitting BELOW the NameGate early return on the way in.',
+      'TWO NEGATIVE TESTS, BOTH RED: the bug reintroduced exactly as it shipped, and the lane quietly reshaped to start at unit 6 so it would agree with the stale label. Gigi\u2019s original note — "Measurement 2.44 is Unit 6" — was reading the Home card, and was a correct reading of the wrong definition. She was not mistaken; the app was.'
+    ]
+  },
   {
     version: '3.91',
     date: 'Aug 26, 2026',

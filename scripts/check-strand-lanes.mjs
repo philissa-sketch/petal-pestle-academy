@@ -58,6 +58,8 @@ const {
 } = await load('src/data/khan/khanUnits.js');
 const { STRAND_IDS } = await load('src/config/strands.js');
 const { resolveBlockTarget } = await load('src/lib/blockLinks.js');
+const { unitForStrand } = await load('src/data/khan/khanMap.js');
+const { buildActionPlan } = await load('src/lib/actionPlan.js');
 
 const errors = [];
 const notes = [];
@@ -280,6 +282,86 @@ if (!errors.length) notes.push('every lane starts at its first unit and walks in
     );
   } else {
     notes.push(`Measurement & Data 2.50 opens unit ${t.unitN}, not unit 1`);
+  }
+}
+
+// ---- 7. ⚠️ HER PLAN AND HER BLOCK NAME THE SAME UNIT — v3.92 -------------
+//
+// ---- HOW THIS WAS FOUND, WHICH IS THE UNCOMFORTABLE PART ----
+//
+// By OPENING THE LIVE SITE AND READING IT. Not by a check. All 38 were green
+// while her Home dashboard said "2nd Grade Math → Measurement" and the
+// Mathematics block on Today opened "Unit 5 · Money and time".
+//
+// Home asked `khanFor`, whose `unit` is a static label written into KHAN_MAP in
+// the v3.20 era, when a strand had exactly one unit. The block asked
+// `nextUnitForStrand`, which walks the lane v3.81 gave her.
+//
+// ⚠️ AND GEOMETRY AGREED IN BOTH — lane [8], map unitN 8. Measurement is the
+// only strand with a MULTI-UNIT lane, so it is the only place the two could
+// diverge. Two implementations of one metric agreeing everywhere anyone looked
+// and disagreeing in one place is v3.78, v3.84, and now this. THIRD TIME.
+//
+// There is one function now, `unitForStrand`, and both callers use it. This
+// asserts that — through the two REAL entry points, not by calling the shared
+// function twice and watching it agree with itself, which would assert nothing.
+
+{
+  // A record with every strand measured and NO Khan grades: her actual state,
+  // and the state in which a lane is at its first unit.
+  const strands = {};
+  for (const id of STRAND_IDS) {
+    strands[id] = { strandId: id, level: 2.44, asked: 6, correct: 3, settled: true };
+  }
+  // Spread the levels so each strand lands in a different band rather than all
+  // nine resolving identically — a fixture where everything is the same value
+  // can agree for reasons that have nothing to do with the rule.
+  const spread = [2.35, 2.44, 2.67, 2.67, 2.91, 2.98, 3.46, 3.48, 3.89];
+  STRAND_IDS.forEach((id, i) => { strands[id].level = spread[i % spread.length]; });
+
+  const plan = buildActionPlan(strands, []);
+  const buckets = [...plan.focus, ...plan.steady, ...plan.stretch];
+
+  if (buckets.length === 0) {
+    fail(
+      'the-plan-produced-strands-to-compare',
+      'buildActionPlan returned no measured strands, so this assertion compared nothing. A check ' +
+        'that silently matches nothing is the shape run-all-checks refuses.'
+    );
+  }
+
+  let compared = 0;
+  for (const row of buckets) {
+    const direct = unitForStrand(row.strand.id, row.level, []);
+    if (!direct || !row.khan) continue;
+    compared += 1;
+
+    if (row.khan.unit !== direct.unit) {
+      fail(
+        'the-plan-names-the-unit-the-lane-gives-her',
+        `the action plan says ${row.strand.label} opens "${row.khan.unit}" and unitForStrand says ` +
+          `"${direct.unit}". Home, My Plan and the Grown-Up Corner all render this field. This is ` +
+          `the v3.92 bug: a static KHAN_MAP label disagreeing with the lane she actually walks.`
+      );
+    }
+    if (row.khan.unitN !== direct.unitN) {
+      fail(
+        'the-plan-names-the-unit-NUMBER-the-lane-gives-her',
+        `${row.strand.label}: the plan carries unit ${row.khan.unitN}, the lane gives ${direct.unitN}. ` +
+          `Measurement & Data is the strand this diverges on — KHAN_MAP says 6 because Unit 6 is ` +
+          `CALLED Measurement, and the lane [5,6,7] starts at 5, "Money and time".`
+      );
+    }
+  }
+
+  if (compared === 0) {
+    fail(
+      'something-was-actually-compared',
+      'not one strand in the action plan could be compared against unitForStrand. The shapes have ' +
+        'drifted apart and this assertion is reading data it cannot understand.'
+    );
+  } else {
+    notes.push(`plan vs lane: ${compared} strands, same unit and same unit number`);
   }
 }
 

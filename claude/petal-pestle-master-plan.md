@@ -2380,3 +2380,46 @@ So the rotation is translated the same way: **the list rotates when her WEEK adv
 ### ⚠️ What this still does not do
 
 **It has never been in front of a child.** The check asserts the screen exists, is reachable, is knocked on, and refuses to run mute. **None of that is the same as it working.**
+
+---
+
+## 54. TWO ANSWERS TO ONE QUESTION, ON HER SCREEN — v3.92
+
+**Her Home dashboard said "2nd Grade Math → Measurement". The Mathematics block on Today opened "Unit 5 · Money and time".** Both were live, both were shipped, and both were wrong to be two.
+
+| Where | What it asked | What it said |
+|---|---|---|
+| Home, My Plan, the Grown-Up Corner | `khanFor()` — a **static label** in `KHAN_MAP` | Unit 6 · Measurement |
+| The Mathematics block on Today | `nextUnitForStrand()` — walks her **lane** | Unit 5 · Money and time |
+
+`KHAN_MAP` carries `unitN: 6` for measurement-data, written in the **v3.20 era when a strand had exactly one unit**, and Unit 6 is the one *called* "Measurement". `STRAND_LANES` gives her `[5, 6, 7]`, and **§43 says she starts at the first unit of her lane and skips nothing.**
+
+### ⚠️ Geometry agreed in both, which is why nobody noticed
+
+Lane `[8]`, map `unitN: 8`. **Measurement & Data is the only strand in this app with a multi-unit lane**, so it is the only place the two definitions can possibly diverge.
+
+**Two implementations of one metric, agreeing everywhere anyone looked and disagreeing in exactly one place.** That is §40's annual-report bug, it is §46's two grading ladders — which agreed below 97% and disagreed above it — and it is now this. **Third time.**
+
+### ⚠️ And it was found by opening the live site and reading it
+
+Not by a check. **All 38 were green while it was on the screen.**
+
+That is the uncomfortable part, and it is why the fix is a check rather than an edit. `check-strand-lanes` now drives the **two real entry points** — `buildActionPlan` and `unitForStrand` — and fails if they name a different unit or a different unit *number*.
+
+⚠️ **Asserting it by calling one shared function twice and watching it agree with itself would have asserted nothing.** That is the adjacency trap in its purest form: a check that measures its own yardstick.
+
+### One function, and it overwrites rather than sits beside
+
+`unitForStrand` lives in `khanMap.js` — which already imports `khanUnits.js`, so there is no cycle. The lane decides when a strand has one; the `KHAN_MAP` label is the answer only when it does not.
+
+⚠️ **It overwrites `unit` rather than adding `unitLabel` next to it.** Every screen in this app already renders `khan.unit`. Adding a correct field beside a stale one would leave the wrong answer sitting in the field the components actually read — **which is precisely how this bug survived from v3.81 to v3.92.** One field, one answer.
+
+`buildActionPlan` takes her **grades** now. It could never have been right without them: how far along a lane she is depends on what she has finished. All three callers — Home, My Plan, the Grown-Up Corner — pass them.
+
+⚠️ **`check-hooks` caught the new selector sitting below the `NameGate` early return** on the way in, which is exactly what it is for.
+
+### ⭐ And Gigi's note was right
+
+Her handover said *"Measurement 2.44 is Unit 6."* An earlier session in this same conversation told her that disagreed with the disk.
+
+**It did not. She was reading the Home card, and she read it correctly.** What she had was a correct reading of the wrong definition — because the app was giving two. **She was not mistaken; the app was.** Telling a person their note is wrong when the software is the thing that is wrong is its own kind of failure, and it is worth writing down beside the bug that caused it.

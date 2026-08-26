@@ -66,7 +66,11 @@ function Row({ entry }) {
 export function PlanView({ onNavigate }) {
   const strands = useAppStore((s) => s.strands);
   const progress = useAppStore((s) => s.progress());
-  const plan = buildActionPlan(strands);
+  // v3.92 — her grades decide how far along her lane she is. Without them this
+  // screen printed a static label from the v3.20 era and disagreed with the
+  // block that actually opens Khan.
+  const khanGrades = useAppStore((s) => s.khanGrades);
+  const plan = buildActionPlan(strands, khanGrades);
 
   if (plan.measuredCount === 0) {
     return (

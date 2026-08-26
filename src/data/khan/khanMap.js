@@ -24,7 +24,7 @@
 // real child — her vocabulary came out at exactly 2.91. A band boundary has to
 // sit immediately below the next whole grade, not a tenth below it.
 
-import { unitUrl as khanUnitUrl } from './khanUnits.js';
+import { unitUrl as khanUnitUrl, nextUnitForStrand } from './khanUnits.js';
 
 export const KHAN_COURSES = {
   math1: { label: '1st Grade Math', url: 'https://www.khanacademy.org/math/cc-1st-grade-math' },
@@ -220,5 +220,65 @@ export function khanFor(strandId, level) {
     unitUrl,
     unitCourse: band.unitCourse || null,
     unitN: band.unitN || null
+  };
+}
+
+/**
+ * ---------------------------------------------------------------------------
+ * THE ONE ANSWER TO "WHICH UNIT IS SHE ON" — v3.92.
+ *
+ * ---- ⚠️ THIS APP HAD TWO, AND THEY DISAGREED ON HER SCREEN ----
+ *
+ * Found Aug 26 2026 by opening the LIVE SITE and reading it, not by running a
+ * check. Her Home dashboard said "2nd Grade Math → Measurement" while the
+ * Mathematics block on Today opened "Unit 5 · Money and time".
+ *
+ *   · Home asked `khanFor()`, whose `unit` is a STATIC LABEL written into
+ *     KHAN_MAP in the v3.20 era, when a strand had exactly one unit.
+ *   · The block asked `nextUnitForStrand()`, which walks the lane v3.81 gave
+ *     her: measurement-data is [5, 6, 7], and she starts at the first.
+ *
+ * KHAN_MAP still carries `unitN: 6` for measurement-data because Unit 6 is the
+ * one CALLED "Measurement". The lane starts at Unit 5, "Money and time".
+ *
+ * ⚠️ AND GEOMETRY AGREES IN BOTH — lane [8], map unitN 8 — WHICH IS EXACTLY WHY
+ * NOBODY NOTICED. Measurement is the only strand with a multi-unit lane, so it
+ * is the only place the two definitions can diverge. Two implementations of one
+ * metric, agreeing everywhere anyone looked, disagreeing in one place: v3.78,
+ * v3.84, and now here. THIRD TIME.
+ *
+ * So there is one function, and both callers use it. The lane decides when a
+ * strand has one; the KHAN_MAP label is the answer only when it does not.
+ * ---------------------------------------------------------------------------
+ */
+export function unitForStrand(strandId, level, grades = []) {
+  const khan = khanFor(strandId, level);
+  if (!khan) return null;
+
+  // No unit-level course behind this band — the map label is all there is.
+  if (!khan.unitCourse) {
+    return { ...khan, unitLabel: khan.unit, unitN: khan.unitN, onLane: false, fromLane: false };
+  }
+
+  const picked = nextUnitForStrand(khan.unitCourse, strandId, grades);
+  if (!picked || !picked.unit) {
+    // Every unit in her lane is graded. The caller decides what that means —
+    // blockLinks offers the Course Challenge only when the WHOLE course is done.
+    return { ...khan, unitLabel: null, unitN: null, onLane: Boolean(picked?.lane), fromLane: true };
+  }
+
+  return {
+    ...khan,
+    // ⚠️ `unit` IS OVERWRITTEN ON PURPOSE, not shadowed by a new field.
+    // Every screen in this app already renders `khan.unit`. Adding `unitLabel`
+    // beside a stale `unit` would leave the wrong answer sitting in the field
+    // the components actually read — which is how this bug survived in the
+    // first place. One field, one answer.
+    unit: picked.unit.name,
+    unitLabel: picked.unit.name,
+    unitN: picked.unit.n,
+    unitUrl: khanUnitUrl(khan.unitCourse, picked.unit.n),
+    onLane: Boolean(picked.lane),
+    fromLane: true
   };
 }
