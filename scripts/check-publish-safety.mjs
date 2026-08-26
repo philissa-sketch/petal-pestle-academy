@@ -436,7 +436,11 @@ if (existsSync(DIST)) {
           'her FULL EDUCATIONAL ASSESSMENT — all nine measured levels, the item detail behind ' +
           'each, and how often she needed a question read aloud. Mission Control’s rule, ' +
           'which this repo mirrors: anything that would be a problem in public does not go in ' +
-          'at all. The repository being private is the SECOND guard, not this one.'
+          'at all. ⚠️ CORRECTED Aug 26 2026 — this line used to end "the repository being ' +
+          'private is the SECOND guard, not this one." THAT WAS FALSE AND IT WAS COPIED FROM ' +
+          'LAMAR’S REPO, WHICH IS PRIVATE. This one is public and Gigi confirmed it stays ' +
+          'public. There is no second guard. This assertion is the only thing standing ' +
+          'between her assessment and a commit that cannot be taken back.'
       },
       { path: '_to_delete/her-latest-export.json', why: 'one of eleven old copies of her record' },
       {

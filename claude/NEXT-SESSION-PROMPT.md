@@ -41,7 +41,10 @@ I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nin
 10. **Restart the dev server after every update** — I do this, you cannot. Remind me.
 11. **A rule the app must follow lives in the ENGINE or a lib, where a check can test it.**
 12. **Do not copy files from your uploads folder over files on my disk. Edit in place.**
-13. **You cannot delete on my machine.** `mv` a FILE into `_to_delete/` and tell me what you moved. **You cannot move a FOLDER** — moving is copy-then-remove. Give me the command.
+13. **You cannot DELETE on my machine, and that is the only limit.** `mv` anything you want gone into `_to_delete/` and tell me what you moved. Then I run **one** `rmdir` on that folder.
+    - ⚠️ **CORRECTED Aug 26 2026. This rule used to say "you cannot move a FOLDER — moving is copy-then-remove." THAT WAS FALSE and it had never been tested.** A move inside one drive is a *rename*, not a copy: it does not read the folder, does not need space, and works on a folder as well as a file. It works across the parent boundary too. I said so, a session tested it in ten seconds, and it worked both ways first time. **The rule had been costing me six hand-typed `rmdir` commands per clean-up for no reason.**
+    - **You can also CREATE folders.** That was never in doubt but was never written down either.
+    - ⚠️ **The lesson is not about folders.** It is that a limit written into this document gets obeyed for months without anyone checking whether it is real. **A rule already written down needs obeying — but a rule that was never tested needs testing once, and this is the second false one found in three days** (the other: "the repository being private is the second guard").
 14. **⚠️ DO NOT RUN `git` COMMANDS AGAINST MY FOLDER.** Even `git status` writes `.git/index.lock`, you cannot remove it, and **GitHub Desktop then refuses to commit**. Read files directly. **I use GitHub Desktop.** Your changes appear in its Changes tab on their own; I commit and push.
 15. **Update the master plan and the build log when you finish a version**, and bump `src/config/buildStamp.js`.
 16. **Use a curly apostrophe in JSX text.** A straight one breaks check-jsx's parser.
@@ -143,7 +146,13 @@ I made a **`Backup folder`** in the project to keep my exports in. The file I pu
 **1. ⚠️ The repository is PUBLIC and the reasoning beside that decision assumes it is private.**
 `.gitignore` and `check-publish-safety` both say *"the repository being private is the SECOND guard"* — copied from Lamar's repo, which **is** private. Mine is not. **"Azianna" appears 18 times in the build log and 16 in the master plan**, beside her measured levels. Her export uses "PrettyGlow", so it is a first name, not a full one. **My call, still unmade.** Three options: flip to private · leave public and rewrite the two false sentences · pull the two documents out.
 
-**2. Folders I have to remove myself** — you cannot move folders:
+**2. ⭐ DONE Aug 26 — everything below was moved into `_to_delete/` by a session, folders included.** `dist`, `_archive-test`, `.pp-drop` and `pp-update` all moved; `Lamar DOC` I removed myself. **One command left, and it is the only one I ever need:**
+
+```
+rmdir /s /q "C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy\_to_delete"
+```
+
+*The old list is kept below only to show what it used to cost.*
 
 ```
 rmdir /s /q "C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy\_to_delete"

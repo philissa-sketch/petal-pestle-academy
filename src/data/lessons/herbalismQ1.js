@@ -82,6 +82,12 @@
 export const HERBALISM_Q1 = [
   {
     id: 'hb-1-01',
+    course: 'herbalism',
+    module: 2,
+    quarter: 1,
+    week: 3,
+    day: 1,
+    standards: [],
     video: {
       id: '18amLZ9vfG8',
       url: 'https://www.youtube.com/watch?v=18amLZ9vfG8',
@@ -155,6 +161,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-02',
+    course: 'herbalism',
+    module: 2,
+    quarter: 1,
+    week: 3,
+    day: 2,
+    standards: [],
     video: {
       id: '11h_7lnflOA',
       url: 'https://www.youtube.com/watch?v=11h_7lnflOA',
@@ -215,6 +227,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-03',
+    course: 'herbalism',
+    module: 2,
+    quarter: 1,
+    week: 4,
+    day: 1,
+    standards: [],
     video: {
       id: '2klJcpdeEEc',
       url: 'https://www.youtube.com/watch?v=2klJcpdeEEc',
@@ -266,6 +284,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-04',
+    course: 'herbalism',
+    module: 2,
+    quarter: 1,
+    week: 4,
+    day: 2,
+    standards: [],
     video: {
       id: 'Iln136eMl4g',
       url: 'https://www.youtube.com/watch?v=Iln136eMl4g',
@@ -317,6 +341,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-05',
+    course: 'herbalism',
+    module: 4,
+    quarter: 1,
+    week: 7,
+    day: 1,
+    standards: [],
     video: {
       id: 'nrqBW1NILuA',
       url: 'https://www.youtube.com/watch?v=nrqBW1NILuA',
@@ -368,6 +398,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-06',
+    course: 'herbalism',
+    module: 4,
+    quarter: 1,
+    week: 7,
+    day: 2,
+    standards: [],
     video: {
       id: 'jkMjYJCdmF0',
       url: 'https://www.youtube.com/watch?v=jkMjYJCdmF0',
@@ -419,6 +455,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-07',
+    course: 'herbalism',
+    module: 4,
+    quarter: 1,
+    week: 7,
+    day: 3,
+    standards: [],
     video: {
       id: 'Fb3EwbCnz1U',
       url: 'https://www.youtube.com/watch?v=Fb3EwbCnz1U',
@@ -470,6 +512,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-08',
+    course: 'herbalism',
+    module: 6,
+    quarter: 2,
+    week: 3,
+    day: 1,
+    standards: [],
     video: {
       id: 'pnBoM4idf1k',
       url: 'https://www.youtube.com/watch?v=pnBoM4idf1k',
@@ -521,6 +569,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-09',
+    course: 'herbalism',
+    module: 1,
+    quarter: 1,
+    week: 1,
+    day: 3,
+    standards: [],
     video: {
       id: 'WqgVks9NViQ',
       url: 'https://www.youtube.com/watch?v=WqgVks9NViQ',
@@ -572,6 +626,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-10',
+    course: 'herbalism',
+    module: 8,
+    quarter: 2,
+    week: 7,
+    day: 1,
+    standards: [],
     video: {
       id: 'lEx9Ra4xV6k',
       url: 'https://www.youtube.com/watch?v=lEx9Ra4xV6k',
@@ -623,6 +683,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-11',
+    course: 'herbalism',
+    module: 8,
+    quarter: 2,
+    week: 7,
+    day: 2,
+    standards: [],
     video: {
       id: 'DsrsQ6k1HEk',
       url: 'https://www.youtube.com/watch?v=DsrsQ6k1HEk',
@@ -674,6 +740,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-12',
+    course: 'herbalism',
+    module: 1,
+    quarter: 1,
+    week: 2,
+    day: 3,
+    standards: [],
     video: {
       id: 'w8Jkp4Lg2ao',
       url: 'https://www.youtube.com/watch?v=w8Jkp4Lg2ao',
@@ -743,6 +815,12 @@ export const HERBALISM_Q1 = [
 
   {
     id: 'hb-1-13',
+    course: 'herbalism',
+    module: 8,
+    quarter: 2,
+    week: 7,
+    day: 3,
+    standards: [],
     video: {
       id: '4EnmiuKqBXI',
       url: 'https://www.youtube.com/watch?v=4EnmiuKqBXI',

@@ -155,6 +155,40 @@ export function capsForQuarter(q) {
  * ---------------------------------------------------------------------------
  */
 export const KNOWN_OVER = [
+  // ---- ⚠️ AND ONE LESSON JOINED THE LIST THE SAME DAY, FOR THE SAME REASON ----
+  //
+  // body-m13-02 was UNDER its cap while the hook went unmeasured and is 14.4w
+  // against 14 now that it is counted. Its hook is long where the six above had
+  // short ones. The measurement change was not kind or unkind; it was complete,
+  // and completeness moves lessons in both directions.
+  //
+  // This is recorded debt, not a raised cap. The fix is the same as for M13-M15:
+  // SPLIT THE SENTENCES. Q4 is April.
+  { id: 'body-m13-02', q: 4, was: '14.4w vs 14 — surfaced Aug 26 2026 when lesson.hook was first measured' },
+
+  // ---- ⚠️ SIX LESSONS CAME OFF THIS LIST ON Aug 26 2026, AND NOT ONE WORD OF
+  // THEM WAS REWRITTEN. Read that twice before trusting the shorter list.
+  //
+  // check-lesson-prose had never measured `lesson.hook` — the Marigold message
+  // and the question under it. LessonReader renders both, unconditionally, at
+  // the top of EVERY lesson. So the check had been measuring less than she
+  // reads, for as long as it has existed.
+  //
+  // Including them is correct: measuring less than she reads is the same error
+  // as measuring more, pointed the other way. But hooks are SHORT, and adding
+  // two short sentences to a twenty-sentence lesson pulls a 14.1 average under
+  // a cap of 14. All six were marginal, and all six moved for that reason.
+  //
+  // THE PROSE DID NOT GET EASIER. THE MEASUREMENT GOT MORE COMPLETE. The lines
+  // are kept here, commented, so nobody reads a shorter debt list as progress:
+  //
+  //   { id: 'hb-m3-03', q: 1, was: '7.2% long vs 6% (energy, producer, consumer, caterpillar)' },
+  //   { id: 'hb-m11-05', q: 3, was: '14.2w vs 14' },
+  //   { id: 'sl-m2-05', q: 1, was: '11.8w vs 11' },
+  //   { id: 'sl-m3-01', q: 1, was: '11.4w vs 11' },
+  //   { id: 'sl-m4-06', q: 1, was: '11.7w vs 11' },
+  //   { id: 'sl-m8-06', q: 3, was: '14.4w vs 14' },
+  //
   // ---- Herbalism Q4, Modules 13-15 · eighteen for eighteen ----
   // The oldest content in the app (v3.9), written before the ramp policy
   // existed. SPLIT THE SENTENCES; do not raise the cap. Q4 is April.
@@ -173,13 +207,11 @@ export const KNOWN_OVER = [
   // `was` records the measurement on the day it was added. It is documentation,
   // not a threshold — the check re-measures and only asks whether the lesson is
   // still over its cap at all.
-  { id: 'hb-m3-03', q: 1, was: '7.2% long vs 6% (energy, producer, consumer, caterpillar)' },
   { id: 'hb-m10-02', q: 3, was: '16.1w vs 14' },
   { id: 'hb-m11-01', q: 3, was: '14.8w vs 14' },
   { id: 'hb-m11-02', q: 3, was: '15.7w vs 14' },
   { id: 'hb-m11-03', q: 3, was: '16.4w vs 14' },
   { id: 'hb-m11-04', q: 3, was: '14.2w vs 14' },
-  { id: 'hb-m11-05', q: 3, was: '14.2w vs 14' },
   { id: 'hb-m13-01', q: 4, was: '17.2w vs 14' },
   { id: 'hb-m13-02', q: 4, was: '19.6w vs 14' },
   { id: 'hb-m13-03', q: 4, was: '17.4w vs 14' },
@@ -198,15 +230,11 @@ export const KNOWN_OVER = [
   { id: 'hb-m15-04', q: 4, was: '18.6w vs 14' },
   { id: 'hb-m15-05', q: 4, was: '17.4w vs 14' },
   { id: 'hb-m15-06', q: 4, was: '15.8w vs 14' },
-  { id: 'sl-m2-05', q: 1, was: '11.8w vs 11' },
-  { id: 'sl-m3-01', q: 1, was: '11.4w vs 11' },
   { id: 'sl-m3-03', q: 1, was: '12.7w vs 11' },
   { id: 'sl-m3-04', q: 1, was: '12.9w vs 11' },
   { id: 'sl-m4-03', q: 1, was: '12.9w vs 11' },
   { id: 'sl-m4-04', q: 1, was: '13.8w vs 11' },
   { id: 'sl-m4-05', q: 1, was: '11.6w vs 11' },
-  { id: 'sl-m4-06', q: 1, was: '11.7w vs 11' },
-  { id: 'sl-m8-06', q: 3, was: '14.4w vs 14' },
   { id: 'ss-m4-04', q: 1, was: '8.2% long vs 6% (amendment, forgotten, newspapers, government)' },
   { id: 'body-m8-04', q: 2, was: '7.9% long vs 7.000000000000001% (actually, listening, information, anybody)' },
   { id: 'body-m16-01', q: 4, was: '16.6w vs 14' },
@@ -231,7 +259,37 @@ export const KNOWN_OVER = [
  * tagging pass, not after.
  * ---------------------------------------------------------------------------
  */
-export const UNCAPPABLE = [
-  'hb-1-01', 'hb-1-02', 'hb-1-03', 'hb-1-04', 'hb-1-05', 'hb-1-06', 'hb-1-07',
-  'hb-1-08', 'hb-1-09', 'hb-1-10', 'hb-1-11', 'hb-1-12', 'hb-1-13'
-];
+/*
+ * ---- ⭐ FIXED v3.88. THE LIST IS EMPTY AND THAT IS THE POINT. ----
+ *
+ * All thirteen now carry `course`, `module`, `quarter`, `week`, `day` and
+ * `standards: []`. Every value was DERIVED FROM `WEEKS` in config/assessment.js
+ * — the table that already knew where all thirteen live — and not one was
+ * typed. Nothing about the lessons changed; they were only told what they are
+ * part of.
+ *
+ * ⚠️ AND THEY HAD NEVER HAD THEIR READING LEVEL MEASURED. Not once. With no
+ * quarter there was no cap, so they sat on this list for eighty versions while
+ * every other lesson in the app was checked against her level. Thirteen real
+ * lessons, in the course she starts the year with. `proseOf` in
+ * check-lesson-prose could not read them either — they use the older flat
+ * shape, `hook` and `core`, rather than `checkIn` and `beats` — so even a cap
+ * would have measured an empty string and passed. TWO layers had to be fixed
+ * before a single sentence of theirs was read.
+ *
+ * ⚠️ `offGrade` IS DELIBERATELY NOT SET ON ANY OF THEM. Every sibling lesson in
+ * modules 1, 2, 4, 6 and 8 declares `standards: []`, so an empty array is the
+ * consistent and honest value. But `offGrade` is a per-lesson citation — it
+ * means "this IS a real Georgia element, just a lower grade's" — and
+ * herbalismM6.js states the rule plainly: writing one without reading the
+ * lesson "would be a guess dressed as a citation." Gigi's call, lesson by
+ * lesson, not a batch job.
+ *
+ * KEPT AS AN EMPTY EXPORT rather than deleted, because check-lesson-prose
+ * asserts BOTH directions: a lesson with no quarter that is not on this list
+ * fails, and a lesson on this list that HAS a quarter fails. It caught its own
+ * fix within a minute — thirteen failures reading "is listed as UNCAPPABLE but
+ * now has a quarter." Deleting the export would remove the guard that says a
+ * future untagged lesson must not go quiet.
+ */
+export const UNCAPPABLE = [];

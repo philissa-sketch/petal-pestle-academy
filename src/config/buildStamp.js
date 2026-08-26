@@ -20,12 +20,62 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.86';
+export const VERSION = '3.90';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.90',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⭐⭐ SHE HAS SPELLING AND VOCABULARY WORDS, AND EVERY ONE OF THEM CAME OUT OF THE 256 LESSONS SHE ACTUALLY READS. Gigi, asked to choose between a published grade-level list and her own material: "pull from the 256 lessons." So the list is not a stack of words beside her week — it IS her week. The apothecary fortnight gives her mortar, pestle, sieve and strainer. Module 1 gives her seed coat, embryo and germination.',
+      '320 SPELLING AND 320 VOCABULARY, TEN OF EACH FOR THIRTY-TWO WEEKS. ⚠️ NOT 360 — that number came from Lamar\u2019s app, whose year is 36 weeks. Hers is 32, four quarters of eight, and the week table has said so since it was built. Padding to 360 would have meant inventing four weeks her schedule does not have.',
+      'VOCABULARY comes from each lesson\u2019s own words: array — all 256 declare them, 1,024 entries, 801 unique. SPELLING comes from the lesson PROSE, filtered to her measured level: 4\u20139 letters, at most two syllables, never a sight word she already reads without thinking, never a term the vocabulary list already teaches, never repeated. GENERATED THEN FROZEN, because a list that recomputed would reshuffle her words mid-year the first time a lesson was reworded — and check-word-study asserts every word still traces to a lesson in its own week, so the freeze is watched rather than trusted.',
+      '⚠️ THE CHECK FOUND A REAL FAULT IN THE GENERATOR ON ITS FIRST RUN. Two words, `record` and `step`, appeared in both lists — spelling had been filtered against a vocabulary set that was still being built week by week, so a word chosen in week 2 collided with a term that arrived in week 6.',
+      '⚠️⚠️ AND ITS SECOND RUN EXPOSED SOMETHING WORSE: THE PROPER-NOUN RULE CALLED 623 ORDINARY WORDS NAMES — among them garlic, ginger, seeds and winter, exactly the words a herbalism spelling list is for. The rule tokenised the text BEFORE looking for sentence starts, and tokenising strips the punctuation, so the sentence-start guard could never fire and every first word of every sentence was filed as a name.',
+      '⚠️ THE CHECK DID NOT CATCH THAT, BECAUSE IT USED THE SAME BROKEN COPY. The generator excluded a word and the check agreed it was excluded. Two implementations of one rule agreeing is not evidence — it is v3.78 and v3.84 again, where two grading ladders agreed everywhere anyone looked and disagreed above 97%. Both now import ONE definition from src/lib/lessonProse.js, which is where a rule the app must follow belongs.',
+      '⚠️ AND THAT LIB BROKE RULE 17 ON ITS FIRST SAVE, IN THE VERSION CARRYING A HEADER NOTE ABOUT RULE 17. A quote inside a regex character class; check-sources caught it in four seconds. Writing a rule at the top of a file does not make the code below it obey.',
+      '⚠️ MEASURING THE HOOK MOVED SIX LESSONS OFF THE DEBT LIST AND ONE ONTO IT, AND NOT A WORD WAS REWRITTEN. check-lesson-prose had never read lesson.hook — the Marigold message and the question under it — which LessonReader renders at the top of EVERY lesson. It had been measuring less than she reads. Six marginal lessons fell under their caps and body-m13-02 rose above its. THE PROSE DID NOT GET EASIER; THE MEASUREMENT GOT MORE COMPLETE, and all seven lines are recorded in readingCaps.js so a shorter list is never read as progress.',
+      '⚠️ THERE IS NO SCREEN. This is the word data and nothing else — she cannot see a list, sit a test, or have a result recorded, and db has no table for one. Said in the file, in the check and here, because "correct and unreachable" is this project\u2019s most repeated failure and a green check is exactly how it hides. The carry-over rule is already decided and not yet built: a strict 7-day rotation, missed words carried and topped up to ten, an untaken test carried forward as fully missed.'
+    ]
+  },
+  {
+    version: '3.89',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⚠️ A STANDING RULE IN THE HANDBOOK WAS FALSE AND HAD NEVER BEEN TESTED. Rule 13 said "you cannot move a FOLDER — moving is copy-then-remove." A move inside one drive is a RENAME: it does not read the folder, does not need space, and works on a folder exactly as it works on a file. It works across the parent boundary too. Gigi said so, the test took ten seconds, and both directions worked first time.',
+      'THE COST WAS SIX HAND-TYPED rmdir COMMANDS PER CLEAN-UP, FOR MONTHS. dist, _archive-test, .pp-drop and pp-update are now in _to_delete/ with the loose files, and one rmdir finishes the job instead of six. Every temporary script this session wrote went the same way.',
+      '⚠️ AND THIS IS THE SECOND FALSE STANDING RULE FOUND IN THREE DAYS. The other was "the repository being private is the SECOND guard", corrected at v3.87 — also copied rather than checked, also load-bearing. A rule already written down needs OBEYING; a rule that was never TESTED needs testing once. Those are different sentences and the project had only ever written down the first.'
+    ]
+  },
+  {
+    version: '3.88',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⭐⭐ THIRTEEN LESSONS HAD NEVER HAD THEIR READING LEVEL MEASURED. NOT ONCE. The 13 flat Herbalism cards carried no course, quarter, week or standards, so no cap could be applied to them, and they sat on the UNCAPPABLE list for eighty versions while every other lesson in the app was checked against her level. They are the cards she meets in Quarter 1, Module 2 — the second thing she does all year.',
+      'ALL SIX FIELDS WERE DERIVED FROM THE WEEK TABLE, NOT TYPED. WEEKS in config/assessment.js already knew where all thirteen live; course, module, quarter, week and day were read off it and written in, and a second script read them back and confirmed all thirteen agree with the table. standards: [] on every one, matching every sibling lesson in modules 1, 2, 4, 6 and 8 — not one of which claims a Georgia element.',
+      '⚠️ offGrade IS DELIBERATELY NOT SET ON ANY OF THEM. It means "this IS a real Georgia element, just a lower grade’s", and herbalismM6.js states the rule: writing one without reading the lesson is "a guess dressed as a citation." Gigi’s call, lesson by lesson.',
+      '⚠️ AND A CAP WAS NOT ENOUGH — THE READER COULD NOT SEE THEM EITHER. proseOf had never heard of the older `hook`/`core` shape and returned an EMPTY STRING for all thirteen. Fixing only the tagging would have produced thirteen lessons scoring a perfect zero on every reading measure and passing in silence: the exact failure that check exists to catch, arriving through the door marked fix. An unreadable lesson is a FAILURE now, not a pass.',
+      '⚠️⚠️ AND THE FIRST DRAFT OF THAT FIX TURNED NINETEEN LESSONS RED FOR SENTENCES THAT ARE ON NO SCREEN. 243 of the 256 lessons carry BOTH `beats` and `core`, and reading both looked thorough. LessonReader has NEVER rendered both — it branches on beats and falls to core only when there are none, and its own header says so. `core` on those 243 is dead data. A check that measures what the app does not render is not stricter, it is wrong, in the direction that costs somebody a day rewriting good lessons.',
+      '⚠️ A HEADING HAS NO FULL STOP, AND JOINING ON A SPACE INVENTED SENTENCES. "The one who had to believe it first She heard about a programme for minority students…" measured as one 29-word sentence. Each part is closed before joining now. ⚠️ THE NEGATIVE TEST FOR THAT CAME BACK GREEN — with the branch fixed, only thirteen short-headed cards reach it and none breach — SO THE RULE IS ASKED DIRECTLY instead. A rule whose failure cannot be observed is a rule nothing is protecting: check-khan-units, v3.76, same sentence.',
+      '⭐ §3 OF HER DIAGNOSTIC FILE IS REWRITTEN CLEAN, AND EVERY ROW WAS COMPUTED BY CALLING khanFor, laneFor AND nextUnitForStrand — not typed. It had printed the pre-re-measure levels and argued at length that her three maths strands all open Unit 1, which v3.81 overturned eight days later. ⚠️ Measurement & Data opens UNIT 5, Money and time — the first unit of its lane — and not Unit 6, which is merely the one CALLED Measurement. Geometry opens Unit 8. Nothing skips.',
+      '⭐ AND check-diagnostic-record IS WIDENED TO §3, in the same session that made §3 true. Its header had said, in capitals, to widen it the moment §3 was corrected — a rule already written down needs obeying, not rediscovering. One function called twice rather than a copy, because two implementations of one metric drift apart: v3.78, and v3.84, where it put two different letter grades on one Georgia record. It does NOT assert which Khan unit §3 names — reimplementing three lookup functions inside a check is how a check and an app drift apart while both stay self-consistent.',
+      'UNCAPPABLE IS EMPTY AND KEPT RATHER THAN DELETED, because check-lesson-prose asserts it in BOTH directions — an untagged lesson missing from the list fails, and a listed lesson that has gained a quarter fails. It caught its own fix within a minute: thirteen failures reading "is listed as UNCAPPABLE but now has a quarter." NINE NEGATIVE TESTS ACROSS THE TWO CHECKS, one of which failed first and was rewritten rather than weakened. 256 lessons measured now, up from 243.'
+    ]
+  },
+  {
+    version: '3.87',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⭐ THE REPOSITORY STAYS PUBLIC — Gigi’s decision, made on Aug 26 with the counts in front of her. The open question from the last session is closed.',
+      '⚠️ AND TWO SENTENCES THAT GAVE THE REASON WERE FALSE. .gitignore said "which is why the repository is private — the second guard, doing the job it is for", and check-publish-safety said "the repository being private is the SECOND guard, not this one." BOTH WERE COPIED OUT OF LAMAR’S REPO, WHICH IS PRIVATE. This one is not, and has not been for as long as anyone can tell.',
+      'THERE IS NO SECOND GUARD. There is one guard, it is .gitignore, and check-publish-safety is the only thing asserting it. A reason that is not true is worse than no reason at all — it is the sentence that talks the next person out of being careful, and it sat directly above the exclusion list it was undermining. Both are rewritten to say what is actually true, with the correction dated and kept in place rather than swapped out silently.',
+      '⚠️ THE COUNT WAS WIDER THAN THE OPEN QUESTION ASSUMED. The question was framed as being about two documents. A first name appears in about SIXTY committed files — including this one, which the Grown-Up Corner renders on screen, on a site that cannot be password-protected on the free plan. Pulling the two documents would not have changed that. The facts are written into .gitignore so the next person decides from the same page rather than re-opening it.',
+      'NOTHING IN THE EXCLUSION LIST MOVED. A first name beside a grade level and a full educational assessment with the item detail behind every number are different things, and the line between them holds whatever the repository visibility is. public/ is empty and still checked; the assessment, the exports and the backup folder are still excluded and still asserted.'
+    ]
+  },
   {
     version: '3.86',
     date: 'Aug 26, 2026',

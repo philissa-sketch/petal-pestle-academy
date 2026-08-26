@@ -31,8 +31,17 @@
 //   · Whether the reading level is RIGHT for her. That is a Check-In question,
 //     and the caps in readingCaps.js are a judgement made from one sitting on
 //     Aug 13 2026.
-//   · The 13 flat cards. They carry no quarter, so there is no cap to apply.
-//     Listed as UNCAPPABLE and reported, never silently skipped.
+//   · ⭐ THE 13 FLAT CARDS ARE MEASURED NOW — v3.88. They used to carry no
+//     quarter, so there was no cap to apply, and they sat on UNCAPPABLE for
+//     eighty versions. They now carry course, module, quarter, week, day and
+//     standards, all derived from WEEKS, and `proseOf` reads their shape.
+//     ⚠️ TWO THINGS HAD TO BE TRUE BEFORE ONE SENTENCE OF THEIRS WAS READ: a
+//     cap to measure against, AND a reader that understood `hook`/`core`.
+//     Fixing only the first would have measured an empty string thirteen
+//     times and passed. UNCAPPABLE is now empty and kept, because this file
+//     asserts it in BOTH directions.
+//   · Whether `core` on the other 243 lessons is any good. It is not rendered
+//     and is not measured. See the beats-or-core note in proseOf.
 //
 // ---- WHY IT PASSES TODAY WITH KNOWN BREACHES ----
 //
@@ -48,20 +57,15 @@
 
 import { ALL_LESSONS, courseOfLesson } from '../src/data/lessons/appCourses.js';
 import { analyse, longestSentences } from '../src/lib/readingLoad.js';
+import { proseOf } from '../src/lib/lessonProse.js';
 import { READING_CAPS, capsForQuarter, KNOWN_OVER, UNCAPPABLE } from '../src/lib/readingCaps.js';
 
 const failures = [];
 const fail = (rule, detail) => failures.push({ rule, detail });
 
-/** The prose she actually reads. Questions are excluded on purpose — see header. */
-function proseOf(lesson) {
-  const parts = [];
-  if (lesson.checkIn) parts.push(lesson.checkIn.text, lesson.checkIn.question);
-  for (const beat of lesson.beats || []) {
-    parts.push(beat.hook, beat.teachingText, beat.example);
-  }
-  return parts.filter(Boolean).join(' ');
-}
+// proseOf and the proper-noun rule now live in src/lib/lessonProse.js.
+// ⚠️ THEY USED TO BE COPIED HERE AND IN THE WORD-STUDY GENERATOR, AND THE
+// SECOND COPY WAS WRONG — see that file's header. One definition, imported.
 
 const round = (n) => Math.round(n * 10) / 10;
 const pct = (n) => `${Math.round(n * 1000) / 10}%`;
@@ -121,6 +125,62 @@ for (const lesson of ALL_LESSONS) {
   }
 
   rows.push({ id: lesson.id, course, quarter: lesson.quarter, ...a, caps, problems });
+}
+
+// ---- 0. THE READER ITSELF, ASKED DIRECTLY --------------------------------
+//
+// ⚠️ WHY THIS EXISTS: A RULE WHOSE FAILURE CANNOT BE OBSERVED IS A RULE
+// NOTHING IS PROTECTING — the sentence check-khan-units learned at v3.76.
+//
+// Closing an unterminated part before joining is a real rule: without it a
+// heading glues onto the paragraph below it and invents a sentence that is on
+// no screen. When it was missing it turned nineteen lessons red.
+//
+// But it is now UNOBSERVABLE through the lesson data. Only the thirteen flat
+// cards go through `core`, and their headings are short enough that gluing
+// them still leaves every card under its cap. So the negative test for it came
+// back GREEN — "a mutation that did not mutate" — and the honest response is
+// not to shrug, it is to ask the rule directly.
+//
+// These fixtures are deliberately NOT real lessons. A real lesson could start
+// passing for reasons that have nothing to do with this rule.
+
+{
+  const glueCase = proseOf({
+    hook: { text: 'One.', question: 'Two?' },
+    core: [{ heading: 'A heading with no full stop', text: 'And the sentence under it.' }]
+  });
+
+  if (!/no full stop\.\s/.test(glueCase)) {
+    fail(
+      'headings-are-closed-before-joining',
+      `proseOf joined a heading straight onto the text below it, producing: "${glueCase}". ` +
+        `That fabricates a sentence nobody reads and inflates the sentence average — it turned ` +
+        `nineteen lessons red when it happened. Close each part before joining.`
+    );
+  }
+
+  // And the branch itself: a lesson with beats must NOT contribute its core.
+  const bothShapes = proseOf({
+    beats: [{ n: 1, teachingText: 'The beat text.' }],
+    core: [{ heading: 'Dead heading', text: 'Dead core text that is not rendered.' }]
+  });
+  if (/Dead/.test(bothShapes)) {
+    fail(
+      'core-is-ignored-when-beats-render',
+      `proseOf read \`core\` on a lesson that has \`beats\`. LessonReader renders one or the ` +
+        `other and never both, so this measures text that is on no screen — across 243 lessons.`
+    );
+  }
+  // ...and a lesson WITHOUT beats must contribute it, or the thirteen go quiet.
+  const flatOnly = proseOf({ core: [{ heading: 'Live heading', text: 'Live core text.' }] });
+  if (!/Live core text/.test(flatOnly)) {
+    fail(
+      'core-is-read-when-nothing-else-renders',
+      'proseOf ignored `core` on a lesson with no `beats`. That is the shape of all thirteen ' +
+        'flat cards, and it would measure them as empty and pass.'
+    );
+  }
 }
 
 // ---- 1. UNCAPPABLE is exactly right ---------------------------------------
@@ -222,7 +282,7 @@ if (over.length) {
 
 console.log(
   'NOT TESTED HERE: whether she understands it, whether the caps are the right ' +
-    'caps, or the 13 flat cards. See the header.\n'
+    'caps, or `core` on the 243 lessons that render `beats` instead. See the header.\n'
 );
 
 if (failures.length === 0) {

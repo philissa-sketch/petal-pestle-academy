@@ -76,8 +76,21 @@ _archive-test/
 #    by accident and a collaborator can be added to. ANYTHING THAT WOULD BE A
 #    PROBLEM IN PUBLIC DOES NOT GO IN AT ALL."
 #
-# So privacy is not the guard here. It is the second guard. The first is that
-# the three files below are never committed at any visibility:
+# ---- ⚠️ CORRECTED Aug 26 2026: THIS REPOSITORY IS PUBLIC. ----
+#
+# The paragraph above is quoted from Lamar's .gitignore and HIS repository is
+# private. This one is not, and Gigi confirmed on Aug 26 that it stays public.
+#
+# So privacy is not the second guard here. IT IS NOT A GUARD AT ALL. There is
+# exactly one guard, it is this file, and check-publish-safety is what asserts
+# it. Every sentence below that used to lean on "and anyway it is private" has
+# been rewritten, because a reason that is not true is worse than no reason —
+# it is the sentence that talks the next person out of being careful.
+#
+# Mission Control's rule matters MORE here, not less: anything that would be a
+# problem in public does not go in at all. Here it IS in public.
+#
+# The first and only guard is that the three files below are never committed:
 #
 #   · her export and her backup — her raw record, both already caught above
 #   · azianna-diagnostic-results.md — a FULL EDUCATIONAL ASSESSMENT of a named
@@ -88,9 +101,32 @@ _archive-test/
 #     works from it.
 #
 # The master plan, the build log and the blueprints DO go in. They are the best
-# writing in this project and losing them was a real cost. They quote her first
-# name and her levels, which is why the repository is private — the second
-# guard, doing the job it is for.
+# writing in this project and losing them was a real cost.
+#
+# ⚠️ THEY QUOTE HER FIRST NAME AND HER LEVELS, AND THEY ARE PUBLIC. Gigi was
+# shown the count on Aug 26 and decided knowingly. What she was told, so that
+# the next person is deciding from the same facts rather than re-opening it:
+#
+#   · Her FIRST NAME only. Her record stores learnerName "PrettyGlow", so the
+#     app itself never renders a full name. No surname, no address, no photo,
+#     no date of birth, no school.
+#   · It is in about 60 committed files, not two — the master plan (18), the
+#     build log (16), src/config/buildStamp.js (17) and ~55 others with one or
+#     two each. Removing the two documents would not have solved it.
+#   · ⚠️ src/config/buildStamp.js RENDERS ON THE LIVE SITE. ParentDashboard
+#     prints the whole changelog in the Grown-Up Corner, and the Grown-Up
+#     Corner is a passcode a visitor sets themselves — ParentGate says so in
+#     its own header: "a lock on a door, not a safe". netlify.toml records
+#     that the site cannot be password-protected on the free plan. So her name
+#     and her levels are readable by anyone with the URL, and that was true
+#     before the repository question was ever asked.
+#   · The people who actually open it are her mother and her grandmother. The
+#     URL is unlisted and nothing links to it.
+#
+# ⚠️ NONE OF THAT MAKES THE FILES BELOW SAFE TO COMMIT. A first name beside a
+# grade level is a different thing from a full educational assessment with the
+# item detail behind every number. The line is drawn below, and it holds
+# whatever the repository visibility is.
 
 claude/azianna-diagnostic-results.md
 

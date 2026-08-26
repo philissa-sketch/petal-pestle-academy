@@ -2140,3 +2140,187 @@ The obvious rule — *compare against the newest export by modification time* �
 **Five green where they must be:** §1b changed · §3 changed · the stale export made newest by date · and both absent-file skips, neither of which claims a pass.
 
 ⚠️ **One label was changed in the DOCUMENT rather than loosening the check.** §1 read *Patterns & Algebra*; `src/config/strands.js` says *Patterns & Early Algebra*. Matching those two fuzzily would have been the **eighth** assertion in this project satisfied by something adjacent to the rule. The strand names come from the app now.
+
+---
+
+## 49. THE REPOSITORY STAYS PUBLIC, AND THE REASON BESIDE IT WAS FALSE — v3.87
+
+**Gigi's decision, made Aug 26 2026 with the counts in front of her.** The question §47 left open is closed: the repository stays public.
+
+### ⚠️ Two sentences gave a reason that was not true
+
+`.gitignore` ended its exclusion argument with *"they quote her first name and her levels, which is why the repository is private — the second guard, doing the job it is for."* `check-publish-safety` said the same thing in its own words: *"The repository being private is the SECOND guard, not this one."*
+
+**Both were copied out of Lamar's `.gitignore`, and his repository is private. This one is not.**
+
+**There is no second guard.** There is one guard, it is `.gitignore`, and `check-publish-safety` is the only thing asserting it. That matters more than a tidy-up, because of where the sentence sat: **directly above the exclusion list it was undermining.** A reason that is not true is worse than no reason at all — it is the sentence that talks the next person out of being careful, and this project has already had one Saturday where her whole record was one commit from going public.
+
+Both are corrected **in place and dated**, not swapped out silently — the same convention as the v3.41 and v3.56 corrections, and for the same reason: a correction nobody can see is a correction nobody can learn from.
+
+### ⚠️ The question was framed narrowly and the facts were wider
+
+§47 described the exposure as *"18 times in the build log and 16 in the master plan"* and offered *"pull the two documents out"* as one of three options. On disk:
+
+| Where | Times |
+|---|---|
+| `claude/petal-pestle-master-plan.md` | 18 |
+| **`src/config/buildStamp.js`** | **17** |
+| `claude/petal-pestle-build-log.md` | 16 |
+| ~55 other committed files — lessons, checks, `App.jsx`, `strands.js` | 1–6 each |
+
+**Removing the two documents would have left about sixty files still carrying it, including the one that renders on screen.**
+
+### ⚠️ And the live site was never the repository question
+
+`ParentDashboard` line 274 renders the whole of `CHANGES` in the Grown-Up Corner, and that changelog names her and prints her measured levels. **The Grown-Up Corner is not a barrier to a stranger**: `ParentGate` stores the passcode in the visitor's own browser, so someone arriving fresh simply sets one. Its own header says so — *"A passcode, not security… a lock on a door, not a safe."* It was built to stop a curious nine-year-old wandering into her own decimals, and it does that job well. `netlify.toml` already recorded that the free plan cannot password-protect the site.
+
+**So her first name and her levels have been readable by anyone with the URL for as long as the site has been up, independently of the repository setting.** The repository decision neither created that nor fixed it.
+
+### What was weighed, written down so it is not re-litigated
+
+- **Her FIRST NAME only.** Her record stores `learnerName` as **"PrettyGlow"**, so the app never renders a full name. No surname, no address, no photograph, no date of birth, no school.
+- **The people who open it are her mother and her grandmother.** The URL is unlisted and nothing links to it.
+- **Nothing in the exclusion list moved.** A first name beside a grade level and a **full educational assessment with the item detail behind every number** are different things, and the line between them holds whatever the visibility is. `public/` is empty and still checked; her assessment, her exports and the Backup folder are still excluded and still asserted by name.
+
+### ⚠️ What this does NOT do
+
+It does not remove her name from anything, and it does not add a check that keeps her name out — because **there is no rule to check.** The rule is the exclusion list, which already has one. **If that decision is ever revisited, the smallest useful version is `buildStamp.js` alone**: seventeen edits, on the one committed file a stranger can actually read, and a check to hold it. That is recorded here as the shape of the work, not as a recommendation to do it.
+
+---
+
+## 50. THIRTEEN LESSONS NOBODY HAD EVER MEASURED — v3.88
+
+**The 13 flat Herbalism cards are tagged, and their reading level has been measured for the first time.**
+
+`hb-1-01` to `hb-1-13` were written before v3.8 and re-homed rather than rewritten, which was the right call — every lesson record Azianna already had survived. But they never gained the fields the rest of the app assumes: no `course`, no `quarter`, no `week`, no `standards`. **With no quarter there was no cap, so `check-lesson-prose` listed them as UNCAPPABLE and measured nothing.** That is where they stayed for eighty versions.
+
+**These are not obscure lessons.** They are Quarter 1, Module 2 — *"The parts of a plant"*, *"What roots do"* — the second thing she does all year.
+
+### Every field derived, not one typed
+
+`WEEKS` in `config/assessment.js` already knew where all thirteen live; it has since the week table was built. `course`, `module`, `quarter`, `week` and `day` were read off it, written in, and then **read back by a second script that confirmed all thirteen agree with the table.**
+
+`standards: []` on every one — the consistent value, since **not one sibling lesson in modules 1, 2, 4, 6 or 8 claims a Georgia element.**
+
+⚠️ **`offGrade` is deliberately not set on any of them.** It means *"this IS a real Georgia element, just a lower grade's"*, and `herbalismM6.js` already wrote the rule down: putting one on without reading the lesson would be *"a guess dressed as a citation."* **Thirteen judgements for Gigi, lesson by lesson, not a batch job.**
+
+### ⚠️ A cap was not enough. The reader could not see them either.
+
+`proseOf` in `check-lesson-prose` knew only `checkIn` + `beats`. The flat cards are `hook` + `core`. **It returned an empty string for all thirteen.**
+
+So fixing only the tagging would have produced **thirteen lessons scoring a perfect zero on every reading measure and passing in silence** — the precise failure that check was written to catch, arriving through the door marked *fix*. **Two things had to be true before one sentence of theirs was read.** An unreadable lesson is a failure now, not a pass.
+
+### ⚠️⚠️ And the first draft of that fix turned nineteen lessons red for sentences that are on no screen
+
+**243 of the 256 lessons carry BOTH `beats` and `core`.** Reading both looked like thoroughness. It is not: `LessonReader.jsx` branches on `lesson.beats?.length > 0` and falls to `core` only when there are none, and **its own header says so** — *"it renders beats OR the flat cards, never both."*
+
+`core` on those 243 is dead data. Measuring it added text that is on no screen to the reading load of 243 lessons, and nineteen of them breached their caps on sentences Azianna will never see.
+
+**A check that measures what the app does not render is not stricter. It is wrong** — and wrong in the direction that costs somebody a day rewriting lessons that were fine.
+
+### ⚠️ A heading has no full stop
+
+Joining the parts on a space had been safe while every part was a finished paragraph. Headings are not. The first version glued each heading to the paragraph beneath it and **fabricated sentences** — one measured at 29 words that reads, on screen, as a title and then a sentence.
+
+Each part is closed before joining now.
+
+⚠️ **And the negative test for that came back GREEN.** With the beats-or-core branch correct, only the thirteen short-headed cards reach `core` at all, and gluing their headings still leaves every card under its cap. **The rule had become unobservable through the data** — *a mutation that did not mutate.*
+
+The honest response is not to shrug. **The rule is asked directly**, on fixtures that are deliberately not real lessons, because a real lesson can start passing for reasons that have nothing to do with the rule. *A rule whose failure cannot be observed is a rule nothing is protecting* — `check-khan-units`, v3.76, and the same sentence applies here.
+
+### UNCAPPABLE is empty, and kept
+
+Not deleted. `check-lesson-prose` asserts it in **both** directions: a lesson with no quarter that is missing from the list fails, and a lesson on the list that has gained a quarter fails. **It caught its own fix within a minute** — thirteen failures reading *"is listed as UNCAPPABLE but now has a quarter."* Deleting the export would remove the guard that stops a future untagged lesson going quiet.
+
+**256 lessons measured now, up from 243.**
+
+### What this unblocks
+
+Phase 2 skill tagging — **2,560 questions** — was held because the thirteen carry `words:` and would have been tagged without knowing what course they are in. **They know now.**
+
+---
+
+## 51. A RULE THAT WAS NEVER TESTED — v3.89
+
+**Rule 13 of the handbook said: *"You cannot move a FOLDER — moving is copy-then-remove. Give me the command."***
+
+**It was false.** A move inside one drive is a **rename**. It does not read the folder, it does not need the space, and it works on a folder exactly as it works on a file — including across the parent boundary. Gigi said so in one line, the test took ten seconds, and both directions worked on the first try.
+
+### What it cost
+
+**Six hand-typed `rmdir` commands per clean-up, for months**, given to someone who has said plainly that she does not use the command line. Every one of them was avoidable. `dist`, `_archive-test`, `.pp-drop` and `pp-update` moved into `_to_delete/` in a single line, alongside the four `.fuse_hidden` leftovers and every temporary script this session wrote. **One `rmdir` now finishes the job.**
+
+*(`Lamar DOC` was already gone — Gigi removed it herself between two checks. This is recorded because a session that claims credit for a change it did not make is the same failure as a document that claims a number it did not read.)*
+
+### ⚠️ The second false standing rule in three days
+
+The other was **"the repository being private is the SECOND guard"** — §49, corrected at v3.87. Both were **copied rather than checked**. Both were **load-bearing**: one gave the reason it was acceptable for her name to be committed, the other decided how a clean-up gets done.
+
+**Neither was ever wrong at the moment it was written.** The privacy sentence was true of Lamar's repository, which is where it came from. The folder rule was someone's reasonable guess about a filesystem. **They became wrong by being copied into a place where nobody re-asked them.**
+
+### The rule this produces
+
+> **A rule already written down needs OBEYING.**
+> **A rule that was never TESTED needs testing once.**
+
+The project had written down the first — twice, after two write-probes were left in folders that turned out not to be read-only. **It had never written down the second**, and the two are not the same sentence. Obedience is right for a rule that came from a real failure. It is exactly wrong for a rule that came from an assumption, because obedience is what stops anyone finding out.
+
+⚠️ **The distinguishing question is not "is this rule inconvenient?"** — the write-probe rule was inconvenient and correct. It is **"what happened to make someone write this down?"** A rule with a scar behind it — a date, a bug, a screenshot, a sentence from Gigi — is a rule to obey. **A rule with nothing behind it but a plausible explanation is a rule to test, once, and then write down what happened.**
+
+---
+
+## 52. HER WORDS, OUT OF HER OWN LESSONS — v3.90
+
+**320 spelling words and 320 vocabulary terms, ten of each for the thirty-two weeks of her year.**
+
+Gigi was asked to choose between a published grade-level list and her own material, and answered: **"pull from the 256 lessons."**
+
+So the spelling list is not a stack of words sitting beside her week. **It is her week.** The apothecary fortnight gives her *mortar, pestle, sieve, strainer*. Module 1 gives her *seed coat, embryo, germination*. She spells what she is reading, the week she reads it.
+
+### ⚠️ 320, not 360 — and the difference is Lamar again
+
+The backlog said 360 + 360. **That number came from his app, whose year is 36 weeks. Hers is 32** — four quarters of eight — and `WEEKS` has said so since the week table was built.
+
+Padding to 360 would have meant inventing four weeks her schedule does not have. **Copying a number out of his app is the same mistake as copying a mechanism out of it** — §38, and §45.
+
+### How each list is built
+
+**Vocabulary** comes from each lesson's own `words:` array — the terms the lesson was written to teach. All 256 declare them: 1,024 entries, 801 unique.
+
+**Spelling** comes from the lesson **prose**, filtered to her measured level: 4–9 letters, at most two syllables, never a sight word she already reads without thinking, never a term the vocabulary list already teaches, never repeated in a later week.
+
+**Generated, then frozen on purpose.** Nothing is hand-typed. But it is stored rather than recomputed, because a list that recomputed would **reshuffle her words mid-year** the first time somebody reworded a lesson, and a child who has learned eight of ten should not find that two changed overnight. `check-word-study` asserts every word still traces to a lesson in its own week — **the freeze is watched, not trusted.**
+
+### ⚠️ The check found a real fault on its first run
+
+Two words, `record` and `step`, appeared in both lists. Spelling had been filtered against a vocabulary set **that was still being built week by week**, so a word chosen in week 2 collided with a term that arrived in week 6.
+
+### ⚠️⚠️ And its second run exposed something worse
+
+**The proper-noun rule called 623 ordinary words names** — among them **`garlic`, `ginger`, `seeds` and `winter`**, which are exactly the words a herbalism spelling list exists for.
+
+The rule was *"capitalised, and not at the start of a sentence."* The implementation **tokenised the text first**, and tokenising strips the punctuation — so the previous token could never end in a full stop, the sentence-start guard never fired, and **every first word of every sentence was filed as a name.**
+
+**⚠️ And check-word-study did not catch it, because it used the same broken copy.** The generator excluded a word; the check agreed the word was excluded. **Two implementations of one rule agreeing is not evidence.** It is v3.78, and it is v3.84, where two grading ladders agreed everywhere anyone had looked and disagreed above 97%.
+
+Both now import **one definition** from `src/lib/lessonProse.js` — rule 11, a rule the app must follow lives where a check can test it.
+
+⚠️ **And that lib broke rule 17 on its first save, in the very version that carried a header note about rule 17** — a quote character inside a regex character class. `check-sources` caught it in four seconds. **Writing a rule at the top of a file does not make the code below it obey.**
+
+### ⚠️ Measuring the hook moved seven lessons, and not a word was rewritten
+
+Consolidating revealed that `check-lesson-prose` **had never read `lesson.hook`** — the Marigold message and the question beneath it, which `LessonReader` renders at the top of **every** lesson. The check had been measuring **less than she reads**.
+
+Including it is correct: measuring less than she reads is the same error as measuring more, pointed the other way. But hooks are short, and adding two short sentences to a twenty-sentence lesson moves a marginal average.
+
+**Six lessons fell under their caps. `body-m13-02` rose above its.**
+
+> **THE PROSE DID NOT GET EASIER. THE MEASUREMENT GOT MORE COMPLETE.**
+
+All seven are recorded in `readingCaps.js` — the six as commented lines kept in place so a shorter debt list is never read as progress, and `body-m13-02` as newly visible debt. **The fix for it is the M13–M15 fix: split the sentences, do not raise the cap.** Q4 is April.
+
+### ⚠️ What is NOT built
+
+**There is no screen.** She cannot see a list, sit a test, or have a result recorded, and `db` has no table for one. Until that exists **this is paper** — and *correct and unreachable* is the failure this project has made six times, so it is written in the data file, in the check's own output, and here.
+
+**The carry-over rule is already decided and not yet implemented.** From `year-plan-03`, taken from Lamar's app: the list rotates on a strict 7-day cycle whether or not the test was passed; missed words carry into next week and are topped up to ten; **a test never taken carries the whole list forward, treated as fully missed, never silently dropped.**

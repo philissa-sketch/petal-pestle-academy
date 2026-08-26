@@ -58,14 +58,25 @@
 //
 // ---- WHAT IT DOES NOT ASSERT, so it never claims more than it tests ----
 //
+//   4. §3's table — "What Khan assigns her, right now" — carries the same nine
+//      levels. WIDENED v3.88, the moment §3 was rewritten clean.
+//      ⚠️ At v3.86 this check deliberately did NOT cover §3, because §3 was
+//      stale and a check that quietly covered a stale section would have made
+//      the staleness invisible. The header said, in capitals, to widen it the
+//      moment §3 was corrected. §3 was corrected at v3.88 and this is that
+//      widening — written in the same session, not left for someone to find.
+//
+// ---- WHAT IT DOES NOT ASSERT, so it never claims more than it tests ----
+//
 //   · Anything in §1b. That is the Aug 13 baseline, it is FROZEN by design, and
 //     a check that forced it to match today's record would destroy the only
 //     thing a growth delta can be measured from.
-//   · Anything in §1c, §2, §3, §4, §5. §3 is known to be stale as this is
-//     written — it still prints 2.50 and 2.82 and an argument v3.81 overturned.
-//     A check that quietly covered it would make that staleness invisible.
-//     ⚠️ IF §3 IS EVER CORRECTED, WIDEN THIS CHECK TO IT. Do not leave the gap
-//     because the heading here says the gap is known.
+//   · Anything in §1c, §2, §4, §5.
+//   · WHICH KHAN UNIT §3 SAYS SHE OPENS. Only the levels. The unit column is
+//     produced by khanFor/laneFor/nextUnitForStrand, and asserting it here
+//     would mean reimplementing those three functions inside a check — at
+//     which point the check and the app can drift apart and BOTH be self-
+//     consistent. check-strand-lanes and check-khan-units own that rule.
 //   · That the prose around the numbers is true.
 //   · That the document was updated for any particular change.
 //
@@ -209,38 +220,53 @@ if (candidates.length > 1) {
 // numbers for the same strand, and two of which are frozen history. That is the
 // adjacency trap this project has hit seven times, and slicing is the fix.
 
-const SEC1_START = /\n##\s*1\.\s/;
-const SEC1_END = /\n##\s*1[a-z]\.\s/;
-
-const startM = doc.match(SEC1_START);
-let section1 = null;
-if (!startM) {
-  fail(
-    'doc-has-section-1',
-    `could not find the "## 1." heading in ${DOC_REL}. If it was renamed, this check has ` +
-      `stopped asserting anything — fix the pattern rather than deleting the assertion.`
-  );
-} else {
+/** The text between one heading and the next, or null when the heading is gone. */
+function slice(name, startRx, endRx, missingRule) {
+  const startM = doc.match(startRx);
+  if (!startM) {
+    fail(
+      missingRule,
+      `could not find the ${name} heading in ${DOC_REL}. If it was renamed, this check has ` +
+        `stopped asserting it — fix the pattern rather than deleting the assertion.`
+    );
+    return null;
+  }
   const from = startM.index + startM[0].length;
   const rest = doc.slice(from);
-  const endM = rest.match(SEC1_END);
-  section1 = endM ? rest.slice(0, endM.index) : rest;
+  const endM = rest.match(endRx);
+  return endM ? rest.slice(0, endM.index) : rest;
 }
 
-if (section1) {
+const section1 = slice('"## 1."', /\n##\s*1\.\s/, /\n##\s*1[a-z]\.\s/, 'doc-has-section-1');
+const section3 = slice('"## 3."', /\n##\s*3\.\s/, /\n##\s*4\.\s/, 'doc-has-section-3');
+
+/**
+ * Compare one section's level table against her record.
+ *
+ * ⚠️ ONE FUNCTION, CALLED TWICE, RATHER THAN A COPY. §1 and §3 print the same
+ * nine numbers, and this project has already had two implementations of one
+ * metric drift apart while both looked right — v3.78 and v3.84, the second of
+ * which put two different letter grades on one Georgia record. A copied
+ * assertion with the same contents today is two assertions tomorrow.
+ */
+function compareLevels(section, name) {
+  if (!section) return;
+
   // Rows look like:  | Grammar & Usage | **2.35** | ✓ | ... |
+  // The label and the level are the FIRST TWO cells, so a table that gains a
+  // column on the right — as §3 did when the lane column arrived — still reads.
   const rowRx = /^\|\s*(?:\*\*)?([^|*]+?)(?:\*\*)?\s*\|\s*(?:\*\*)?(\d\.\d{2})(?:\*\*)?\s*\|/gm;
   const found = new Map();
   let m;
-  while ((m = rowRx.exec(section1)) !== null) {
+  while ((m = rowRx.exec(section)) !== null) {
     found.set(m[1].trim(), m[2]);
   }
 
   if (found.size === 0) {
     fail(
-      'section-1-table-parses',
-      `§1 of ${DOC_REL} has no rows this check can read. The table shape changed, and a check ` +
-        `that silently matches nothing is the thing this file exists to prevent.`
+      `${name}-table-parses`,
+      `${name} of ${DOC_REL} has no rows this check can read. The table shape changed, and a ` +
+        `check that silently matches nothing is the thing this file exists to prevent.`
     );
   }
 
@@ -256,8 +282,8 @@ if (section1) {
 
     if (printed === undefined) {
       fail(
-        'every-strand-has-a-row',
-        `§1 has no row labelled "${strand.label}", but her record holds it at ${expected}. ` +
+        `${name}-every-strand-has-a-row`,
+        `${name} has no row labelled "${strand.label}", but her record holds it at ${expected}. ` +
           `A strand missing from the table is a strand this check cannot guard — an omission ` +
           `must never exempt itself.`
       );
@@ -267,8 +293,8 @@ if (section1) {
     compared += 1;
     if (printed !== expected) {
       fail(
-        'section-1-level-matches-record',
-        `§1 says ${strand.label} is ${printed}. Her record says ${expected}. This document ` +
+        `${name}-level-matches-record`,
+        `${name} says ${strand.label} is ${printed}. Her record says ${expected}. This document ` +
           `governs the reading level of every lesson in the app — master plan §30.`
       );
     }
@@ -279,15 +305,18 @@ if (section1) {
   // a check can have. run-all-checks has the same floor for the same reason.
   if (compared === 0 && found.size > 0) {
     fail(
-      'something-was-actually-compared',
-      `§1 has ${found.size} readable rows and NOT ONE of them matched a strand label from ` +
+      `${name}-something-was-actually-compared`,
+      `${name} has ${found.size} readable rows and NOT ONE of them matched a strand label from ` +
         `src/config/strands.js. The labels have drifted apart, so this check is reading a ` +
         `table it cannot understand and would pass whatever the numbers said.`
     );
   } else if (compared > 0) {
-    notes.push(`§1: ${compared} of ${STRANDS.length} strand levels compared against her record`);
+    notes.push(`${name}: ${compared} of ${STRANDS.length} strand levels compared against her record`);
   }
 }
+
+compareLevels(section1, '§1');
+compareLevels(section3, '§3');
 
 // ---- §1d, the read-aloud count --------------------------------------------
 
@@ -323,9 +352,12 @@ console.log('\nPetal & Pestle — diagnostic record check');
 console.log('Does her diagnostic document say what her record says?\n');
 for (const n of notes) console.log(`  ${n}`);
 console.log(
-  '\n  NOT TESTED HERE: §1b (the Aug 13 baseline, frozen on purpose), §1c, and\n' +
-    '  §3 — which is KNOWN to be stale and must not be made invisible by a check\n' +
-    '  that quietly covers it. Widen this to §3 when §3 is corrected.\n'
+  '\n  NOT TESTED HERE: §1b — the Aug 13 baseline, frozen on purpose, because a\n' +
+    '  check that forced it to match today would destroy the growth delta. Nor\n' +
+    '  WHICH KHAN UNIT §3 says she opens: that comes from khanFor, laneFor and\n' +
+    '  nextUnitForStrand, and reimplementing those here would let the check and\n' +
+    '  the app drift apart while both stayed self-consistent. check-strand-lanes\n' +
+    '  and check-khan-units own that rule.\n'
 );
 
 if (failures.length === 0) {
