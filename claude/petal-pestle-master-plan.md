@@ -2423,3 +2423,53 @@ That is the uncomfortable part, and it is why the fix is a check rather than an 
 Her handover said *"Measurement 2.44 is Unit 6."* An earlier session in this same conversation told her that disagreed with the disk.
 
 **It did not. She was reading the Home card, and she read it correctly.** What she had was a correct reading of the wrong definition — because the app was giving two. **She was not mistaken; the app was.** Telling a person their note is wrong when the software is the thing that is wrong is its own kind of failure, and it is worth writing down beside the bug that caused it.
+
+---
+
+## 55. A SCREEN THAT WAS DOWN, AND THIRTY-EIGHT GREEN CHECKS — v3.93
+
+**The Grown-Up Corner threw on render, on the live site, and v3.92 put it there.**
+
+§54 changed one call in three files:
+
+```
+buildActionPlan(strands)  →  buildActionPlan(strands, grades)
+```
+
+`HomeDashboard` and `PlanView` each gained a selector beside it. **`ParentDashboard` did not** — and there **is** a `grades` in that file, at line 798, **inside a different component**. The edit read as correct in the file, in the diff, and in review. It threw `ReferenceError` the moment the screen rendered.
+
+**That is the screen where she records a Khan grade, marks the journal and takes a backup.** Gigi found it by opening it.
+
+### What went right
+
+**The error boundary did exactly its job.** She saw *"This page got tangled — nothing you did caused this and nothing you have finished is lost, every answer is saved the moment you give it"*, and underneath, small: **"For a grown-up: grades is not defined."**
+
+A child sees a plant and a Start again button. A grown-up gets the actual reason. **That line is what turned this into a two-minute diagnosis instead of an afternoon**, and it is worth saying so, because the temptation with a friendly error screen is to hide the cause entirely.
+
+### ⚠️ And thirty-eight checks were green while it was broken
+
+This is the part worth keeping.
+
+**Every check in this project reads TEXT.** Does the tag close. Does the import resolve. Does the bracket balance. Does this file mention that string. **Not one of them asked the only question that mattered: does this name exist HERE?**
+
+`check-sources` gets closest and cannot help — its own header says it strips strings and counts brackets. **A balanced bracket around an undefined variable is still balanced.**
+
+### ⭐ Check #39 understands the code instead of reading it
+
+`check-undefined` parses all **220 files** in `src/` with Babel and walks the **real scope chain**, asking of every one of **15,612 identifier references** whether a binding reaches it.
+
+⚠️ **A file-wide text search would have FOUND `grades` and passed.** It is declared — in another component. **Scope is the entire point**, and it is why the negative test matters: putting the bug back exactly as it shipped turns this red, and `check-sources` stays green beside it.
+
+⚠️ **The parser is declared in `package.json`, not borrowed.** `@babel/parser` and `@babel/traverse` arrive with `@vitejs/plugin-react` anyway, but a check resting on a transitive dependency **disappears on an unrelated upgrade, silently**. If the parser cannot load, this check **fails rather than skips**. A green run must always mean the files were read.
+
+**The globals list is deliberately short.** The temptation when this goes red is to add a name to it. It went red exactly once while being written — on `process` — and the answer was to add the real global, not to widen the rule.
+
+### ⭐ Shipping with no build minutes
+
+Netlify charges build minutes only for builds **it** runs. **Uploading an already-built folder does not consume any.**
+
+`BUILD-FOR-NETLIFY.bat` runs the checks, **refuses to build if any is red**, builds on her own computer, and then tells her in plain words to drag the `dist` folder onto the Deploys page.
+
+⚠️ **It says loudly that uploading by hand SKIPS the checks Netlify would have run.** Normally the Netlify build is the second pair of eyes and a red check stops the site updating. Deploying this way removes that entirely, so the local run is the only thing standing between a mistake and the live site. **A shortcut that quietly removes a guard is worse than no shortcut**, so the guard is stated where she will read it.
+
+⚠️ **And it has not been run.** The build cannot execute in the environment these sessions run in — `node_modules` holds Windows rollup binaries only. **Gigi will be the first person to run this file**, and that is written here rather than implied away.

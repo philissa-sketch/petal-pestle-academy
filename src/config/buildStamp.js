@@ -20,12 +20,25 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.92';
+export const VERSION = '3.93';
 
 export const BUILD_DATE = 'August 26, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.93',
+    date: 'Aug 26, 2026',
+    notes: [
+      '⚠️⚠️ THE GROWN-UP CORNER WAS DOWN ON THE LIVE SITE, AND I PUT IT THERE. v3.92 changed buildActionPlan(strands) to buildActionPlan(strands, grades) in three files by matching the same text in each. HomeDashboard and PlanView each got a selector added beside it. PARENT DASHBOARD DID NOT — and there IS a `grades` in that file, at line 798, inside a DIFFERENT component. So the edit read as correct in the file, in the diff and in review, and threw ReferenceError the moment the screen rendered.',
+      'THAT IS THE SCREEN WHERE SHE RECORDS A KHAN GRADE, MARKS THE JOURNAL AND TAKES A BACKUP. Gigi found it by opening it. The error boundary did its job — "nothing you have finished is lost" — and printed the real reason underneath for a grown-up, which is the only thing that made this a two-minute diagnosis.',
+      '⚠️ AND ALL 38 CHECKS WERE GREEN WHILE IT WAS BROKEN. Every check in this project reads TEXT: does the tag close, does the import resolve, does the bracket balance, does this file mention that string. Not one of them asked the only question that mattered — DOES THIS NAME EXIST HERE? check-sources gets closest and cannot help: a balanced bracket around an undefined variable is still balanced.',
+      '⭐ CHECK #39, AND IT IS THE FIRST ONE IN THIS PROJECT THAT UNDERSTANDS THE CODE RATHER THAN READING IT. check-undefined parses all 220 files in src/ with Babel and walks the real scope chain, asking of every one of 15,612 identifier references whether a binding reaches it. A file-wide text search would have FOUND `grades` and passed — it is declared, in another component. Scope is the whole point.',
+      '⚠️ THE PARSER IS DECLARED IN package.json, NOT BORROWED. @babel/parser and @babel/traverse arrive with @vitejs/plugin-react anyway, but a check resting on a transitive dependency disappears on an unrelated upgrade — and it would disappear SILENTLY. If the parser cannot load, the check FAILS rather than skipping. A green run must always mean the files were read.',
+      'THE GLOBALS LIST IS SHORT ON PURPOSE, and the temptation when this goes red is to add a name to it. It went red exactly once while being written — on `process` — and the answer was to add the real global, not to widen the rule.',
+      '⭐ AND THERE IS A WAY TO SHIP WITHOUT BUILD MINUTES. Netlify only charges minutes for builds IT runs; uploading an already-built folder does not. BUILD-FOR-NETLIFY.bat runs the checks, refuses to build if any is red, builds on her own computer and then tells her in words to drag the dist folder onto the Deploys page. ⚠️ It says loudly that uploading by hand SKIPS the checks Netlify would have run, so the local run is the only pair of eyes.'
+    ]
+  },
   {
     version: '3.92',
     date: 'Aug 26, 2026',

@@ -1796,11 +1796,22 @@ export function ParentDashboard({ onExit }) {
   const resetAll = useAppStore((s) => s.resetAll);
   // Written at v3.55, rendered by nothing until Aug 19.
   const byStrand = useAppStore((s) => s.readAloudByStrand());
+  // ⚠️ v3.93 — THIS LINE WAS MISSING AND IT TOOK THE WHOLE SCREEN DOWN.
+  //
+  // v3.92 changed `buildActionPlan(strands)` to `buildActionPlan(strands, grades)`
+  // in three files by matching the same text in each. In HomeDashboard and
+  // PlanView a selector was added beside it. HERE IT WAS NOT — and there IS a
+  // `grades` in this file, at line 798, inside KhanGradesPanel. A different
+  // component. So the edit read as correct and threw ReferenceError at render.
+  //
+  // The Grown-Up Corner is where she records a Khan grade, marks the journal
+  // and takes a backup. It was down on the live site until she opened it.
+  const khanGrades = useAppStore((s) => s.khanGrades);
 
   const [tab, setTab] = useState('report');
   const [confirmText, setConfirmText] = useState('');
 
-  const plan = buildActionPlan(strands, grades);
+  const plan = buildActionPlan(strands, khanGrades);
   const rows = planRows(plan);
 
   // Read-aloud usage, split by whether it landed on a strand where hearing the
