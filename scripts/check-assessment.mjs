@@ -1067,7 +1067,42 @@ function itemsForLesson(lessonId) {
 //
 // Comments are stripped first, on purpose. The history of why units existed is
 // worth keeping in the source; what must not survive is copy she can SEE.
+//
+// ---- ⚠️ KHAN'S UNIT TEST IS A DIFFERENT INSTRUMENT WITH THE SAME NAME ----
+//
+// Added v3.95, and it is the SIXTH time a check in this project has failed
+// correct content. v3.94 put Khan's own links on the grading screen and matched
+// Khan's wording deliberately — Khan calls them unit tests, on the page Gigi is
+// copying a score off. This rule was written about THIS APP's unit test, which
+// the weekly test replaced at v3.8, and it does not know the difference.
+//
+// ⚠️ AND IT HAD ALREADY COST A DEPLOY. v3.94 was red from the day it was built
+// and nobody ran this check — its own run status says 11 of 39. netlify.toml
+// runs `npm run check && npm run build`, so the deploy failed and the live site
+// correctly stayed on v3.93. The guard worked; nothing read the reason.
+//
+// ⚠️ SO THE EXEMPTION IS ENUMERATED BY NAME AND SCOPED TO ONE FILE — the same
+// discipline check-publish-safety uses, and for the reason v3.76 gives: a guard
+// that holds by luck is not a guard. A heuristic ("allow it near the word
+// Khan") would quietly re-admit the stale app copy this rule exists to catch.
+//
+// ⚠️ AND IT IS A RATCHET, like KNOWN_OVER in check-lesson-prose. Each line below
+// must still be ON SCREEN. Reword one and this FAILS until its line is deleted,
+// so an exemption cannot outlive the thing it was granted for.
 // ---------------------------------------------------------------------------
+const KHAN_UNIT_TEST_COPY = [
+  {
+    file: 'ParentDashboard.jsx',
+    text: 'unit test ↗',
+    why: "the link to Khan's unit test on the grading screen — v3.94, Khan's own wording"
+  },
+  {
+    file: 'ParentDashboard.jsx',
+    text: 'no unit test on Khan',
+    why: 'said out loud where Khan built no test, rather than left as an absence — v3.94'
+  }
+];
+
 {
   const { readFileSync, readdirSync, statSync } = await import('node:fs');
   const files = [];
@@ -1080,9 +1115,16 @@ function itemsForLesson(lessonId) {
   })(resolve(ROOT, 'src/components'));
 
   for (const f of files) {
-    const src = readFileSync(f, 'utf8')
+    let src = readFileSync(f, 'utf8')
       .replace(/\/\*[\s\S]*?\*\//g, '')   // block comments
       .replace(/^\s*\/\/.*$/gm, '');       // whole-line comments
+
+    // Khan's instrument, enumerated above. Removed before the search so every
+    // OTHER use of the phrase in this file still fails.
+    for (const ok of KHAN_UNIT_TEST_COPY) {
+      if (f.endsWith(ok.file)) src = src.split(ok.text).join('');
+    }
+
     const hit = /unit tests?/i.exec(src);
     if (hit) {
       const short = f.slice(f.indexOf('src'));
@@ -1096,6 +1138,30 @@ function itemsForLesson(lessonId) {
   if (!errors.length) {
     notes.push(`${files.length} screens checked: none still mention a unit test`);
   }
+
+  // ---- THE RATCHET ----
+  //
+  // Every exemption must still be on screen. Reword one and this fails until
+  // its line is deleted — so the list cannot quietly outlive its reason, which
+  // is how five earlier exemptions in this app survived the thing they were for.
+  for (const ok of KHAN_UNIT_TEST_COPY) {
+    const target = files.find((f) => f.endsWith(ok.file));
+    if (!target) {
+      errors.push(
+        `check-assessment exempts "${ok.text}" in ${ok.file} and that file no longer exists. ` +
+          `Delete the exemption.`
+      );
+      continue;
+    }
+    if (!readFileSync(target, 'utf8').includes(ok.text)) {
+      errors.push(
+        `check-assessment still exempts "${ok.text}" in ${ok.file}, and that text is no longer ` +
+          `there — ${ok.why}. An exemption that outlives its reason is how the phrase creeps ` +
+          `back. Delete the exemption.`
+      );
+    }
+  }
+
 }
 
 // ---------------------------------------------------------------------------
