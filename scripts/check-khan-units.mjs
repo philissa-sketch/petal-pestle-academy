@@ -341,6 +341,86 @@ for (const subject of ['math', 'reading', 'writing']) {
   }
 }
 
+// ---- 8. A COURSE CARRIES ALL OF ITSELF, NOT THE PART SOMEBODY GOT TO -------
+//
+// ⚠️ THE ASSERTION THIS FILE WAS MISSING, AND IT WAS MISSING FOR THIRTEEN DAYS.
+//
+// §2 above asserts units run 1..n with no gaps. Grammar held units 1 and 2 of
+// Khan's TEN. One and two have no gaps. IT PASSED EVERY SINGLE RUN — thirty-nine
+// green checks over a course carrying a fifth of itself, and the file even
+// explained in a comment why that was fine.
+//
+// Gigi found it by opening the Khan grades screen and asking why Language Arts
+// and Writing stopped at the verb. She could not record a grade for a unit that
+// did not exist here, so seven units of real work had nowhere to go.
+//
+// ---- WHY A COUNT AND NOT A CLEVERER TEST ----
+//
+// The check cannot ask Khan how many units a course has: Khan serves HTTP 200
+// for dead pages, renders in JavaScript, and its public API is gone (see this
+// file's header). So the count is DECLARED — `unitCount`, written down by a
+// person who opened the page — and this asserts the list matches the claim.
+//
+// That is a smaller promise than "this course is complete", and it is stated as
+// such below rather than dressed up. What it makes impossible is the specific
+// thing that happened: a course quietly holding fewer units than the person who
+// last looked at it wrote down. To ship a short course now you have to EDIT THE
+// DECLARED NUMBER DOWN, which is a visible act in a diff, not an omission.
+//
+// ⚠️ AND A MISSING unitCount IS A FAILURE, NOT A SKIP. A course that simply
+// omits the field would otherwise opt itself out of this check by saying
+// nothing — which is how the original bug looked from the outside.
+for (const id of U.KHAN_UNIT_COURSE_IDS) {
+  const c = U.KHAN_UNIT_COURSES[id];
+
+  if (!Number.isInteger(c.unitCount) || c.unitCount < 1) {
+    errors.push(
+      `${id}: no unitCount. Open the course page, count what Khan prints, and write it down. ` +
+        `A course with no declared length cannot be checked for being short — which is exactly ` +
+        `how Grammar carried 2 of 10 units through thirty-nine green runs.`
+    );
+    continue;
+  }
+
+  if (c.units.length < c.unitCount) {
+    errors.push(
+      `${id} "${c.label}" holds ${c.units.length} of its ${c.unitCount} units. ` +
+        `Units ${c.units.length + 1}–${c.unitCount} cannot be graded, cannot be linked, and cannot be ` +
+        `reached — Gigi has no way to record work Azianna has actually done. ` +
+        `⚠️ Do NOT lower unitCount to make this pass unless Khan really has removed units; ` +
+        `add the missing ones, each opened in a browser first.`
+    );
+  }
+
+  if (c.units.length > c.unitCount) {
+    errors.push(
+      `${id} "${c.label}" holds ${c.units.length} units but declares ${c.unitCount}. ` +
+        `Either a unit was added without opening the course page, or Khan has grown the course ` +
+        `and nobody re-read it. Both need a browser, not a guess.`
+    );
+  }
+}
+
+// ---- 8b. THE FLOOR. This section must never assert nothing. ---------------
+// If KHAN_UNIT_COURSE_IDS is ever empty or the loop above is refactored into
+// silence, the two assertions vanish and the check goes green having examined
+// nothing — the shape run-all-checks' own floor exists to prevent.
+{
+  const declared = U.KHAN_UNIT_COURSE_IDS.filter((id) =>
+    Number.isInteger(U.KHAN_UNIT_COURSES[id].unitCount)
+  ).length;
+  if (declared < 4) {
+    errors.push(
+      `only ${declared} course(s) declare a unitCount. This app has had four since v3.19, so the ` +
+        `completeness rule has stopped being applied rather than the courses having gone away.`
+    );
+  }
+  notes.push(
+    `${declared} courses declare their unit count, and each holds every unit it declares ` +
+      `(this proves the list matches what a person counted on the page — NOT that Khan still agrees today)`
+  );
+}
+
 // ---- report ---------------------------------------------------------------
 console.log('\nPetal & Pestle — Khan unit links check\n');
 if (errors.length) {
@@ -369,8 +449,34 @@ console.log(
   '  · with nothing graded each strand starts at the FIRST UNIT OF ITS OWN LANE, and advances one per grade'
 );
 for (const n of notes) console.log('  · ' + n);
-console.log('\n  ALL 28 ADDRESSES WERE OPENED IN A BROWSER ON Aug 16 2026 — 16 units, 10 unit tests,');
-console.log('  2 course challenges. Every heading matched. Nothing came back "Oops!".');
+// ⚠️ v3.94 — THIS WAS TWO HAND-TYPED SENTENCES AND BOTH HAD GONE STALE.
+//
+// They said "ALL 28 ADDRESSES WERE OPENED IN A BROWSER ON Aug 16 2026 — 16
+// units, 10 unit tests, 2 course challenges." Grammar gained eight units and
+// eight unit tests on Aug 29 and every one of those numbers was wrong, in the
+// check whose job is to notice wrong numbers. The date was wrong too: it named
+// one render pass as though it were the only one.
+//
+// "Anything countable is generated, never hand-typed" — the rule the build log
+// records as having been broken by the video counts, the lesson counts, the
+// version in two files, the strand levels and the list of checks itself. This
+// is the same rule, in the file that polices it.
+{
+  const units = U.KHAN_UNIT_COURSE_IDS.reduce((n, id) => n + U.KHAN_UNIT_COURSES[id].units.length, 0);
+  const tests = U.KHAN_UNIT_COURSE_IDS.reduce(
+    (n, id) => n + U.KHAN_UNIT_COURSES[id].units.filter((u) => u.test).length,
+    0
+  );
+  const challenges = U.KHAN_UNIT_COURSE_IDS.filter((id) => U.KHAN_UNIT_COURSES[id].courseChallenge).length;
+  const renders = [...new Set(U.KHAN_UNIT_COURSE_IDS.map((id) => U.KHAN_UNIT_COURSES[id].renderedOn))].sort();
+
+  console.log(
+    `\n  ${units + tests + challenges} ADDRESSES ARE ON FILE — ${units} units, ${tests} unit tests, ` +
+      `${challenges} course challenge${challenges === 1 ? '' : 's'}.`
+  );
+  console.log(`  Each course was last opened in a browser on: ${renders.join(', ')}.`);
+  console.log('  Every heading matched on the day it was read. Nothing came back "Oops!".');
+}
 console.log('\n  WHAT THIS CHECK CANNOT DO: it cannot tell you they are STILL live today.');
 console.log('  Khan serves HTTP 200 for a dead course and renders "Page not found" in JavaScript,');
 console.log('  a dead course\'s HTML <title> is identical to a live one, and the public API is gone');

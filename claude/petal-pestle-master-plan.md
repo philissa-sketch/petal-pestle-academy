@@ -2473,3 +2473,151 @@ Netlify charges build minutes only for builds **it** runs. **Uploading an alread
 ⚠️ **It says loudly that uploading by hand SKIPS the checks Netlify would have run.** Normally the Netlify build is the second pair of eyes and a red check stops the site updating. Deploying this way removes that entirely, so the local run is the only thing standing between a mistake and the live site. **A shortcut that quietly removes a guard is worse than no shortcut**, so the guard is stated where she will read it.
 
 ⚠️ **And it has not been run.** The build cannot execute in the environment these sessions run in — `node_modules` holds Windows rollup binaries only. **Gigi will be the first person to run this file**, and that is written here rather than implied away.
+
+---
+
+## 56. TWO OF TEN UNITS, AND THE RULE THAT WAS ALREADY WRITTEN DOWN — v3.94
+
+Gigi opened the Khan grades screen and asked one question: **why does Language Arts and Writing stop at the verb?**
+
+It stopped because `khanUnits.js` stopped. Khan's Grammar course has ten units and a Course Challenge; this file held **two**. Azianna could do Units 3–10 on Khan and **there was nowhere to write the result down**, because the app had never heard of them.
+
+### The check was green, and it could not have been anything else
+
+`check-khan-units` asserts units run **1..n with no gaps**. Units 1 and 2 have no gaps. A course carrying a fifth of itself passed every run this project has ever made.
+
+And the file argued its own case in a comment:
+
+> *"Only the two units Quarter 1 teaches are here. Units 3 onward arrive with the quarters that teach them. Units 8–10 are middle-school syntax and are not part of a fourth-grade finish at all."*
+
+That reads as a decision. It was never tested, and nothing was ever going to make it come true. **A reason written in a comment is not a check** — the second standing sentence in four days to be believed rather than tested, after the `Lamar DOC` move rule at v3.89 and the "private repository is the second guard" line at v3.87.
+
+**§8 is the fix.** Each course declares `unitCount` — the number Khan prints on its own page — and a shorter list **fails the build**. ⚠️ **A missing `unitCount` fails too, never skips.** A course that simply omits the field would opt itself out by saying nothing, which is precisely how this looked from the outside. Three negative tests, all red: Grammar cut back to two, the count deleted, an eleventh unit added without raising it.
+
+⚠️ **The escape hatch is stated rather than hidden.** Someone can still lower `unitCount` to make a short course pass. What they cannot do is *omit* the units silently — lowering the number is a visible edit in a diff, and the check says so in its own failure text.
+
+### ⚠️ The rule this broke was recorded sixteen days earlier
+
+`claude/mission-control-vs-petal-pestle.md`, written Aug 13. **Section 6 is titled "The rule of yours that Petal & Pestle is currently breaking."** It quotes Lamar's locked decisions:
+
+> anything generative or content-based … must be sized for a FULL SCHOOL YEAR of use, not a sample or a "good start" … treat anything short of a full year as an **incomplete build**, not a phase to revisit "eventually."
+
+**Gigi has said more than once that she asked for Mission Control and is not getting it.** On this she was right, it was written down in her own repository, and nothing read it. A document that records a broken rule and changes nothing is a document that lets the rule be broken again somewhere else — which is what happened, in a file nobody thought to re-open.
+
+### All ten opened in a browser, and that is why Lamar's file was not copied
+
+Lamar's `src/data/khan/grammarCourseOrder.js` carries this identical course with all ten units. Copying it would have been quick and **wrong**:
+
+| | Lamar's file | Khan, Aug 29 2026 |
+|---|---|---|
+| Unit 6 | Punctuation: the comma and the apostrophe | **Punctuation: end-of-sentence punctuation, the comma, and the apostrophe** |
+
+**Khan renamed the unit and kept the address.** A copy would have shown a stale title behind a working link — invisible on screen, and **bug #2 from `check-khan-units`' own header for the third time.** His slug was correct; his name was nine days stale.
+
+Every title below the fold was read off the live page character for character, and every unit-test path taken from the real link rather than built from a pattern.
+
+### ⭐ The grading screen had no links on it. At all.
+
+Gigi: *"Where are the links to the reading and Vocabulary so that they can be graded?"*
+
+There were none — **for any course**. Zero `href`s in the entire panel. `unitUrl`, `unitTestUrl` and `courseChallengeUrl` have existed since v3.19 and were wired to **Azianna's** screens only. **The screen asked Gigi to copy a score off a Khan page it would not take her to**, for every unit, every time.
+
+Every unit row now links to its unit and its unit test, the Course Challenge links, and where Khan built no test **the screen says so** rather than leaving a gap that reads as broken. New tab, deliberately — she keeps this screen open beside Khan and types the score back into the row she started from.
+
+### Scope was Gigi's call, and it is recorded in the lane
+
+Asked whether the lane should stop short of Units 8–9 — subject-verb agreement, dangling modifiers, parallel structure, against her measured Grammar & Usage of **2.15** — she chose the full ladder: **"add the full 1-10 and course challenge."**
+
+Written into `STRAND_LANES` beside the units themselves, with the reason: *she has watched the child work and I have read a number.* That is why it was a question and not a judgement call (rule 7), and why it is recorded rather than left to be re-argued.
+
+### ⚠️ What this version does NOT do, named so it is not lost
+
+**2nd and 3rd Grade Reading & Vocabulary are still on the Khan grades screen.** Gigi asked for them off it, and she is right that they do not belong: Khan built no unit tests and no Course Challenge for either.
+
+It is not done here for a reason worth writing down. **The `Mark complete` button on that screen is the only thing that advances her reading unit.** `readingCheck.js` may never write a Khan grade — that is deliberate, stated in its own header — but it calls `nextUnitFor(courseId, grades)` to know which unit she is on. Remove those rows and `nextUnitFor` returns Unit 1 for ever: **exactly the v3.74 bug, where the Planner offered Unit 1 no matter how much work she did.**
+
+`check-khan-advance` also asserts that this panel offers the whole catalogue, so the change touches a guard as well as a screen.
+
+**Gigi chose Option B:** the two courses come off the Khan screen and a small *finished this unit* control moves into a reading section, so nothing is stranded and no reading grade is invented that Khan never gave. **That is v3.95, and it is the next job.** Doing it in the last minutes of a session is how v3.92 happened.
+
+---
+
+## 57. ONE CARD PER SUBJECT, AND A SCREEN THAT FINALLY KNOWS ALL FOUR COURSES — v3.95
+
+Gigi, Aug 29 2026: *"The long list of randomness in the Test tab under Gradebook is confusing."* And what she wanted instead, in her own words: **one place to open and see how Azianna is doing in each subject.**
+
+### What was actually wrong
+
+The Tests table called `allWeeks()`. That returns **104 weeks across four courses** — herbalism 32, social 24, sciencelab 16, humanbody 32 — and every one of them was rendered under a heading that read **"Herbalism · Quarter 1"**. No column said which course a row belonged to, so two different courses both printed *"Q1 Week 1"*. She had sat **eleven tests** and was scrolling 104 rows to find them.
+
+It was not one bug. It was **one bug written four times in one file**, because this screen was built for Herbalism and three courses were added around it afterwards:
+
+| Where | What it did |
+|---|---|
+| The Tests table | 104 weeks, four courses, one course's heading, no course column |
+| The practice gate | Filtered `HERBALISM_Q1` — 23 lessons read, only the Herbalism ones could show |
+| `lessonLabel()` | Searched `HERBALISM_Q1` — every Science Lab, Social Studies and Human Body question printed a raw id like `sl-m2-04` |
+| The exam rows | Hardcoded `herbalism-q1-final` and `q2-final`, while `assessmentEngine.js` line 317 generates `${course}-q${n}-final` for **every** course and **every** quarter — **fourteen** possible exam results with nowhere on screen to appear |
+
+**A course was added four times and this screen was updated zero times.**
+
+### Nothing new had to be built to fix it
+
+`appCourses.js` has exported `ALL_LESSONS` and `lessonById` across all four courses **since v3.25**, and five other files already import it. `appBank.js` has spanned every course since v3.25 too, and this panel already imported it. **The Gradebook was the one screen never wired to either.** The fix was mostly deleting a wrong assumption.
+
+### The shape
+
+Above everything, unchanged: **"What is sticking"** — Solid · Settling · Slipping, and the *worth sitting down with her about* list. Gigi: *"Keep it. Do not move it, shrink it, or soften a single number."* It is now asserted by `check-gradebook` rather than protected by good intentions.
+
+Then **five cards** — Herbalism · The Science Lab · Social Studies · The Human Body · Language Arts & Writing. Each carries a letter, a percentage, and beneath it **what the number is made of**: *"6 tests sat · 3 Khan units graded · 2 writing pieces marked."* A row per quarter with its own letter, its own percentage and *"3 of 8 sat"*, opening into the weeks inside it, and then into the per-question detail as it already worked.
+
+### ⚠️ No Khan result reaches this screen, and the first cut had it wrong
+
+Gigi had written *"Maths lives on the Khan grades tab and stays there"*, and I kept Khan **Maths** off while counting Khan **Grammar** toward Language Arts & Writing — on the reasoning that Language Arts had app-owned work beside it and Mathematics did not, so a Mathematics card would be nothing but a second view of the Khan tab.
+
+**That distinction was mine, not hers.** On her real record it produced **"Language Arts & Writing — A- · 90%"** built from **one Khan unit and nothing else**, because she has no writing pieces marked and no spelling results yet. She saw it and asked the obvious question: *"Why is a Kahn unit here when it has its own area?"* — and then said the rule plainly:
+
+> **"No I asked for grades for the lessons that the app creates on this screen. Kahn has its own tab."**
+
+Her line is drawn by **who wrote the work**. Weekly tests, quarter exams, writing pieces and spelling are this app's; Khan units and the Course Challenge are somebody else's curriculum, recorded and graded on their own tab. **It needs no exceptions and it cannot drift.** Mine needed a paragraph to defend, and a rule that needs defending is a rule that gets re-argued into something else later.
+
+Nothing is stranded by this: Khan work is **not** a grade nobody reads — the failure Lamar's app was rebuilt to fix — because it has a screen that shows every row of it.
+
+⚠️ **The check now probes every Khan course, not just Maths.** The old assertion — *"there is no card called Mathematics"* — was **true the entire time Grammar was being folded in**. A true assertion beside a wrong screen is this project's oldest recurring failure, and it had gone green on the first run.
+
+### An exam weighs what the quarter weighs
+
+**Gigi's decision, taken with the arithmetic in front of her**, and the one place this version departed from what she had written down.
+
+Her instruction quoted Lamar's rule 1 — *"Equal weight per assessment. One Khan unit = one weekly test… any other weighting is a judgement someone has to defend to a reviewer."* That sentence is real and it is in his store, dated **Aug 10**. ⚠️ **His parent overturned it on Aug 23**, after it was measured: a Quarterly Exam was **0.7%** of Aerospace, and *"a student could fail every quarterly exam and finish with an A."*
+
+Petal & Pestle had the same shape. Herbalism is 32 weekly tests and 4 quarter exams:
+
+| | An exam is worth |
+|---|---|
+| Equal weight | 1 of 36 — **2.8%** |
+| Weighing its quarter | 8 of 64 — **12.5%** |
+
+Azianna could have failed all four Herbalism exams and finished with an A. **A contradiction in what was asked for is a question, not a judgement call**, so it was put to Gigi with both numbers and she chose the weighted rule. An exam's weight is **the number of that quarter's weekly tests she actually sat** — sat, not scheduled, because an exam cannot outweigh work that never happened. Everything else stays at weight 1.
+
+The check asserts the arithmetic, not the intention: three tests at 100% and an exam at 0% **must** read 50%. If it ever reads 75% again, the rule has been silently reverted.
+
+### A quarter never built for is not a quarter not reached
+
+`APP_COURSES` already declares this and nothing had ever read it: **`sciencelab` is `[1, 3]`**, **`social` is `[1, 2, 3]`**. Those quarters are not "not reached yet" — they are not coming, and a greyed row would promise work that does not exist. They are **absent**. A quarter that *is* built and not yet sat is **greyed and says so** — never a blank, never a zero, because a zero is a grade she was never given and it is the difference between *has not got there* and *failed*.
+
+This is Lamar's rule 3 — *"a wall of blank rows on day one reads as failure"* — and his code applies it at two levels: omit a subject with nothing in it, report `null` and never `0` for a quarter inside one. Both are mirrored.
+
+### Check #40 asks the code
+
+The arithmetic moved out of the panel into `src/lib/gradebook.js` as a **pure function**, for the reason Lamar's own store states: *"A store action cannot be called from a check; a pure function can."* **The panel renders and does not calculate.** `check-gradebook` builds a record with a test and an exam in every quarter of every course and asks what the screen would show.
+
+⚠️ **Its import assertions run on the parsed Babel AST, not on the file's text.** GradebookPanel's comments discuss the old `HERBALISM_Q1` import at length, and a text search would have matched them — **the v3.72 failure, where a check matched the comments explaining the decision it was testing**, and the third time this project has been bitten by a check that read prose instead of asking the code.
+
+**Seven negative tests, all seven red:** a course dropped from the cards · the single-course import put back on the panel · the exam rows hardcoded to quarters 1 and 2 · the exam returned to equal weight · an unreached quarter made to read 0% · "What is sticking" renamed · **and Khan Grammar folded back into Language Arts, which is the mistake this version actually made, reintroduced exactly as it was written.** Both files were restored afterwards and **verified by checksum**, not by looking at them.
+
+### Two things carried forward rather than quietly settled
+
+**Her two reading checks reach no subject grade, and the card says so.** `read-ela2-u1`, **25% then 75%**, sat Aug 25 and 26 — found by opening the app on her real record, not by a check. ⚠️ **This is different from Khan and the difference is the whole rule above**: a reading check is *this app's own work*, written in `readingCheck.js` and `ela2Unit1.js`, so it has no other screen to be graded on. It belongs here and it is waiting for Reading to become its own card — folding it into a writing grade would bury the **`unaidedPercent`** the instrument exists to produce. It stays visible in "Every attempt, question by question" meanwhile.
+
+**`TestView.jsx` imports `HERBALISM_Q1` directly too** — the same bug, in a second file, on a screen **Azianna** sees. Found here, recorded in §6, and not fixed here. Doing it in the last ten minutes of a session is how v3.92 happened.

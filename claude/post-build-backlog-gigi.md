@@ -147,3 +147,41 @@ A weekly word list, a daily puzzle, a test at the end of the week. Fits the Thur
 5. ~~§5 and §6~~ ✅ both done.
 
 Every item gets the same treatment: **a check that would have caught it, negative-tested by reintroducing the bug** — a check that never claims more than it tests, a rule she must act on is a **check** rather than a warning, **when she says the same thing twice the guard is the first suspect**, **a contradiction in what she asked for is a question**, and **a legal figure is looked up, never remembered**.
+
+---
+
+## 7. READING AS ITS OWN SUBJECT, LIKE MISSION CONTROL'S
+
+**Gigi's instruction, Aug 29 2026:** *"Add for later after the grading is fixed, that the reading check should be created for reading like Lamar's in the mission control homeschool."*
+
+**⚠️ BLOCKED UNTIL THE GRADING WORK IS FINISHED.** Her words, and the order matters — v3.94 and v3.95 come first.
+
+### What she is asking for, read off his disk rather than guessed
+
+`mission-control-homeschool/src/data/lessons/reading7.js` — **3,835 lines.** His reading is **not a Khan course at all.** It is:
+
+- **original passages** written for the curriculum, so there is no copyright question
+- comprehension questions on each — main idea, vocabulary in context, inference
+- **real, published, verified book recommendations** shown on the debrief, with publisher-stated reading ages
+- per his parent instruction, history and biography passages about **Black Americans in aerospace**
+
+Reading is a subject that grades itself. Khan is not involved.
+
+### Why hers needs it
+
+Khan built **zero** assessments for elementary ELA — counted on the rendered page: 77 links, none of them a test. So `ela2` and `ela3` carry `graded: 'parent'` and the mark was always meant to come from Gigi by hand.
+
+`src/lib/readingCheck.js` is the first step of this and already exists — **it was built in direct response to Gigi on Aug 25**, quoted in its own header:
+
+> *"There are no unit tests. How can we test her. In Lamar's app we have passages that he has to read and is tested on it."*
+
+**It covers one unit.** `src/data/reading/ela2Unit1.js`, and `READING_UNITS` has a single entry. His covers a year.
+
+### ⚠️ The two rules that already exist and must survive the build
+
+1. **`readAloud` is recorded per answer, and `unaidedPercent` is null when everything was read to her.** 54 of her 86 recorded answers were read aloud — 63% — and 5 of her 6 Reading Comprehension answers. **Her independent reading has never been measured by anything.** A reading check that does not record whether she was read to produces one more listening score wearing a reading score's name, which is worse than no score because it looks like the blank was filled.
+2. **It may never write a Khan grade.** A paper this app wrote must not advance a Khan unit Khan has never seen.
+
+### The sizing rule this must be built against
+
+`mission-control-vs-petal-pestle.md` §6, quoting Lamar: content is sized for a **FULL SCHOOL YEAR**, and anything short of one is an **incomplete build**. **v3.94 is what happens when that is forgotten** — a Khan course carrying two of its ten units for thirteen days, green the whole time. One reading unit out of a year is the same shape. **Blueprint the whole year before writing passage one.**

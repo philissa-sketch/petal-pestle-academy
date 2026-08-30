@@ -45,6 +45,17 @@ import {
   percentFromFraction
 } from '../../lib/khanGrade.js';
 import { resolveBlockTarget } from '../../lib/blockLinks.js';
+// ⚠️ v3.94 — THE GRADING SCREEN HAD NO LINKS ON IT AT ALL.
+//
+// These three builders have existed since v3.19 and were used by AZIANNA'S
+// screens only. This screen asked Gigi to copy a score off a Khan page it would
+// not take her to — she had to go and find it herself, every time, for every
+// unit. Gigi, Aug 29: "Where are the links to the reading and Vocabulary so that
+// they can be graded?" There were none for any course.
+//
+// They are built from khanUnits.js, so a link here can never disagree with the
+// unit name printed beside it — both come from the same confirmed record.
+import { unitUrl, unitTestUrl, courseChallengeUrl } from '../../data/khan/khanUnits.js';
 import {
   speechSupported,
   listVoices,
@@ -1005,6 +1016,39 @@ function KhanGradesPanel() {
                             she is here
                           </span>
                         )}
+                        {/* ---- v3.94 — GO AND LOOK AT THE WORK YOU ARE GRADING ----
+                            A new tab, deliberately: Gigi keeps this screen open
+                            beside Khan and types the score back into the row she
+                            started from. Replacing the page would lose the row.
+                            `rel` is set because target="_blank" without it hands
+                            the opened page a handle on this one. */}
+                        <span className="mt-1 flex flex-wrap items-center gap-3">
+                          {unitUrl(c.courseId, u.n) && (
+                            <a
+                              href={unitUrl(c.courseId, u.n)}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="text-[0.7rem] text-lavender-700 underline hover:no-underline"
+                            >
+                              open the unit on Khan ↗
+                            </a>
+                          )}
+                          {unitTestUrl(c.courseId, u.n) ? (
+                            <a
+                              href={unitTestUrl(c.courseId, u.n)}
+                              target="_blank"
+                              rel="noreferrer noopener"
+                              className="text-[0.7rem] text-lavender-700 underline hover:no-underline"
+                            >
+                              unit test ↗
+                            </a>
+                          ) : (
+                            /* Said out loud rather than left as an absence. Khan
+                               built no test here, and a missing link with no
+                               reason reads as a broken screen. */
+                            <span className="text-[0.7rem] text-ink-500">no unit test on Khan</span>
+                          )}
+                        </span>
                       </span>
 
                       {g ? (
@@ -1134,6 +1178,19 @@ function KhanGradesPanel() {
                     <span className="ml-2 text-[0.7rem] text-ink-500">
                       the whole course, after the units
                     </span>
+                    {/* v3.94 — same reason as the unit links above. */}
+                    {courseChallengeUrl(c.courseId) && (
+                      <span className="mt-1 block">
+                        <a
+                          href={courseChallengeUrl(c.courseId)}
+                          target="_blank"
+                          rel="noreferrer noopener"
+                          className="text-[0.7rem] text-lavender-700 underline hover:no-underline"
+                        >
+                          open the Course Challenge on Khan ↗
+                        </a>
+                      </span>
+                    )}
                   </span>
 
                   {challenge ? (

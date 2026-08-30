@@ -94,6 +94,9 @@ export const KHAN_UNIT_COURSES = {
     renderedOn: '2026-08-16',
     skills: 75,
     graded: 'khan',
+    // Counted on Khan's own course page. See the Grammar note and
+    // check-khan-units §8 — a course shorter than this FAILS the build.
+    unitCount: 8,
     courseChallenge: 'test/x3184e0ec:course-challenge',
     units: [
       { n: 1, name: 'Add and subtract within 20', slug: 'x3184e0ec:add-and-subtract-within-20', test: 'x3184e0ec:add-and-subtract-within-20/x3184e0ec:untitled-177/test/x3184e0ec:add-and-subtract-within-20-unit-test' },
@@ -132,6 +135,7 @@ export const KHAN_UNIT_COURSES = {
     renderedOn: '2026-08-16',
     skills: 15,
     graded: 'parent',
+    unitCount: 3,
     courseChallenge: null,
     units: [
       { n: 1, name: 'Pets', slug: 'xaf0c1b5d7010608e:cc-3rd-pets', test: null },
@@ -154,6 +158,7 @@ export const KHAN_UNIT_COURSES = {
     confirmedOn: '2026-08-16',
     renderedOn: '2026-08-16',
     graded: 'parent',
+    unitCount: 3,
     courseChallenge: null,
     units: [
       { n: 1, name: 'Fairy Tales Retold', slug: 'xfb4fc0bf01437792:cc-2nd-fairy-tales-retold', test: null },
@@ -168,22 +173,85 @@ export const KHAN_UNIT_COURSES = {
   // 7th–8th and 9th–10th. /humanities/grammar is the general overview, and its
   // Unit 1 is exactly where her Grammar & Usage 2.15 lands.
   //
-  // Only the two units Quarter 1 teaches are here. Units 3 onward arrive with
-  // the quarters that teach them. Units 8–10 are middle-school syntax and are
-  // not part of a fourth-grade finish at all.
+  // ---- ⚠️ THIS COURSE HELD 2 OF ITS 10 UNITS FOR THIRTEEN DAYS — v3.94 ----
+  //
+  // The comment that stood here said: "Only the two units Quarter 1 teaches are
+  // here. Units 3 onward arrive with the quarters that teach them. Units 8–10
+  // are middle-school syntax and are not part of a fourth-grade finish at all."
+  //
+  // Gigi found it by opening the Khan grades screen and asking why Language Arts
+  // and Writing stopped at the verb. SHE COULD NOT RECORD A GRADE FOR A UNIT
+  // THIS FILE HAD NEVER HEARD OF — so seven units of work Azianna could do had
+  // nowhere to be written down.
+  //
+  // ⚠️ AND check-khan-units WAS GREEN THE WHOLE TIME. Its assertion is that
+  // units run 1..n with no gaps. Units 1 and 2 have no gaps. A course carrying
+  // a fifth of itself passed every run. That is fixed in the same version: a
+  // course now declares `unitCount` — what Khan's own page says it has — and a
+  // shorter list FAILS. See check-khan-units §8.
+  //
+  // ---- THE RULE THIS BROKE, WHICH WAS ALREADY WRITTEN DOWN ----
+  //
+  // claude/mission-control-vs-petal-pestle.md, Aug 13, quoting Lamar's locked
+  // decisions: "anything generative or content-based must be sized for a FULL
+  // SCHOOL YEAR of use, not a sample or a 'good start' … treat anything short of
+  // a full year as an INCOMPLETE BUILD, not a phase to revisit eventually."
+  //
+  // Section 6 of that document is titled "The rule of yours that Petal & Pestle
+  // is currently breaking." It was written sixteen days before this was found,
+  // and it was broken again in a file nobody thought to re-read. A rule that is
+  // only written down gets broken again; a rule with a check does not.
+  //
+  // ---- ALL TEN OPENED IN GIGI'S BROWSER, Aug 29 2026 ----
+  //
+  // The course page rendered and says "10 UNITS". Every title below was read off
+  // that page character for character, and every unit-test path was taken from
+  // the real link rather than built from a pattern. Every unit has a test; the
+  // Course Challenge is live and its path is unchanged from Aug 16.
+  //
+  // ⚠️ UNIT 6 IS WHY THIS WAS DONE IN A BROWSER AND NOT COPIED. Lamar's app
+  // (src/data/khan/grammarCourseOrder.js) carries this identical course with all
+  // ten units, and its Unit 6 reads "Punctuation: the comma and the apostrophe".
+  // KHAN HAS RENAMED IT and kept the address. Copying his file would have put a
+  // stale title on screen behind a working link — invisible, and exactly bug #2
+  // from check-khan-units' own header for the third time. HIS SLUG WAS RIGHT.
+  // The name below is Khan's current one.
+  //
+  // ---- SCOPE: GIGI'S CALL, Aug 29 2026 ----
+  //
+  // Asked whether the lane should stop short of Units 8–9 — subject-verb
+  // agreement, dangling modifiers, parallel structure, against her measured
+  // Grammar & Usage of 2.15 — she chose the full ladder: "add the full 1-10 and
+  // course challenge." Recorded here rather than argued again later. The lane in
+  // STRAND_LANES below is 1..10 because she said so, and for no other reason.
   grammar: {
     courseId: 'grammar',
     label: 'Grammar',
     subject: 'writing',
     quarter: 1,
     base: '/humanities/grammar',
-    confirmedOn: '2026-08-16',
-    renderedOn: '2026-08-16',
+    confirmedOn: '2026-08-29',
+    renderedOn: '2026-08-29',
+    skills: 100,
     graded: 'khan',
+    // What Khan's own course page prints. check-khan-units compares this to
+    // units.length and FAILS if the list is short. Raising it without adding the
+    // units breaks the build, which is the point.
+    unitCount: 10,
     courseChallenge: 'test/x00307e86:course-challenge',
     units: [
       { n: 1, name: 'Parts of speech: the noun', slug: 'parts-of-speech-the-noun', test: 'parts-of-speech-the-noun/irregular-plural-nouns-mutant-and-foreign-plurals/test/parts-of-speech-the-noun-unit-test' },
-      { n: 2, name: 'Parts of speech: the verb', slug: 'parts-of-speech-the-verb', test: 'parts-of-speech-the-verb/verb-aspect-and-modal-verbs/test/parts-of-speech-the-verb-unit-test' }
+      { n: 2, name: 'Parts of speech: the verb', slug: 'parts-of-speech-the-verb', test: 'parts-of-speech-the-verb/verb-aspect-and-modal-verbs/test/parts-of-speech-the-verb-unit-test' },
+      { n: 3, name: 'Parts of speech: the pronoun', slug: 'parts-of-speech-the-pronoun', test: 'parts-of-speech-the-pronoun/indefinite-pronouns-pronoun-vagueness-and-emphatic-pronouns/test/parts-of-speech-the-pronoun-unit-test' },
+      { n: 4, name: 'Parts of speech: the modifier', slug: 'parts-of-speech-the-modifier', test: 'parts-of-speech-the-modifier/comparative-superlative-intensifiers-and-adverbs-of-degree/test/parts-of-speech-the-modifier-unit-test' },
+      { n: 5, name: 'Parts of speech: the preposition and the conjunction', slug: 'parts-of-speech-the-preposition-and-the-conjunction', test: 'parts-of-speech-the-preposition-and-the-conjunction/correlative-conjunctions-and-starting-sentences/test/parts-of-speech-the-preposition-and-the-conjunction-unit-test' },
+      // ⚠️ Khan's CURRENT title. Lamar's file still says "Punctuation: the comma
+      // and the apostrophe" — same slug, renamed unit. See the note above.
+      { n: 6, name: 'Punctuation: end-of-sentence punctuation, the comma, and the apostrophe', slug: 'punctuation-the-comma-and-the-apostrophe', test: 'punctuation-the-comma-and-the-apostrophe/its-vs-its/test/punctuation-the-comma-and-the-apostrophe-unit-test' },
+      { n: 7, name: 'Punctuation: the colon, semicolon, and more', slug: 'punctuation-the-colon-semicolon-and-more', test: 'punctuation-the-colon-semicolon-and-more/hyphens-dashes-and-ellipses/test/punctuation-the-colon-semicolon-and-more-unit-test' },
+      { n: 8, name: 'Syntax: sentences and clauses', slug: 'syntax-sentences-and-clauses', test: 'syntax-sentences-and-clauses/phrases-and-clauses/test/syntax-sentences-and-clauses-unit-test' },
+      { n: 9, name: 'Syntax: conventions of standard English', slug: 'syntax-conventions-of-standard-english', test: 'syntax-conventions-of-standard-english/dangling-modifiers-and-parallel-structure/test/syntax-conventions-of-standard-english-unit-test' },
+      { n: 10, name: 'Usage and style', slug: 'usage-and-style', test: 'usage-and-style/style/test/usage-and-style-unit-test' }
     ]
   }
 };
@@ -407,8 +475,32 @@ export const STRAND_LANES = {
   },
   grammar: {
     'grammar-usage': {
-      units: [1, 2],
-      why: ['Parts of speech: the noun', 'Parts of speech: the verb']
+      // ⚠️ WAS [1, 2] UNTIL v3.94, AND THAT IS WHY HER PLAN STOPPED AT THE VERB.
+      //
+      // The lane is what the app SENDS her to; the unit list above is what Gigi
+      // can RECORD. Those are different questions and they were both answered
+      // "two" by accident, because the lane was built from whatever the unit list
+      // happened to hold.
+      //
+      // Gigi's call, Aug 29 2026: "add the full 1-10 and course challenge." She
+      // was shown that Units 8-9 are subject-verb agreement, dangling modifiers
+      // and parallel structure against her measured Grammar & Usage of 2.15, and
+      // chose the full ladder anyway. SHE HAS WATCHED THE CHILD WORK AND I HAVE
+      // READ A NUMBER — that is the whole reason this was a question and not a
+      // judgement call.
+      units: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      why: [
+        'Parts of speech: the noun',
+        'Parts of speech: the verb',
+        'Parts of speech: the pronoun',
+        'Parts of speech: the modifier',
+        'Parts of speech: the preposition and the conjunction',
+        'Punctuation: end-of-sentence punctuation, the comma, and the apostrophe',
+        'Punctuation: the colon, semicolon, and more',
+        'Syntax: sentences and clauses',
+        'Syntax: conventions of standard English',
+        'Usage and style'
+      ]
     }
   }
   // ela2 and ela3: no lanes. Their units are THEMES, not strands. See header.

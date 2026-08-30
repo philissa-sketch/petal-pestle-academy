@@ -1,163 +1,129 @@
 # NEXT SESSION — start here
-*Rewritten Aug 26 2026, end of the word-study / two-definitions / broken-screen session.*
 
-**Where things stand:** the app on disk is at **v3.93**, **all 39 checks green**, repo at **github.com/philissa-sketch/petal-pestle-academy**. Azianna works on an Acer Chromebook and it holds the live copy of her data.
+**Paste everything below the line as your first message in the new conversation.**
 
-**Three things before you start:**
+**Where things stand:** the app is **v3.94 on disk**, the live site is **v3.93**. Two jobs are agreed and specified and neither has been started: **v3.95** (the two Reading courses off the Khan grades screen) and **the Gradebook rebuild** (subject cards, quarter rows).
 
-1. **⚠️ THE LIVE SITE IS AT v3.92 AND ITS GROWN-UP CORNER IS BROKEN.** v3.93 fixes it and is **on disk, not deployed**. See the first job.
-2. **⚠️ I HAVE NO NETLIFY BUILD MINUTES UNTIL THE END OF SEPTEMBER.** Do not tell me to push. See "how we ship right now".
-3. **Committing is free. Only pushing costs.** I can commit locally as often as you like.
+**Before you start the new session:**
+
+1. **Run `RUN-THE-CHECKS.bat`** if you have not since v3.94 landed. Only 13 of the 39 were run on Aug 29, and yours is the run that counts.
+2. **Commit in GitHub Desktop.** Do not push — pushing spends Netlify build minutes you do not have until the end of September.
+3. **The live site is still v3.93.** v3.94 is only on your computer. Deploy with `BUILD-FOR-NETLIFY.bat` and drag `dist` onto the Deploys page when you want it live.
 
 ---
 
 ## THE PROMPT — copy everything below
 
-I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nine-year-old granddaughter **Azianna**, who wants to be a doctor and a herbalist. It is modelled on **Mission Control Homeschool Academy**, the aerospace app I built for my son Lamar.
+I am Gigi. I am building **Petal & Pestle Academy**, a homeschool app for my nine-year-old granddaughter **Azianna**, who wants to be a doctor and a herbalist. It is modelled on **Mission Control Homeschool Academy**, the app I built for my son Lamar.
 
 **Read these first, in this order:**
 
-1. `claude/petal-pestle-master-plan.md` — the plan. **§47 to §55 are from Aug 26.**
-2. `claude/petal-pestle-build-log.md` — every version, every bug, all 39 checks
-3. `claude/azianna-diagnostic-results.md` — **her measured levels. These govern every lesson you write.** ⚠️ **NOT in the GitHub repo** — a full assessment of a named child, excluded deliberately. **It is CURRENT as of Aug 26** — §1, §1c, §1d and §3 were all rebuilt from her record.
-4. `claude/BLUEPRINT_A_LOCAL_FIRST.md` — the standard above this document
-5. `claude/year-plans-audit-2026-08-26.md` — which of my nine printed year plans are still true
+1. `claude/petal-pestle-master-plan.md` — **§56 is the newest.**
+2. `claude/petal-pestle-build-log.md` — every version, every bug, all 39 checks. **§6 Open items is where your job is.**
+3. `claude/azianna-diagnostic-results.md` — **her measured levels. These govern everything.**
+4. `claude/post-build-backlog-gigi.md` — **§7 is new.**
 
-**The app is at v3.93, installed at `C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy`, runs on `localhost:5180` (strictPort), database `PetalPestleDB` at v12.**
+**The app is v3.94 on disk, at `C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy`, runs on `localhost:5180`, database `PetalPestleDB` at v12, 39 checks.**
 
----
-
-### ⚠️ HOW WE SHIP RIGHT NOW — READ THIS BEFORE YOU SUGGEST ANYTHING
-
-**I am out of Netlify build minutes until the end of September.** Every push triggers a build and I cannot afford one.
-
-- **Committing in GitHub Desktop is FREE.** It is local. Do that as often as it helps.
-- **Pushing is what costs.** One push, in October, for everything.
-- **⭐ EXCEPT: uploading an already-built folder costs nothing.** Netlify only charges for builds it runs. `BUILD-FOR-NETLIFY.bat` runs the checks, refuses to build if any is red, builds on my computer, and tells me to drag `dist` onto the Deploys page. **That is how v3.93 reaches the live site.**
-- ⚠️ **Deploying that way SKIPS the checks Netlify would normally run.** The local run is the only pair of eyes. Never suggest skipping it.
-
----
+**Lamar's app is at `C:\Users\pknot\Downloads\mission-control-homeschool-school-start-gate\mission-control-homeschool` and is READ-ONLY.** Read his **code**, not just his docs. `Lamar DOC` was deleted on Aug 26 — do not go looking for it.
 
 ### HOW I WANT YOU TO WORK — these are not suggestions
 
-1. **Ask me before building.** Tell me the scope you intend and wait.
-2. **Run the checks on my machine after every change.** ⚠️ **I do not use the command line.** Double-click **`RUN-THE-CHECKS.bat`** in the project folder. It runs all 39 and tells me in words whether it is safe to commit.
-3. **Every fix gets a check that would have caught it, and you negative-test it by reintroducing the bug.**
-4. **A check must never claim more than it tests** — and it must never *print* a claim it has stopped testing.
-5. **A rule I have to act on is a CHECK, not a warning.**
-6. **⭐ A rule that was never TESTED needs testing once.** New Aug 26, and it is not the same sentence as rule 5. Two standing rules in this document turned out to be false — *"you cannot move a folder"* and *"the repository being private is the second guard"*. **Both had been obeyed for months. Neither had ever been checked.** A rule with a scar behind it — a date, a bug, a screenshot, a sentence from me — is a rule to obey. A rule with nothing behind it but a plausible explanation is a rule to test, once.
-7. **When I repeat a complaint, check the CHECK before you check the content.**
-8. **A contradiction in what I asked for is a question, not a judgement call.**
-9. **Never invent or guess a URL, and never put a placeholder in a command you give me.** I will paste it exactly as written.
-10. **Verify against the disk, not against what I tell you** — not against the app's own comments, and **not against a document describing an app.** ⚠️ **And check what is actually mounted before saying you cannot see something.** A session told me it had no access to Lamar's folder while it was mounted the whole time.
-11. **Restart the dev server after every update** — I do this, you cannot. Remind me.
-12. **A rule the app must follow lives in the ENGINE or a lib, where a check can test it.**
-13. **Do not copy files from your uploads folder over files on my disk. Edit in place.**
-14. **You cannot DELETE on my machine, and that is the only limit.** `mv` anything into `_to_delete/` and tell me what you moved. **You CAN move folders and you CAN create them** — moving inside one drive is a rename. The old rule said otherwise and was wrong for months.
-15. **⚠️ DO NOT RUN `git` COMMANDS AGAINST MY FOLDER.** Even `git status` writes `.git/index.lock`, you cannot remove it, and **GitHub Desktop then refuses to commit**. Read files directly. **I use GitHub Desktop.**
-16. **Update the master plan and the build log when you finish a version**, and bump `src/config/buildStamp.js`.
-17. **Use a curly apostrophe in JSX text.** A straight one breaks check-jsx's parser.
-18. **Never put a quote character inside a regex character class in `src/`** — and not a `)` either. Write `\u0027`, `\u0022`, `\u0029`. Known, not fixed. ⚠️ A file broke this **in the version carrying a header note about it.**
-19. **Explain things to me plainly.** I am not a developer. When I say I do not understand, repeat it in plain words rather than adding detail.
-20. **⚠️ Ask questions as TEXT, never as a picker widget.** The widget disappears when I scroll up to re-read, and then I cannot see what you asked.
-
-### FIVE RULES ABOUT CHECKS, ALL LEARNED THE HARD WAY
-
-- **A negative test must prove its own mutation landed** — and that it hit **a rule and not a comment**. *"A mutation that did not mutate."* ⚠️ Twice on Aug 26 a mutation targeted a string that no longer existed and the test reported a pass.
-- **⚠️ An assertion satisfied by something ADJACENT to the rule is not testing the rule.** Now **nine times in twelve versions**. Newest: an assertion went red against **the comment explaining the rule it was testing.**
-- **⚠️ A check whose yardstick is the thing being measured is not measuring.** Asserting that two callers agree by calling one shared function twice asserts nothing.
-- **A check that fails a SAFER change is broken** — widen it to what its own heading promised, never weaken it.
-- **⭐ A GREEN CHECK IS NOT A WORKING APP.** New Aug 26. **Thirty-eight checks were green while the Grown-Up Corner threw on render.** Every check in this project read TEXT; not one asked whether a name existed where it was used. `check-undefined` (#39) now parses `src/` and walks the real scope chain. **When something is broken on screen and everything is green, the checks are the thing that is wrong.**
-
-### THE CONTENT RULES
-
-- **EVERY LESSON IS WRITTEN AT HER MEASURED LEVEL, NOT HER AGE.**
-- **A LESSON MAY ONLY ASK FOR WHAT IT GAVE HER.**
-- **THE VIDEO MUST TEACH THE LESSON**, picked and watched **before** the lesson is written.
-- **THE RIGHT ANSWER HAS TO MOVE AROUND** — no answer slot over 40%.
-- **Every video verified at `youtube.com/oembed`.** Never noembed.com. ⚠️ Some older module headers say they were verified at noembed — that is history, and it means those were never checked to the current standard.
-- **Black American educators actively sought, every failed search written down.**
-- **The Journal is never graded and never corrected.**
-- **Safety:** no dosing, no self-treatment, no weight or appearance language attached to a person.
-- **Proper nouns are exempt from the long-word count.**
-- **⚠️ Nothing on her screen says *behind*, *weakest*, *catch up*, *overdue* or *late*.** The order carries the meaning.
-- **⚠️ Split the sentences. Never raise the cap.**
+1. **Ask me before building. Then wait.** Do not surprise me with 40 files.
+2. **Ask me questions as text. Never as a picker widget.**
+3. **I do not use the command line.** I double-click `RUN-THE-CHECKS.bat`, `START-PETAL-PESTLE.bat` and `BUILD-FOR-NETLIFY.bat`. Never tell me to type a command.
+4. **Never run `git` against my folder.** I use GitHub Desktop.
+5. **⚠️ No Netlify build minutes until the end of September. Do not tell me to push.** Committing is free. `BUILD-FOR-NETLIFY.bat` builds on my computer so I can drag `dist` onto Netlify's Deploys page, which uses no minutes.
+6. **Every fix gets a check that would have caught it, and you negative-test it by reintroducing the bug.**
+7. **A green check is not a working app.** 38 were green while the Grown-Up Corner was down. **39 were green while Grammar carried 2 of its 10 units.**
+8. **A check must never claim more than it tests.** Do not report checks you did not run.
+9. **Verify against the disk — not against what I tell you, and not against the app's own comments.** A comment explaining why something is fine is not a check. This has now caused three bugs.
+10. **A rule I have to act on is a CHECK, not a warning.** A rule that is only written down gets broken again.
+11. **When I repeat a complaint, check the CHECK before you check the content.**
+12. **A contradiction in what I asked for is a question, not a judgement call.**
+13. **Never invent or guess a URL.** Open it in my browser and read the title off the rendered page. Write down every failed search.
+14. **You have my browser. Use it.** Do not describe verification as something I should do later.
+15. **Restart the dev server after every update — I do this, you cannot. Remind me.**
+16. **Use a curly apostrophe (’) in JSX text.** A straight one breaks check-jsx's parser.
+17. **You cannot delete on my machine** — move into `_to_delete/` and tell me what you moved.
+18. **Update the master plan, the build log and `src/config/buildStamp.js` when you finish a version.**
+19. **Anything countable is generated, never hand-typed.** Every hand-typed number in this project has drifted.
+20. **Sizing rule, from Lamar's locked decisions:** content is built for a **FULL SCHOOL YEAR**. Anything shorter is an **incomplete build**, not a phase to revisit. **v3.94 is what happens when this is forgotten.**
 
 ---
 
-## ⚠️ LAMAR'S APP — READ THE CODE, NOT THE NOTES
+## JOB 1 — v3.95 · the two Reading courses off the Khan grades screen
 
-`C:\Users\pknot\Downloads\mission-control-homeschool-school-start-gate\mission-control-homeschool` — **his running app.** Source, data, checks, and his docs. **Read it directly. READ-ONLY — never write to it.**
+**My call, Aug 29, and I chose Option B.** Khan built no unit tests and no Course Challenge for 2nd or 3rd Grade Reading & Vocabulary, so they do not belong on a screen for recording Khan results.
 
-`Lamar DOC` is gone. I deleted it. If a comment still names it, that is history.
+**⚠️ This is not a deletion.** The `Mark complete` button on those rows is the **only** thing that advances her reading unit. `readingCheck.js` may never write a Khan grade — deliberate, in its own header — but it calls `nextUnitFor(courseId, grades)` to know where she is. Remove the rows and the Planner offers Unit 1 for ever: **the v3.74 bug exactly.**
 
-### ⚠️ And what fits him does not always fit her
+**Option B:** the two courses come off the Khan screen, and a small **"finished this unit"** control moves into a reading section, so nothing is stranded and no reading grade is invented that Khan never gave.
 
-Things that did **not** transfer, each for a stated reason: **his dates** (this app has no calendar and refuses one — §7.1), **his 350–500 word reports** (that is a twelve-year-old; hers are 80–150), **all sixteen formats** (six were taken), **his rubric curve**, and **his 36-week year** — hers is **32**, which is why her word lists are 320 and not 360.
-
-**Copying a NUMBER out of his app is the same error as copying a mechanism out of it.**
+`check-khan-advance` asserts that panel offers the whole catalogue and has to move with it.
 
 ---
 
-## FIRST JOB — GET v3.93 ONTO THE LIVE SITE
+## JOB 2 — the Gradebook · Tests tab
 
-**The Grown-Up Corner is broken in production right now.** It throws `ReferenceError: grades is not defined` the moment it renders — the screen where I record a Khan grade, mark the journal and take a backup. v3.93 fixes it and is sitting on my disk.
+**My complaint:** *"The long list of randomness in the Test tab under Gradebook is confusing."* I want to open one place and see how she is doing in each subject.
 
-**Walk me through `BUILD-FOR-NETLIFY.bat`, then the drag onto the Deploys page.** Then have me confirm the version in the top corner reads **V3.93**.
+### What is wrong now — all confirmed on disk
 
-**Do not let me start anything else until that is done.**
+- The Tests table calls `allWeeks()`, which returns **104 weeks across four courses**, and renders every one of them under a heading that says **"Herbalism · Quarter 1"**. No column says which course a row belongs to, so two courses both print "Q1 Week 1". **She has sat 11 tests. I scroll 104 rows to find them.**
+- **Lessons and the practice gate** filters `HERBALISM_Q1` only. She has read **23** lessons; it can only ever show the Herbalism ones.
+- **`lessonLabel()`** searches `HERBALISM_Q1` only, so every Science Lab, Social Studies and Human Body question prints a raw id like `sl-m2-04`.
+- The **Quarter 1 / Quarter 2 Exam** rows are hardcoded to `herbalism-q*-final`. The other three courses have no exam row.
 
----
+**It is one bug repeated four times: this screen was written for Herbalism and three courses were added around it.**
 
-## WHAT IS OPEN, IN THE ORDER I WOULD DO IT
+### The shape I agreed
 
-**1. ⚠️ 32 lessons are over her reading cap.** Eighteen are Herbalism M13–M15 at 16–19.6 words a sentence against a cap of 14. **Split the sentences; do not raise the cap.** A worked sample exists in the last session — same facts, same names, same dates, ideas just stop arriving three at a time. ⚠️ **Q4 has a FLOOR of 6.5 as well as a cap of 14** — chopping too hard fails the other way. `KNOWN_OVER` in `src/lib/readingCaps.js` is a ratchet: delete each line as its lesson comes under, and the check forces it.
+**Above everything, unchanged: "What is sticking."** Solid · Settling · Slipping, and the *worth sitting down with her about* list. ⚠️ **Keep it. Do not move it, shrink it, or soften a single number.** That screen's own header: *"A test score says how one morning went. That list says what is not sticking"* and *"the kindness is in where the number is shown, not in whether it is true."* **This screen is only ever seen by me.**
 
-**2. Three of my nine year-plan PDFs are stale.** `00-master-calendar` and `01-mathematics` both call Geometry and Measurement *"at the floor"* — they are 2.67 and 2.44 now, real readings. `03-language-arts` says Grammar 2.15; it is 2.35. **The other six are fine.** ⚠️ **`year-plans/` is OUTSIDE the git repo, so this costs no build minutes at all.** Full detail in `claude/year-plans-audit-2026-08-26.md`.
+**Then one card per subject — FIVE cards:**
 
-**3. The 13 flat cards need Georgia codes — and I need to find the standards file first.** `hb-1-01`–`hb-1-13` now carry `course`, `module`, `quarter`, `week`, `day` and `standards: []`, all derived from `WEEKS`. **`offGrade` is deliberately blank on all thirteen.** Only the *social studies* standards are on disk; without the K-5 **science** GSE, any code would be *"a guess dressed as a citation"* — `herbalismM6.js`'s own words. **Ask me whether I found the file.**
+**Herbalism · The Science Lab · Social Studies · The Human Body · Language Arts & Writing**
 
-**4. ⚠️ `offGrade` means two different things in this app.** In Herbalism it holds Georgia codes (`S2L1`, `S3L1`, `S3L2`). In Human Body it holds free-text notes about the *maths* inside the lesson. **One field, two meanings** — the family that has now bitten this project three times. Not causing a visible bug. Worth fixing before it does.
+**⚠️ NO MATHEMATICS CARD. Maths lives on the Khan grades tab and stays there.**
 
-**5. A projects area she can browse.** Projects exist in the system; she has no tab to go and look at them.
+Each card:
 
-**6. Still waiting on my answer:** the three held skill terms `balance`, `volume`, `shape` · the retired `model` · the advocacy exclusion · the Black-scientists module · the Ubongo / Super Sema question.
+- **Subject, letter grade, percentage** — and beneath it, what the number is made of: *"6 tests sat · 3 Khan units graded · 2 writing pieces marked"*
+- **A row per quarter — Q1 Q2 Q3 Q4** — each with its own letter, its own percentage, and *"3 of 8 sat"*. A quarter she has not reached is greyed and says so. Never a blank, never a zero.
+- **Click a quarter** → the weeks inside it. **Click a week** → the per-question detail, as it works today.
 
-**7. One command I have to run myself:**
-```
-rmdir /s /q "C:\Users\pknot\Downloads\petal-pestle-academy\petal-pestle-academy\_to_delete"
-```
+Khan grades, writing pieces and spelling results **fold into this screen**. Language Arts & Writing draws on Khan grammar, writing marks and spelling.
 
----
+### Lamar's four rules — take all four, they are in his code
 
-## ⚠️ HER RECORD IS STILL EMPTY IN FOUR PLACES
+1. **Equal weight per assessment.** One Khan unit = one weekly test. His reason: *"any other weighting is a judgement someone has to defend to a reviewer."*
+2. **Report each source separately as well as blended** — *"so the blend is never something she has to take on trust."*
+3. **Omit what has not been started** — *"a wall of blank rows on day one reads as failure."* **This is what kills the 93 empty rows.**
+4. **Show the breakdown, not just a headline letter** — *"far more likely to work on it than one handed a single blended letter that never seems to budge."*
 
-| | On her record |
-|---|---|
-| Khan grades | **0** |
-| Reading checks sat | **0** |
-| Journal marks | **0** |
-| Writing marks | **0** |
-| Spelling results | **0** |
+**And read this before you build:** his parent said on Aug 10, *"The grades from Kahn Academy arent being saved anywhere."* They were saved — **nothing read them back.** Same complaint I made on Aug 29, in the same place. His `getReportCardData()` in `src/store/useAppStore.js` is the fix. **Read it.**
 
-**These are mine to fix, not yours, and they are worth more than any feature you could build.**
+### The check
 
-- **The reading check.** Today → Reading block → *"Then: reading check."* Two passages, eight questions, read-aloud recorded per answer. **63% of every answer she has ever given was read to her and her independent reading has never once been measured.** Every level on her record is caveated by this.
-- **One Khan grade.** Nothing in her maths advances until one is recorded in the Grown-Up Corner — **which is the screen that is currently broken.** That is the other reason the first job is the first job.
-
-**Remind me about these. Do not let them slide into another month.**
+Fails if **any course is missing from any section of this screen**, or if a subject's card omits a quarter that has work in it. **Negative-test it by deleting a course from each section.** That is the bug, and it has happened four times in one file.
 
 ---
 
-## WHAT HAPPENED Aug 26, SO IT IS NOT REDONE
+## OPEN, AND WAITING ON MY ANSWER
 
-- **v3.85–v3.86** — Her diagnostic document made true again, and **check #37** written so it cannot drift a fourth time. ⚠️ It can pass without testing anything off my PC and **says so in words** rather than printing PASSED.
-- **v3.87** — **The repository stays public — my decision.** ⚠️ And two sentences giving the reason were **false**, copied from Lamar's private repo. **There is no second guard.** Her first name is in ~60 committed files including `buildStamp.js`, which renders on the live site.
-- **v3.88** — **Thirteen lessons had never had their reading level measured. Not once.** ⚠️ Two layers had to be fixed before one sentence of theirs was read. ⚠️ And the first draft turned **nineteen good lessons red for sentences that are on no screen** — 243 of 256 lessons carry `core` that `LessonReader` never renders.
-- **v3.89** — **Rule 13 was false and had never been tested.** Six `rmdir` commands a clean-up, for months, for nothing.
-- **v3.90** — **320 spelling + 320 vocabulary words, every one pulled from the 256 lessons she actually reads.** ⚠️ The check found a real fault in the generator on its first run, and **a proper-noun rule calling `garlic`, `ginger` and `seeds` names** on its second.
-- **v3.91** — **The words got a screen and something that knocks on it.** ⚠️ The word is never on screen while she types it; **hearing it IS the test**, so there is no unaided percentage and there must never be one. **If the device cannot speak the test refuses to run.**
-- **v3.92** — ⚠️ **Two answers to "which unit is she on", disagreeing on her screen.** Found by **opening the live site and reading it**, not by a check. One function now.
-- **v3.93** — ⚠️ **v3.92 broke the Grown-Up Corner and 38 checks stayed green.** **Check #39 parses `src/` and walks the real scope chain.** And `BUILD-FOR-NETLIFY.bat` exists so I can ship with no build minutes.
+1. **⚠️ The "undo" button on a recorded Khan grade.** One click, no confirmation, and no actual undo — it deletes a Georgia record permanently and leaves no trace. Resetting all her data makes me type `RESET`; erasing a grade takes one click on a five-letter link that everywhere else in the world means "put it back". **It did not cause the Aug 29 scare, but it is still live.** Three options were put to me and I have not chosen: confirm before delete · mark deleted rather than erase, with a real undo · both, and rename the link.
+2. **Reading as its own subject, like Mission Control's.** Recorded in `post-build-backlog-gigi.md` §7. His `reading7.js` is 3,835 lines of original passages with comprehension questions and verified book recommendations. Mine covers **one unit**. **Blocked until the grading work is done — my instruction.** ⚠️ `readAloud` per answer and a null `unaidedPercent` must survive it, and it may never write a Khan grade.
+3. **`Lh8wC-qoqgw`** — the 3/5 Compromise video, Social Studies lesson 10. 5:13 and squarely about slavery. **I should watch it before it plays.**
+4. **The advocacy exclusion**, the **Black-scientists module** for The Science Lab, and the **Ubongo / Super Sema** question for Science Lab lesson 23.
+5. **Herbalism M13–M15 prose** — 18 lessons to split. Recorded debt, not urgent, Q4 is April.
 
-**Start by reading the four documents, then confirm back to me: the version on disk, the version on the LIVE SITE, the check count, how many Khan grades are on my record, and what you intend to do first.**
+---
+
+## THINGS FOUND ON Aug 29 THAT YOU SHOULD KNOW
+
+- **I have two databases and they had drifted.** The app is local-first: **the live site does not share data between devices.** Work entered on Azianna's machine is not on mine, at the same address. Three Khan grades I entered were never lost — they were in a backup file on my disk and imported back. **`netlify.toml` says it: "her work lives in the browser, filed under the exact address."**
+- **The v11→v12 schema upgrade was proven safe on real data**, twice — the live record and an old localhost record from Aug 20. 21 tables, nothing lost. It is no longer a theory.
+- **My Backup folder works.** Keep exporting before anything risky.
+
+**Start by confirming back to me: the version on disk, the version on the live site, the check count, and what you intend to do first.**
