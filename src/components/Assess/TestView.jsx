@@ -5,7 +5,7 @@ import { speechSupported, speakChunks, stopSpeaking, chunksForItem } from '../..
 import { bankItemById } from '../../data/assessments/appBank.js'; // v3.25 — every course
 import { gradeTest, presentQuestion } from '../../lib/assessmentEngine.js';
 import { EXIT_TICKET } from '../../config/assessment.js';
-import { HERBALISM_Q1 } from '../../data/lessons/herbalismQ1.js';
+import { lessonById } from '../../data/lessons/appCourses.js'; // v3.96 — every course
 
 // ---------------------------------------------------------------------------
 // SITTING A TEST.
@@ -131,12 +131,32 @@ const TONE_RING = {
   clay: 'border-clay-500 bg-clay-500/10'
 };
 
+// ---------------------------------------------------------------------------
+// v3.96 — THE LABEL KNOWS ALL FOUR COURSES.
+//
+// This read HERBALISM_Q1.find(...) from v2.x until now. HERBALISM_Q1 holds 13
+// of the app's 256 lessons — the hb-1-01..13 flat cards. The other 243 fell
+// through to the `: lessonId` fallback, so the results screen after a Human Body
+// test offered her a button labelled "hb2-07", and so did Herbalism Q2, Q3 and
+// Q4. It never threw, it never went red, and it looked like a design choice.
+//
+// The same bug the Gradebook had in four places at v3.95: a screen that knows
+// one course of four. appCourses.js has answered for all four since v3.25.
+//
+// This function is a LABEL and has never been a gate. The gate is lessonIsOpen
+// in lib/rotatingBlock.js. See the revisit buttons below, which now ask it.
+// ---------------------------------------------------------------------------
 function lessonTitle(lessonId) {
-  const l = HERBALISM_Q1.find((x) => x.id === lessonId);
+  const l = lessonById(lessonId);
   return l ? `${l.n}. ${l.title}` : lessonId;
 }
 
-export function TestView({ form, onExit, onOpenLesson }) {
+// `canOpenLesson` is the gate, handed down by whoever renders this screen. A
+// MISSING predicate means CLOSED, not open — see the revisit buttons. Failing
+// closed on a forgotten prop shows her a lesson she cannot open; failing open
+// hands her the whole course. check-lesson-doors asserts the prop is passed, so
+// the closed case is caught before it ships rather than in front of her.
+export function TestView({ form, onExit, onOpenLesson, canOpenLesson }) {
   const recordAttempt = useAppStore((s) => s.recordAttempt);
 
   const [index, setIndex] = useState(0);
@@ -257,19 +277,51 @@ export function TestView({ form, onExit, onOpenLesson }) {
               Not because you failed them. Because going back is what makes them stick.
             </p>
             <div className="mt-3 space-y-2">
-              {grade.revisit.map((r) => (
-                <button
-                  key={r.lesson}
-                  type="button"
-                  onClick={() => onOpenLesson?.(r.lesson)}
-                  className="flex w-full items-center justify-between rounded-petal border border-cream-300 bg-white px-4 py-3 text-left hover:border-lavender-500"
-                >
-                  <span className="text-sm font-700 text-ink-900">{lessonTitle(r.lesson)}</span>
-                  <span className="text-xs text-ink-500">
-                    {r.misses === 1 ? '1 to look at' : `${r.misses} to look at`} →
-                  </span>
-                </button>
-              ))}
+              {grade.revisit.map((r) => {
+                // v3.96 — THIS DOOR ASKS THE GATE.
+                //
+                // Gigi, Aug 30 2026: "It is supposed to be that she can only see
+                // the lesson that is due so that she doesn't move forward before
+                // completing."
+                //
+                // Until now this button called onOpenLesson straight through and
+                // LessonsView opened the reader without asking lessonIsOpen. It
+                // was harmless in practice, because a test only covers lessons
+                // she has already read and a read lesson is open — but harmless
+                // BY ACCIDENT OF THE DATA is not the same as guarded, and every
+                // other route into the reader asks. This is the fourth door.
+                //
+                // Missing predicate means closed. See the note on the props.
+                const open = canOpenLesson ? canOpenLesson(r.lesson) : false;
+                const missText = r.misses === 1 ? '1 to look at' : `${r.misses} to look at`;
+                return (
+                  <button
+                    key={r.lesson}
+                    type="button"
+                    disabled={!open}
+                    aria-disabled={!open}
+                    onClick={() => open && onOpenLesson?.(r.lesson)}
+                    className={`flex w-full items-center justify-between rounded-petal border px-4 py-3 text-left ${
+                      open
+                        ? 'border-cream-300 bg-white hover:border-lavender-500'
+                        : 'cursor-not-allowed border-cream-200 bg-cream-100 opacity-60'
+                    }`}
+                  >
+                    <span
+                      className={`text-sm font-700 ${open ? 'text-ink-900' : 'text-ink-500'}`}
+                    >
+                      {lessonTitle(r.lesson)}
+                    </span>
+                    {/* The closed wording is the list's own wording, word for
+                        word — "Not yet — this one comes later", the v3.63 rule.
+                        Two screens describing the same lock in two different
+                        sentences is how a child learns the app is arbitrary. */}
+                    <span className="text-xs text-ink-500">
+                      {open ? `${missText} →` : 'Not yet — this one comes later'}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </section>
         )}

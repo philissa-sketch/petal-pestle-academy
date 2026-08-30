@@ -3,7 +3,12 @@ import { useAppStore } from '../../store/useAppStore.js';
 import { MarigoldMessage } from '../Mentor/MarigoldMessage.jsx';
 import { LessonReader } from './LessonReader.jsx';
 import { TestView } from '../Assess/TestView.jsx';
-import { APP_COURSES, courseById, lessonById } from '../../data/lessons/appCourses.js';
+import {
+  APP_COURSES,
+  courseById,
+  lessonById,
+  courseOfLesson
+} from '../../data/lessons/appCourses.js';
 import { WEEKS, weekForLesson, weekTestReady } from '../../config/assessment.js';
 import { lessonIsOpen, nextLessonFor } from '../../lib/rotatingBlock.js';
 import {
@@ -148,12 +153,38 @@ export function LessonsView({
   );
   const shownQuarter = quartersWithWork.includes(quarter) ? quarter : quartersWithWork[0];
 
+  // -------------------------------------------------------------------------
+  // v3.96 — ONE GATE, AND EVERY DOOR ASKS IT.
+  //
+  // There are four ways into LessonReader from this screen. Three of them asked
+  // lessonIsOpen, directly or upstream. The fourth — the "Worth going back to"
+  // buttons on a test's results — did not, and had not since the feature was
+  // written. Nothing was wrong on screen, because a test only covers lessons she
+  // has already read and a read lesson is open. That is luck, not a lock.
+  //
+  // The course comes from the LESSON, not from `courseId`. She can be looking at
+  // the Herbalism tab with a Human Body test's results on screen, and asking the
+  // gate about the wrong course is exactly the v3.42 bug — a link that goes to
+  // the wrong place, which is worse than one that goes nowhere.
+  //
+  // check-lesson-doors enumerates the doors and fails on a fifth one.
+  // -------------------------------------------------------------------------
+  const canOpenLesson = (lid) => {
+    const c = courseOfLesson(lid);
+    return Boolean(c) && lessonIsOpen(lid, c, lessonsRead);
+  };
+
   if (activeForm) {
     return (
       <TestView
         form={activeForm}
         onExit={() => setActiveForm(null)}
+        canOpenLesson={canOpenLesson}
         onOpenLesson={(lessonId) => {
+          // Asked twice on purpose. The button is greyed when the gate says no,
+          // but a disabled button is a fact about the SCREEN. The door should
+          // not depend on the screen having got it right.
+          if (!canOpenLesson(lessonId)) return;
           setActiveForm(null);
           setOpenLesson(lessonId);
         }}

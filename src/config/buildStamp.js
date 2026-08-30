@@ -20,12 +20,27 @@
 // reason. It was added there after the same confusion.
 // ---------------------------------------------------------------------------
 
-export const VERSION = '3.95';
+export const VERSION = '3.96';
 
-export const BUILD_DATE = 'August 29, 2026';
+export const BUILD_DATE = 'August 30, 2026';
 
 /** Newest first. Short enough to read on screen. */
 export const CHANGES = [
+  {
+    version: '3.96',
+    date: 'Aug 30, 2026',
+    notes: [
+      '⭐ EVERY DOOR INTO A LESSON NOW ASKS THE SAME GATE. Gigi was offered a one-line fix to a LABEL and asked a question about it instead: "It is supposed to be that she can only see the lesson that is due so that she doesn’t move forward before completing." The label was not the gate. But the question found that the "Worth going back to" buttons on a test’s results were a FOURTH route into the lesson reader, and had never asked lessonIsOpen — not once since the feature was written.',
+      '⚠️ AND NOTHING WAS WRONG ON SCREEN, WHICH IS THE PART WORTH WRITING DOWN. A test only covers lessons she has already read, and a read lesson is open, so the gate would have said yes to every one of them. The door was correct BY ACCIDENT OF THE DATA. The day a test covers a lesson she has not read, it stops being correct with no warning and no red check. Same shape as the comment above the Herbalism branch that described the intention truthfully and the code falsely for fifty-nine versions.',
+      '⭐ ASKED TWICE, ON PURPOSE. LessonsView asks canOpenLesson before it opens, and TestView greys the button when the gate says no — because a disabled button is a fact about the SCREEN, and the door should not depend on the screen having got it right. The gate is asked about the course the LESSON belongs to, not the tab she is looking at: a Human Body result can be on screen with the Herbalism tab selected, and asking about the wrong course is the v3.42 bug.',
+      '⭐ THE CLOSED WORDING IS THE LESSON LIST’S OWN WORDING, WORD FOR WORD — "Not yet — this one comes later". Gigi chose greyed over hidden, Aug 30. Two screens describing the same lock in two different sentences is how a child learns the app is arbitrary. Nothing else on her screen changed.',
+      '⚠️ AND THE LABEL BUG WAS BIGGER THAN IT WAS REPORTED. TestView looked lesson titles up in HERBALISM_Q1, which holds THIRTEEN of the app’s 256 lessons — the hb-1-01..13 flat cards. The other 243 fell through to a raw-id fallback, so after a Human Body test she was offered a button reading "hb2-07", and so were Science Lab, Social Studies and Herbalism Q2, Q3 and Q4. It never threw and it never went red. It is the v3.95 Gradebook bug in a fifth place: a screen that knows one course of four.',
+      '⭐ CHECK #41 ASSERTS THE CLASS, NOT THE INSTANCE. check-lesson-doors does not assert "TestView does not import herbalismQ1". It enumerates every route into the reader with the parser and fails on a fifth one whether or not that fifth one is gated — the failure is that nobody was asked. It forbids ANY screen under src/components importing a lesson module other than appCourses.js. And it RUNS the gate on all four courses rather than reading it: the lesson she is up to opens, the one after it does not, and a finished one stays open — the assertion that goes red if the course is ever "opened back up" without saying who decided and when.',
+      '⚠️ THE CHECK’S OWN FIRST RUN WAS RED ON CORRECT CODE, and that is now written into it. onOpenLesson?.() parses as an OptionalCallExpression, NOT a CallExpression, so a visitor matching only CallExpression saw nothing and reported a present lock as missing. Caught before the commit rather than after — and the version along, the same blind spot would have reported an ABSENT lock as present.',
+      '⭐ NINE NEGATIVE TESTS, ALL NINE RED, run on a sandbox copy so nothing was edited on Gigi’s disk to prove a check works: the HERBALISM_Q1 import restored, the guard removed, the greying removed, a missing predicate made to mean OPEN instead of closed, the gate not handed down, the second ask deleted, lessonIsOpen forced to return true, a fifth unexamined door added, and the gate asked about the tab instead of the lesson’s own course.',
+      '⚠️ check-version-stamp WENT RED FIRST, exactly as designed — a 41st script arrived and four counts in the build log still said 40. Recorded because a check that only ever passes is a check nobody has evidence about.'
+    ]
+  },
   {
     version: '3.95',
     date: 'Aug 29, 2026',

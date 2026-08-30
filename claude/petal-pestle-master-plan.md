@@ -2621,3 +2621,79 @@ The arithmetic moved out of the panel into `src/lib/gradebook.js` as a **pure fu
 **Her two reading checks reach no subject grade, and the card says so.** `read-ela2-u1`, **25% then 75%**, sat Aug 25 and 26 — found by opening the app on her real record, not by a check. ⚠️ **This is different from Khan and the difference is the whole rule above**: a reading check is *this app's own work*, written in `readingCheck.js` and `ela2Unit1.js`, so it has no other screen to be graded on. It belongs here and it is waiting for Reading to become its own card — folding it into a writing grade would bury the **`unaidedPercent`** the instrument exists to produce. It stays visible in "Every attempt, question by question" meanwhile.
 
 **`TestView.jsx` imports `HERBALISM_Q1` directly too** — the same bug, in a second file, on a screen **Azianna** sees. Found here, recorded in §6, and not fixed here. Doing it in the last ten minutes of a session is how v3.92 happened.
+
+
+### ⭐ v3.95 is live, and it carried v3.94 up with it
+
+Deployed Aug 29 2026. Pushed to GitHub, Netlify ran the forty checks and then the build, and the site at `https://unrivaled-caramel-e28469.netlify.app/` was opened and read: **V3.95**.
+
+⚠️ **The first push of it failed, and the reason had been sitting on disk since v3.94.** `check-assessment` forbids the words *"unit test"* on any screen — the app's own unit test was replaced by the weekly test at v3.8 — and v3.94 had put **Khan's** links on the grading screen in **Khan's** wording, because that is the page Gigi copies a score off. `netlify.toml` runs `npm run check && npm run build`, so the deploy was refused and the live site correctly stayed on v3.93.
+
+**The guard worked perfectly for six days and nobody read the reason.** v3.94's own run status says *11 of 39*. The check was not among them.
+
+**Sixth time a check in this project has failed correct content.** The exemption is enumerated by name, scoped to one file, and ratcheted — each exempted string must still be on screen, so rewording one fails the check until its exemption is deleted.
+
+⚠️ **And the process lesson belongs to the assistant, not to the suite.** Gigi was told v3.95 was ready to commit after **7 of 40** had been run, and the failure was in the 33 that were not. Run in batches, the whole suite takes about three minutes. `RUN-THE-CHECKS.bat` and `BUILD-FOR-NETLIFY.bat` would each have refused this build and shown her the red check before any push. **The workflow she built was never the thing that failed.**
+
+---
+
+## 58. A QUESTION ABOUT A LABEL FOUND A DOOR NOBODY WAS ASKING — v3.96
+
+**Aug 30 2026.** A cleaning session. The plan put five untidy things in front of Gigi and she picked one: `TestView.jsx` importing `HERBALISM_Q1` directly, carried over from v3.95 as recorded debt. A one-line fix, offered as a one-line fix.
+
+She did not approve it. She asked a question about it:
+
+> *"It is supposed to be that she can only see the lesson that is due so that she doesn't move forward before completing."*
+
+**She was right to ask and the answer was no — the line is a label, not a gate.** `lessonTitle()` turns a lessonId that is already on screen into readable text. It has never opened anything. Changing it could not widen what Azianna reaches.
+
+**But going to check that found something else.** `LessonsView` has four routes into `LessonReader`. Three ask `lessonIsOpen`, directly or upstream. The fourth — the **"Worth going back to"** buttons on a test's results — called `setOpenLesson` straight through, and had done since the feature was written.
+
+### ⚠️ Nothing was wrong on screen, and that is the entry
+
+A test only covers lessons she has already read. A read lesson is open. So the gate would have said yes to every single one of those buttons, every time.
+
+**The door was correct by accident of the data.** Not by design, not by a lock, and not by anything that would notice if the data changed. The day a test covers a lesson she has not read — a diagnostic, a placement re-sit, a course reordered — it stops being correct silently, and all forty checks stay green through it.
+
+This is the same shape as three failures already in this file:
+
+* the comment above the Herbalism branch that described the intention truthfully and the code falsely **for fifty-nine versions** (§ the v3.79 gate);
+* `check-khan-units` §6c printing *"advance one unit per grade"* while the writer it described had never written a usable row;
+* the four hand-written correction notes about version drift sitting in the very file whose job was to prevent it — **two notes in a file are not a check**.
+
+**A thing that works for a reason nobody wrote down is not working. It is pending.**
+
+### What changed, and what did not
+
+The door asks `canOpenLesson` inside `LessonsView`, **and** the button greys in `TestView`. Asked twice on purpose: a disabled button is a fact about the screen, and the door must not depend on the screen having got it right.
+
+The gate is asked about the course **the lesson belongs to**, from `courseOfLesson`, not about the tab she happens to be looking at. A Human Body result can sit on screen with the Herbalism tab selected; asking about the wrong course is the **v3.42** bug — a link that goes to the wrong place, which is worse than one that goes nowhere.
+
+**Greyed, not hidden** — Gigi's call, Aug 30, consistent with v3.79: *she may see the shape of her year, she may go back over anything she has finished, and she may not jump ahead.* The closed wording is the lesson list's own wording, word for word: **"Not yet — this one comes later"**. Two screens describing one lock in two sentences is how a child learns the app is arbitrary. **Nothing else on Azianna's screen moved.**
+
+### ⚠️ And the label bug was larger than it had been recorded
+
+`HERBALISM_Q1` holds **13 of the app's 256 lessons** — the `hb-1-01`–`hb-1-13` flat cards. The other **243** fell through to a raw-id fallback. After a Human Body test she was handed a button reading `hb2-07`. So were Science Lab, Social Studies, and **Herbalism Q2, Q3 and Q4** — three quarters of the signature course. It never threw. It never went red. It looked like a design choice.
+
+That is the **v3.95 Gradebook bug in a fifth place**: a screen built for one course while three were added around it.
+
+### `check-lesson-doors` — #41 — asserts the class
+
+It does **not** assert "TestView does not import herbalismQ1". That is the instance, and the instance is the fifth one found.
+
+1. The doors are **enumerated by the parser** and a fifth one is red on arrival **whether or not it is gated** — the failure being tested is that nobody was asked.
+2. No file under `src/components` imports a lesson module other than `appCourses.js`.
+3. `TestView` **fails closed** on a missing predicate, and the check catches the omission before it ships.
+4. The gate is **run, not read**, on all four courses: the lesson she is up to opens, the next one does not, a finished one stays open.
+
+**⚠️ Its own first run was red on correct code.** `onOpenLesson?.()` parses as an `OptionalCallExpression`, not a `CallExpression`; the visitor matched nothing and reported a present lock as missing. Caught before the commit — and the version along, that same blind spot would have reported an **absent** lock as **present**. The fix and the reason are in the check.
+
+**Nine negative tests, all nine red**, run on a sandbox copy so that nothing on Gigi's disk was edited to prove a check works.
+
+`check-version-stamp` went red first, as designed: a 41st script arrived while four counts in the build log still said 40.
+
+### The process note
+
+**All 41 were run before Gigi was told anything was ready** — as one command, 114s, no batching needed. v3.95 was pushed with a red check in it after 7 of 40 were run. `RUN-THE-CHECKS.bat` on Gigi's Windows machine remains the run that counts.
+
+**And the finding belongs to her.** Five items were put in front of her, the fix was scoped, and it was her question about the scope — not the plan, and not the checks — that found the door. **A contradiction in what was asked for is a question, not a judgement call**, and this is what asking it is worth.
